@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
+import { NbMediaBreakpointsService, NbMenuBag, NbMenuItem, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { NbAuthService } from '@nebular/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-header',
@@ -36,15 +38,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     },
   ];
 
-  currentTheme = 'default';
+  currentTheme = 'dark';
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenu: NbMenuItem[] = [ { data: {id: 1}, title: 'Profile' }, { data: {id: 2}, title: 'Log out' } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
               private userService: UserData,
+              private authService: NbAuthService,
               private layoutService: LayoutService,
+              public router: Router,
               private breakpointService: NbMediaBreakpointsService) {
   }
 
@@ -69,6 +73,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
+
+    // Event de click sur le profil
+    this.menuService.onItemClick().subscribe((value) => {
+      this.onItemSelection(value.item.data.id);
+    });
   }
 
   ngOnDestroy() {
@@ -78,6 +87,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   changeTheme(themeName: string) {
     this.themeService.changeTheme(themeName);
+  }
+
+  onItemSelection(title: number) {
+    switch (title) {
+      case 2:
+        console.log('log out');
+        this.router.navigateByUrl('/login');
+        // location.reload();
+        // this.authService.logout('email');
+        break;
+    }
   }
 
   toggleSidebar(): boolean {
