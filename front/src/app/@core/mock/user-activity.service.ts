@@ -21,9 +21,9 @@ export class UserActivityService extends UserActivityData {
   constructor(private periods: PeriodsService) {
     super();
     this.data = {
-      week: this.getDataWeek(),
-      month: this.getDataMonth(),
-      year: this.getDataYear(),
+      hebdomadaires: this.getDataWeek(),
+      mensuel: this.getDataMonth(),
+      annuel: this.getDataYear(),
     };
   }
 

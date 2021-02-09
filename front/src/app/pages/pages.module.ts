@@ -11,6 +11,7 @@ import { UsersComponent } from './users/users.component';
 import { QuotationComponent } from './quotation/quotation.component';
 import { ModulesComponent } from './modules/modules.component';
 import { ComposantsComponent } from './composants/composants.component';
+import { ProfilComponent } from './profil/profil.component';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { ComposantsComponent } from './composants/composants.component';
     QuotationComponent,
     ModulesComponent,
     ComposantsComponent,
+    ProfilComponent,
   ],
 })
 export class PagesModule {
