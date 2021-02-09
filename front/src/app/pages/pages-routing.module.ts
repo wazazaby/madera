@@ -9,8 +9,10 @@ import { CustomersComponent } from './customers/customers.component';
 import { QuotationComponent } from './quotation/quotation.component';
 import { ModulesComponent } from './modules/modules.component';
 import { ComposantsComponent } from './composants/composants.component';
+import { ProfilComponent } from './profil/profil.component';
+import { StockComponent } from './stock/stock.component';
 
-const routes: Routes = [{
+export const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [
@@ -19,24 +21,32 @@ const routes: Routes = [{
       component: UsersComponent,
     },
     {
-      path: 'customers/create',
+      path: 'customers',
       component: CustomersComponent,
     },
     {
-      path: 'quotation/create',
+      path: 'quotation',
       component: QuotationComponent,
     },
     {
-      path: 'modules/create',
+      path: 'modules',
       component: ModulesComponent,
     },
     {
-      path: 'composant/create',
+      path: 'composant',
       component: ComposantsComponent,
     },
     {
       path: 'dashboard',
       component: DashboardComponent,
+    },
+    {
+      path: 'profil',
+      component: ProfilComponent,
+    },
+    {
+      path: 'stocks',
+      component: StockComponent,
     },
     {
       path: 'miscellaneous',

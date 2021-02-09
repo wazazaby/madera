@@ -16,7 +16,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Création',
-        link: '/pages/quotation/create',
+        link: '/pages/users/create',
       },
       {
         title: 'Consultation',
@@ -38,7 +38,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Consultation',
-        link: '/pages/devis/list',
+        link: '/pages/quotation',
       },
     ],
   },
@@ -52,7 +52,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Consultation',
-        link: '/pages/customers/list',
+        link: '/pages/customers',
       },
     ],
   },
@@ -70,7 +70,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Consultation',
-        link: '/pages/modules/list',
+        link: '/pages/modules',
       },
     ],
   },
@@ -84,7 +84,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Consultation',
-        link: '/pages/composant/list',
+        link: '/pages/composant',
       },
     ],
   },

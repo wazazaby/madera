@@ -12,6 +12,7 @@ import { QuotationComponent } from './quotation/quotation.component';
 import { ModulesComponent } from './modules/modules.component';
 import { ComposantsComponent } from './composants/composants.component';
 import { ProfilComponent } from './profil/profil.component';
+import { StockComponent } from './stock/stock.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { ProfilComponent } from './profil/profil.component';
     ModulesComponent,
     ComposantsComponent,
     ProfilComponent,
+    StockComponent,
   ],
 })
 export class PagesModule {
