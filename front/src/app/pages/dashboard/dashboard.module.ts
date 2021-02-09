@@ -1,69 +1,65 @@
 import { NgModule } from '@angular/core';
 import {
-  NbActionsModule,
   NbButtonModule,
   NbCardModule,
+  NbProgressBarModule,
   NbTabsetModule,
   NbUserModule,
-  NbRadioModule,
+  NbIconModule,
   NbSelectModule,
   NbListModule,
-  NbIconModule,
 } from '@nebular/theme';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { DashboardComponent } from './dashboard.component';
-import { StatusCardComponent } from './status-card/status-card.component';
-import { ContactsComponent } from './contacts/contacts.component';
-import { RoomsComponent } from './rooms/rooms.component';
-import { RoomSelectorComponent } from './rooms/room-selector/room-selector.component';
-import { TemperatureComponent } from './temperature/temperature.component';
-import { TemperatureDraggerComponent } from './temperature/temperature-dragger/temperature-dragger.component';
-import { KittenComponent } from './kitten/kitten.component';
-import { SecurityCamerasComponent } from './security-cameras/security-cameras.component';
-import { ElectricityComponent } from './electricity/electricity.component';
-import { ElectricityChartComponent } from './electricity/electricity-chart/electricity-chart.component';
-import { WeatherComponent } from './weather/weather.component';
-import { SolarComponent } from './solar/solar.component';
-import { PlayerComponent } from './rooms/player/player.component';
-import { TrafficComponent } from './traffic/traffic.component';
-import { TrafficChartComponent } from './traffic/traffic-chart.component';
-import { FormsModule } from '@angular/forms';
+import { ECommerceChartsPanelComponent } from './charts-panel/charts-panel.component';
+import { OrdersChartComponent } from './charts-panel/charts/orders-chart.component';
+import { ProfitChartComponent } from './charts-panel/charts/profit-chart.component';
+import { ChartPanelHeaderComponent } from './charts-panel/chart-panel-header/chart-panel-header.component';
+import { ChartPanelSummaryComponent } from './charts-panel/chart-panel-summary/chart-panel-summary.component';
+import { ChartModule } from 'angular2-chartjs';
+import { ECommerceLegendChartComponent } from './legend-chart/legend-chart.component';
+import { ECommerceProgressSectionComponent } from './progress-section/progress-section.component';
+
+import { CountryOrdersComponent } from './country-orders/country-orders.component';
+import { CountryOrdersMapComponent } from './country-orders/map/country-orders-map.component';
+import { CountryOrdersMapService } from './country-orders/map/country-orders-map.service';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { CountryOrdersChartComponent } from './country-orders/chart/country-orders-chart.component';
 
 @NgModule({
   imports: [
-    FormsModule,
     ThemeModule,
     NbCardModule,
     NbUserModule,
     NbButtonModule,
+    NbIconModule,
     NbTabsetModule,
-    NbActionsModule,
-    NbRadioModule,
     NbSelectModule,
     NbListModule,
-    NbIconModule,
-    NbButtonModule,
+    ChartModule,
+    NbProgressBarModule,
     NgxEchartsModule,
+    NgxChartsModule,
+    LeafletModule,
   ],
   declarations: [
     DashboardComponent,
-    StatusCardComponent,
-    TemperatureDraggerComponent,
-    ContactsComponent,
-    RoomSelectorComponent,
-    TemperatureComponent,
-    RoomsComponent,
-    KittenComponent,
-    SecurityCamerasComponent,
-    ElectricityComponent,
-    ElectricityChartComponent,
-    WeatherComponent,
-    PlayerComponent,
-    SolarComponent,
-    TrafficComponent,
-    TrafficChartComponent,
+    ECommerceChartsPanelComponent,
+    ChartPanelHeaderComponent,
+    ChartPanelSummaryComponent,
+    OrdersChartComponent,
+    ProfitChartComponent,
+    CountryOrdersComponent,
+    CountryOrdersMapComponent,
+    CountryOrdersChartComponent,
+    ECommerceLegendChartComponent,
+    ECommerceProgressSectionComponent,
+  ],
+  providers: [
+    CountryOrdersMapService,
   ],
 })
 export class DashboardModule { }
