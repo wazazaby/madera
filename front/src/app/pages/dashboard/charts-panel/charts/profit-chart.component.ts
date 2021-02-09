@@ -3,7 +3,7 @@ import { NbThemeService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators';
 
 import { ProfitChart } from '../../../../@core/data/profit-chart';
-import { LayoutService } from '../../../../@core/utils/layout.service';
+import { LayoutService } from '../../../../@core/utils';
 
 @Component({
   selector: 'ngx-profit-chart',
@@ -14,8 +14,7 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
 })
 export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges {
 
-  @Input()
-  profitChartData: ProfitChart;
+  @Input() profitChartData: ProfitChart;
 
   private alive = true;
 
@@ -104,7 +103,7 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
       ],
       series: [
         {
-          name: 'Canceled',
+          name: 'Annuler',
           type: 'bar',
           barGap: 0,
           barWidth: '20%',
@@ -122,7 +121,7 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
           data: this.profitChartData.data[0],
         },
         {
-          name: 'Payment',
+          name: 'Payer',
           type: 'bar',
           barWidth: '20%',
           itemStyle: {
@@ -139,7 +138,7 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
           data: this.profitChartData.data[1],
         },
         {
-          name: 'All orders',
+          name: 'Commander',
           type: 'bar',
           barWidth: '20%',
           itemStyle: {
@@ -164,6 +163,7 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
     const series = this.getNewSeries(options.series, profitChartData.data);
 
     this.echartsIntance.setOption({
+      // tslint:disable-next-line:object-literal-shorthand
       series: series,
       xAxis: {
         data: this.profitChartData.chartLabel,

@@ -18,7 +18,7 @@ export const routes: Routes = [
     canActivate: [AuthguardService],
   },
   {
-    path: '',
+    path: 'auth',
     component: NbAuthComponent,
     children: [
       {

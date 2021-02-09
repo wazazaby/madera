@@ -14,9 +14,9 @@ export class ChartPanelHeaderComponent implements OnDestroy {
 
   @Output() periodChange = new EventEmitter<string>();
 
-  @Input() type: string = 'week';
+  @Input() type: string = 'hebdomadaires';
 
-  types: string[] = ['week', 'month', 'year'];
+  types: string[] = ['hebdomadaires', 'mensuel', 'annuel'];
   chartLegend: {iconColor: string; title: string}[];
   breakpoint: NbMediaBreakpoint = { name: '', width: 0 };
   breakpoints: any;
@@ -33,27 +33,27 @@ export class ChartPanelHeaderComponent implements OnDestroy {
         this.setLegendItems(orderProfitLegend);
       });
 
-      this.breakpoints = this.breakpointService.getBreakpointsMap();
-      this.themeService.onMediaQueryChange()
-        .pipe(takeWhile(() => this.alive))
-        .subscribe(([oldValue, newValue]) => {
-          this.breakpoint = newValue;
-        });
+    this.breakpoints = this.breakpointService.getBreakpointsMap();
+    this.themeService.onMediaQueryChange()
+      .pipe(takeWhile(() => this.alive))
+      .subscribe(([oldValue, newValue]) => {
+        this.breakpoint = newValue;
+      });
   }
 
   setLegendItems(orderProfitLegend) {
     this.chartLegend = [
       {
         iconColor: orderProfitLegend.firstItem,
-        title: 'Payment',
+        title: 'Payer',
       },
       {
         iconColor: orderProfitLegend.secondItem,
-        title: 'Canceled',
+        title: 'Annuler',
       },
       {
         iconColor: orderProfitLegend.thirdItem,
-        title: 'All orders',
+        title: 'Commander',
       },
     ];
   }

@@ -5,7 +5,7 @@ import { Contacts, RecentUsers, UserData } from '../data/users';
 @Injectable()
 export class UserService extends UserData {
 
-  private time: Date = new Date;
+  private time: Date = new Date();
 
   private users = {
     nick: { name: 'Nick Jones', picture: 'assets/images/nick.png' },

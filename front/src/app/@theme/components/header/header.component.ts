@@ -19,25 +19,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPictureOnly: boolean = false;
   user: any;
 
-  themes = [
-    {
-      value: 'default',
-      name: 'Light',
-    },
-    {
-      value: 'dark',
-      name: 'Dark',
-    },
-    {
-      value: 'cosmic',
-      name: 'Cosmic',
-    },
-    {
-      value: 'corporate',
-      name: 'Corporate',
-    },
-  ];
-
   currentTheme = 'dark';
 
   userMenu: NbMenuItem[] = [ { data: {id: 1}, title: 'Profile' }, { data: {id: 2}, title: 'Log out' } ];
@@ -92,8 +73,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onItemSelection(title: number) {
     switch (title) {
       case 2:
-        console.log('log out');
-        this.router.navigateByUrl('/login');
+        this.router.navigateByUrl('auth/login').then();
         // location.reload();
         // this.authService.logout('email');
         break;

@@ -17,7 +17,7 @@ export class ECommerceChartsPanelComponent implements OnDestroy {
   private alive = true;
 
   chartPanelSummary: OrderProfitChartSummary[];
-  period: string = 'week';
+  period: string = 'hebdomadaires';
   ordersChartData: OrdersChart;
   profitChartData: ProfitChart;
 
@@ -45,7 +45,7 @@ export class ECommerceChartsPanelComponent implements OnDestroy {
   }
 
   changeTab(selectedTab) {
-    if (selectedTab.tabTitle === 'Profit') {
+    if (selectedTab.tabTitle === 'Benefices') {
       this.profitChart.resizeChart();
     } else {
       this.ordersChart.resizeChart();
