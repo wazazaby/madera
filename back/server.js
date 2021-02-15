@@ -13,11 +13,10 @@ const app = fastify({
   logger: true
 });
 
-// app.register(fastifyMySQL, {
-//     promise: true,
-//     name: 'madera-dev',
-//     connectionString: 'mysql://root@localhost:3306'
-// })
+app.register(fastifyMySQL, {
+    promise: true,
+    connectionString: 'mysql://root@localhost:3306/madera-dev'
+})
 
 // Route par défaut
 app.get('/', async (_, rep) => {
@@ -35,10 +34,20 @@ app.post('/test', testSchema, async (req, rep) => {
 });
 
 app.post('/test/db', newAdminSchema, async (req, rep) => {
+    const { firstName, lastName, email, password } = req.body;
+    const connection = await app.mysql.getConnection();
+
+    const res = await connection.query(
+        'INSERT INTO administrator VALUES (NULL, ?, ?, ?, ?, NOW(), NOW())', 
+        [firstName, lastName, email, password],
+    )
+
+    connection.release()
+    
     rep
-        .code(300)
+        .code(200)
         .header('Content-Type', 'application/json')
-        .send({ wot: 'Shit hit the fan' });
+        .send(res[0]);
 });
 
 // Lancement du serveur
