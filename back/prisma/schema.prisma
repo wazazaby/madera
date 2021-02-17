@@ -1,0 +1,157 @@
+datasource db {
+    provider = "mysql"
+    url = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+enum UsageUnit {
+    CENTIMETER
+    SQUARE_METER
+    LINEAR_METER
+    UNIT
+}
+
+enum QuotationStatus {
+    WAITING
+    ACCEPTED
+    DENIED
+}
+
+enum OrderStatus {
+    WAITING
+    IN_PRODUCTION
+    IN_ASSEMBLY
+    IN_DELIVERY
+    INSTALLED
+}
+
+enum PaymentType {
+    AT_SIGNATURE
+    AT_CONSTRUCTION_LICENCE_OBTENTION
+    AT_SITE_OPENING
+    AT_FOUNDATION_COMPLETION
+    AT_WALLS_COMPLETION
+    AT_WATER_AIR_PUT_OUT
+    AT_EQUIPMENT_WORK_COMPLETION
+    AT_KEY_HANDING
+}
+
+model Administrator {
+    id          Int         @default(autoincrement()) @id
+    firstName   String      @db.VarChar(255)
+    lastName    String      @db.VarChar(255)
+    email       String      @db.VarChar(255) @unique
+    password    String      @db.VarChar(255)
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+}
+
+model Commercial {
+    id                  Int             @default(autoincrement()) @id
+    firstName           String          @db.VarChar(255)
+    lastName            String          @db.VarChar(255)
+    email               String          @db.VarChar(255) @unique
+    phoneNumber         String          @db.VarChar(10) @unique
+    password            String          @db.VarChar(255)
+    createdAt           DateTime        @default(now())
+    updatedAt           DateTime        @updatedAt
+    administrator       Administrator   @relation(fields: [administratorId], references: [id])
+    administratorId     Int
+}
+
+model Stockist {
+    id                  Int             @default(autoincrement()) @id
+    firstName           String          @db.VarChar(255)
+    lastName            String          @db.VarChar(255)
+    email               String          @db.VarChar(255) @unique
+    password            String          @db.VarChar(255)
+    createdAt           DateTime        @default(now())
+    updatedAt           DateTime        @updatedAt
+    administrator       Administrator   @relation(fields: [administratorId], references: [id])
+    administratorId     Int
+}
+
+model Client {
+    id                  Int             @default(autoincrement()) @id
+    firstName           String          @db.VarChar(255)
+    lastName            String          @db.VarChar(255)
+    city                String          @db.VarChar(255)
+    postalCode          Int             
+    adressLine1         String          @db.VarChar(255)
+    adressLine2         String          @db.VarChar(255)
+    email               String          @db.VarChar(255) @unique
+    phoneNumber         String          @db.VarChar(10) @unique
+    password            String          @db.VarChar(255)
+    createdAt           DateTime        @default(now())
+    updatedAt           DateTime        @updatedAt
+    commercial          Commercial      @relation(fields: [commercialId], references: [id])
+    commercialId        Int
+}
+
+model Provider {
+    id          Int         @default(autoincrement()) @id
+    name        String      @db.VarChar(255)
+    reference   String      @db.VarChar(255) @unique
+    logoUrl     String      @db.VarChar(255)
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    stockist    Stockist    @relation(fields: [stockistId], references: [id])
+    stockistId  Int
+}
+
+model Component {
+    id          Int         @default(autoincrement()) @id
+    label       String      @db.VarChar(255)
+    reference   String      @db.VarChar(255) @unique
+    description String      @db.Text
+    unit        UsageUnit        
+    price       Float
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    provider    Provider    @relation(fields: [providerId], references: [id])
+    providerId  Int
+}
+
+model Stock {
+    id              Int         @default(autoincrement()) @id
+    quantity        Int
+    createdAt       DateTime    @default(now())
+    updatedAt       DateTime    @updatedAt
+    stockist        Stockist    @relation(fields: [stockistId], references: [id])
+    stockistId      Int
+    component       Component   @relation(fields: [componentId], references: [id])
+    componentId     Int
+}
+
+model Quotation {
+    id              Int             @default(autoincrement()) @id
+    status          QuotationStatus
+    price           Float
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+    commercial      Commercial      @relation(fields: [commercialId], references: [id])
+    commercialId    Int
+    client          Component       @relation(fields: [clientId], references: [id])
+    clientId        Int
+}
+
+model Order {
+    id              Int         @default(autoincrement()) @id
+    status          OrderStatus
+    totalPaid       Float
+    payments        Payment[]
+}
+
+model Payment {
+    id              Int         @default(autoincrement()) @id
+    type            PaymentType
+    currentlyPaid   Float
+    leftToPay       Float
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+    order           Order @relation(fields: [orderId], references: [id])
+    orderId         Int
+}

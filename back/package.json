@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Wazazaby/madera#readme",
   "dependencies": {
+    "@prisma/client": "^2.17.0",
     "dotenv": "^8.2.0",
     "fastify": "^3.12.0",
     "fastify-mysql": "^2.1.0"
@@ -27,6 +28,7 @@
     "@babel/core": "^7.12.16",
     "@babel/node": "^7.12.16",
     "@babel/preset-env": "^7.12.16",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "prisma": "^2.17.0"
   }
 }
