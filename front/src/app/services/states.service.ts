@@ -19,7 +19,10 @@ export class StatesService implements NbRoleProvider {
   public getRole(): Observable<string> {
     return this.authService.onTokenChange()
       .pipe(map((token: NbAuthJWTToken) => {
-        return token.isValid() ? token.getPayload()['role'] : 'admin';
+        console.log('*token', token);
+        // return token.isValid() ? token.getPayload()['role'] : 'admin';
+        // TODO à supprimer
+        return 'admin';
       }));
   }
 }

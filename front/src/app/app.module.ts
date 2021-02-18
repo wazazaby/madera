@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import {
   NbChatModule,
@@ -57,6 +58,34 @@ import { StatesService } from './services/states.service';
         },
       },
     }),
+    // TODO fonctionnera quand l'API sera dispo -> /login
+    // NbAuthModule.forRoot({
+    //
+    //   strategies: [
+    //     NbPasswordAuthStrategy.setup({
+    //       name: 'email',
+    //       baseEndpoint: '/api/',
+    //       login: {
+    //         endpoint: '/api/login',
+    //         method: 'post',
+    //         defaultErrors: ['Compte incorrect, merci de contacter votre administrateur'],
+    //         defaultMessages: ['Bienvenue Madara Ushiha'],
+    //         redirect: {
+    //           success: '/dashboard/',
+    //           failure: null, // stay on the same page
+    //         },
+    //       },
+    //
+    //       requestPass: {
+    //         redirect: {
+    //           success: '/auth/login',
+    //           failure: null, // stay on the same page
+    //         },
+    //       },
+    //     }),
+    //   ],
+    //   forms: {},
+    // }),
   ],
   providers: [
     AuthguardService,

@@ -14,7 +14,7 @@ import { getDeepFromObject, NB_AUTH_OPTIONS, NbAuthResult, NbAuthService, NbAuth
 })
 export class LoginComponent {
 
-  redirectDelay: number = 0;
+  redirectDelay: number = 1000;
   showMessages: any = {};
   strategy: string = 'email';
 
@@ -41,6 +41,7 @@ export class LoginComponent {
     this.submitted = true;
 
     this.service.authenticate(this.strategy, this.user).subscribe((result: NbAuthResult) => {
+
       this.submitted = false;
 
       if (result.isSuccess()) {
@@ -59,7 +60,11 @@ export class LoginComponent {
     });
   }
 
-  getConfigValue(key: string): any {
+  /**
+   * Retourne la configuration du login
+   * @param key: stratégie du login
+   */
+  public getConfigValue(key: string): any {
     return getDeepFromObject(this.options, key, null);
   }
 }

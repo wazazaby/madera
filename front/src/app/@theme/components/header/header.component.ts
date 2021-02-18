@@ -61,7 +61,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl('pages/profil').then();
         break;
       case 2:
-        this.router.navigateByUrl('auth/login').then();
+        this.router.navigateByUrl('auth/logout').then();
         break;
     }
   }
