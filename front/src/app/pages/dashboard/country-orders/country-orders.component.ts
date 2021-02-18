@@ -8,7 +8,7 @@ import { CountryOrderData } from '../../../@core/data/country-order';
   styleUrls: ['./country-orders.component.scss'],
   template: `
     <nb-card [size]="breakpoint.width >= breakpoints.md ? 'medium' : 'giant'">
-      <nb-card-header>Country Orders Statistics</nb-card-header>
+      <nb-card-header>Statistiques des commandes par pays</nb-card-header>
       <nb-card-body>
         <ngx-country-orders-map (select)="selectCountryById($event)"
                                 countryId="USA">

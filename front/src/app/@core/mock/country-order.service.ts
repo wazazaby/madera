@@ -9,7 +9,7 @@ export class CountryOrderService extends CountryOrderData {
     'Bois',
     'Metal',
     'Verre',
-    'Cuivre'
+    'Cuivre',
   ];
   private countriesCategoriesLength = this.countriesCategories.length;
   private generateRandomData(nPoints: number): number[] {
