@@ -1,0 +1,83 @@
+<h1 id="title" class="title">Madera Authentification</h1>
+
+<nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
+  <p class="alert-title"><b>Oups !</b></p>
+  <ul class="alert-message-list">
+    <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+  </ul>
+</nb-alert>
+
+<nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="success" role="alert">
+  <p class="alert-title"><b>Bravo!</b></p>
+  <ul class="alert-message-list">
+    <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+  </ul>
+</nb-alert>
+
+<form (ngSubmit)="login()" #form="ngForm" aria-labelledby="title">
+
+  <div class="form-control-group">
+    <label class="label" for="input-email">Email:</label>
+    <input nbInput
+           fullWidth
+           [(ngModel)]="user.email"
+           #email="ngModel"
+           name="email"
+           id="input-email"
+           pattern=".+@.+\..+"
+           placeholder="Email address"
+           autofocus
+           [status]="email.dirty ? (email.invalid  ? 'danger' : 'success') : ''"
+           [required]="getConfigValue('forms.validation.email.required')"
+           [attr.aria-invalid]="email.invalid && email.touched ? true : null">
+    <ng-container *ngIf="email.invalid && email.touched">
+      <p class="error-message" *ngIf="email.errors?.required">
+        L'email est obligatoire!
+      </p>
+      <p class="error-message" *ngIf="email.errors?.pattern">
+        L'email est incorrecte !
+      </p>
+    </ng-container>
+  </div>
+
+  <div class="form-control-group">
+    <label class="label" for="input-password">Mot de passe:</label>
+    <input nbInput
+           fullWidth
+           [(ngModel)]="user.password"
+           #password="ngModel"
+           name="password"
+           type="password"
+           id="input-password"
+           placeholder="Password"
+           [status]="password.dirty ? (password.invalid  ? 'danger' : 'success') : ''"
+           [required]="getConfigValue('forms.validation.password.required')"
+           [minlength]="getConfigValue('forms.validation.password.minLength')"
+           [maxlength]="getConfigValue('forms.validation.password.maxLength')"
+           [attr.aria-invalid]="password.invalid && password.touched ? true : null">
+    <ng-container *ngIf="password.invalid && password.touched ">
+      <p class="error-message" *ngIf="password.errors?.required">
+        Mot de passe obligatoire !
+      </p>
+      <p class="error-message" *ngIf="password.errors?.minlength || password.errors?.maxlength">
+        Le mot de passe doit contenir
+        de {{ getConfigValue('forms.validation.password.minLength') }}
+        à {{ getConfigValue('forms.validation.password.maxLength') }}
+        caractères
+      </p>
+    </ng-container>
+  </div>
+
+  <div class="form-control-group accept-group">
+    <nb-checkbox name="rememberMe" [(ngModel)]="user.rememberMe" *ngIf="rememberMe">Ce souvenir de moi</nb-checkbox>
+    <a class="forgot-password" routerLink="../request-password">Mot de passe oublier ?</a>
+  </div>
+
+  <button nbButton
+          fullWidth
+          status="success"
+          [disabled]="submitted || !form.valid"
+          [class.btn-pulse]="submitted">
+    Valider
+  </button>
+</form>

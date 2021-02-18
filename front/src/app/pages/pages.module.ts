@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
-import { NbMenuModule } from '@nebular/theme';
+import { FormsModule } from '@angular/forms';
+import { NbSecurityModule } from '@nebular/security';
+import { NbAlertModule, NbButtonModule, NbCheckboxModule, NbInputModule, NbMenuModule } from '@nebular/theme';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -13,6 +16,8 @@ import { ModulesComponent } from './modules/modules.component';
 import { ComposantsComponent } from './composants/composants.component';
 import { ProfilComponent } from './profil/profil.component';
 import { StockComponent } from './stock/stock.component';
+import { SmartTableComponent } from './smart-table/smart-table.component';
+import { LoginComponent } from './auth/login/login.component';
 
 @NgModule({
   imports: [
@@ -21,6 +26,13 @@ import { StockComponent } from './stock/stock.component';
     NbMenuModule,
     DashboardModule,
     MiscellaneousModule,
+    Ng2SmartTableModule,
+    NbSecurityModule,
+    NbInputModule,
+    FormsModule,
+    NbCheckboxModule,
+    NbAlertModule,
+    NbButtonModule,
   ],
   declarations: [
     PagesComponent,
@@ -31,6 +43,8 @@ import { StockComponent } from './stock/stock.component';
     ComposantsComponent,
     ProfilComponent,
     StockComponent,
+    SmartTableComponent,
+    LoginComponent,
   ],
 })
 export class PagesModule {

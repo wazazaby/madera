@@ -1,1 +1,8 @@
-<p>users list</p>
+<app-smart-table
+    [columns]="columns"
+    [data]="data"
+    (create)="onCreate($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+>
+</app-smart-table>
