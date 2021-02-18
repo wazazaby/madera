@@ -1,15 +1,8 @@
-import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import {
-  NbAuthComponent,
-  NbLoginComponent,
-  NbLogoutComponent,
-  NbRegisterComponent,
-  NbRequestPasswordComponent,
-  NbResetPasswordComponent,
-} from '@nebular/auth';
-import { AuthguardService } from '../app/services/authguard.service';
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
+import { NbAuthComponent } from '@nebular/auth';
 import { LoginComponent } from './pages/auth/login/login.component';
+import { RequestPasswordComponent } from './pages/auth/request-password/request-password.component';
 
 export const routes: Routes = [
   {
@@ -31,25 +24,17 @@ export const routes: Routes = [
         component: LoginComponent,
       },
       {
-        path: 'register',
-        component: NbRegisterComponent,
-      },
-      {
-        path: 'logout',
-        component: NbLogoutComponent,
-      },
-      {
         path: 'request-password',
-        component: NbRequestPasswordComponent,
+        component: RequestPasswordComponent,
       },
-      {
-        path: 'reset-password',
-        component: NbResetPasswordComponent,
-      },
+      // {
+      //   path: 'reset-password',
+      //   component: NbResetPasswordComponent,
+      // },
     ],
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  {path: '', redirectTo: 'pages', pathMatch: 'full'},
+  {path: '**', redirectTo: 'pages'},
 ];
 
 const config: ExtraOptions = {

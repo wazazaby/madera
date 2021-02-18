@@ -18,6 +18,7 @@ import { ProfilComponent } from './profil/profil.component';
 import { StockComponent } from './stock/stock.component';
 import { SmartTableComponent } from './smart-table/smart-table.component';
 import { LoginComponent } from './auth/login/login.component';
+import { RequestPasswordComponent } from './auth/request-password/request-password.component';
 
 @NgModule({
   imports: [
@@ -45,6 +46,7 @@ import { LoginComponent } from './auth/login/login.component';
     StockComponent,
     SmartTableComponent,
     LoginComponent,
+    RequestPasswordComponent,
   ],
 })
 export class PagesModule {
