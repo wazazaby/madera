@@ -24,6 +24,7 @@ export class LogoutComponent implements OnInit {
   }
 
   logout(strategy: string): void {
+    console.log('*', strategy);
     this.service.logout(strategy).subscribe((result: NbAuthResult) => {
 
       const redirect = result.getRedirect();

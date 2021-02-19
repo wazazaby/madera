@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SmartTables } from '../../interfaces/smart-tables';
 import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
@@ -49,7 +48,9 @@ export class SmartTableComponent implements OnInit {
       this._setting.columns = this.columns;
     }
 
-    this._source.load(this.data).then();
+    if (this.data && this.data.length > 0) {
+      this._source.load(this.data).then();
+    }
   }
 
   public onCreate(event) {

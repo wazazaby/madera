@@ -4,7 +4,9 @@ import { NbRoleProvider } from '@nebular/security';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class StatesService implements NbRoleProvider {
 
   /** Utilisateur */

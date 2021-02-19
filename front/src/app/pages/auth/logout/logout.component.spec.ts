@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NbAuthModule } from '@nebular/auth';
 
 import { LogoutComponent } from './logout.component';
 
@@ -8,7 +11,12 @@ describe('LogoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LogoutComponent ]
+      declarations: [ LogoutComponent ],
+      imports: [
+        FormsModule,
+        RouterTestingModule,
+        NbAuthModule.forRoot(),
+      ],
     })
     .compileComponents();
   });

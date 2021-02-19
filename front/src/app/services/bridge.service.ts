@@ -38,7 +38,7 @@ export class BridgeService implements OnDestroy {
   // Composant
 
   public getComposant(): Observable<any> {
-    return this.http.get<any>(environment.apiUrlService + '/composants', { withCredentials: true });
+    return this._http.get<any>(environment.apiUrlService + '/composants', { withCredentials: true });
   }
 
   public setComposant(): Observable<any> {

@@ -49,6 +49,7 @@ import { LogoutComponent } from './auth/logout/logout.component';
     LoginComponent,
     RequestPasswordComponent,
     LogoutComponent,
+    SmartTableComponent,
   ],
 })
 export class PagesModule {

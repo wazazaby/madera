@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import {
   NbChatModule,
@@ -13,6 +14,7 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppRoutingModule } from './app-routing.module';
@@ -59,7 +61,6 @@ import { StatesService } from './services/states.service';
     }),
     // TODO fonctionnera quand l'API sera dispo -> /login
     // NbAuthModule.forRoot({
-    //
     //   strategies: [
     //     NbPasswordAuthStrategy.setup({
     //       name: 'email',
@@ -71,6 +72,13 @@ import { StatesService } from './services/states.service';
     //         defaultMessages: ['Bienvenue Madara Ushiha'],
     //         redirect: {
     //           success: '/dashboard/',
+    //           failure: null, // stay on the same page
+    //         },
+    //       },
+    //
+    //       logout: {
+    //         redirect: {
+    //           success: '/auth/login',
     //           failure: null, // stay on the same page
     //         },
     //       },

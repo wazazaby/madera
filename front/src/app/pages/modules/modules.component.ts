@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'ngx-modules',
   templateUrl: './modules.component.html',
-  styleUrls: ['./modules.component.scss']
+  styleUrls: ['./modules.component.scss'],
 })
 export class ModulesComponent implements OnInit {
 

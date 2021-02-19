@@ -16,7 +16,7 @@ export class LoginComponent {
 
   redirectDelay: number = 1000;
   showMessages: any = {};
-  strategy: string = 'email';
+  strategy: string = '';
 
   errors: string[] = [];
   messages: string[] = [];
@@ -32,7 +32,7 @@ export class LoginComponent {
     this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
     this.showMessages = this.getConfigValue('forms.login.showMessages');
     this.strategy = this.getConfigValue('forms.login.strategy');
-    this.rememberMe = this.getConfigValue('forms.login.rememberMe');
+    this.rememberMe = this.getConfigValue('forms.login.rememberMe') || false;
   }
 
   login(): void {
