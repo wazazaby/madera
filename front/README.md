@@ -19,12 +19,3 @@
   * leaflet
   * compodoc
   * tinymce
-
-* Supprimer les parties "demo" :
-  * @core
-  * pages
-
-* Retravailler les parties :
-  * @theme
-  * router angular
-  * permission

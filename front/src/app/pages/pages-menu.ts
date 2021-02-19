@@ -13,16 +13,7 @@ export const MENU_ADMIN: NbMenuItem[] = [
   {
     title: 'Utilisateur',
     icon: 'people-outline',
-    children: [
-      {
-        title: 'Création',
-        link: '/pages/users/create',
-      },
-      {
-        title: 'Consultation',
-        link: '/pages/users',
-      },
-    ],
+    link: '/pages/users',
   },
   {
     title: 'ESPACE COMMERCIAL',

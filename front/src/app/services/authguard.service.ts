@@ -8,21 +8,22 @@ import { tap } from 'rxjs/operators';
 })
 export class AuthguardService implements CanActivate {
 
-  constructor(
-    private authService: NbAuthService,
-    private router: Router,
-  ) {
-  }
+  constructor(private authService: NbAuthService,
+              private router: Router) {}
 
   canActivate() {
     return this.authService.isAuthenticated().pipe(
-      tap((authenticated: boolean) => {
-        console.log('canActivate', authenticated);
-        // TODO supprimer le !
-        if (!authenticated) {
-          this.router.navigate(['auth/login']);
-        }
-      }),
+      tap(
+        (authenticated: boolean) => {
+          console.log('canActivate', authenticated);
+          // TODO supprimer le !
+          if (!authenticated) {
+            this.router.navigate(['auth/login']);
+          }
+        },
+        (error) => {
+          console.log('*error', error);
+        }),
     );
   }
 }

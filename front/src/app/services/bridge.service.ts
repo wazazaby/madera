@@ -4,16 +4,16 @@ import { Router } from '@angular/router';
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { StateService } from '../@core/utils';
+import { StatesService } from './states.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BridgeService implements OnDestroy {
 
-  constructor(private http: HttpClient,
-              private stateService: StateService,
-              private router: Router) { }
+  constructor(private _http: HttpClient,
+              private _statesService: StatesService,
+              private _router: Router) { }
 
 
   /** Subject utilisé pour le unsubscribe de tout les obs */
@@ -23,7 +23,7 @@ export class BridgeService implements OnDestroy {
   // Client
 
   public getClient(): Observable<any> {
-    return this.http.get<any>(environment.apiUrlService + '/clients', { withCredentials: true });
+    return this._http.get<any>(environment.apiUrlService + '/clients', { withCredentials: true });
   }
 
   public setClient(): Observable<any> {
@@ -53,7 +53,7 @@ export class BridgeService implements OnDestroy {
   // Modele
 
   public getModele(): Observable<any> {
-    return this.http.get<any>(environment.apiUrlService + '/modeles', { withCredentials: true });
+    return this._http.get<any>(environment.apiUrlService + '/modeles', { withCredentials: true });
   }
 
   public setModele(): Observable<any> {

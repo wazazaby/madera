@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPictureOnly: boolean = false;
   user: any;
 
-  currentTheme = 'dark';
+  currentTheme = 'cosmic';
 
   userMenu: NbMenuItem[] = [
     { data: {id: 1}, title: 'Profile' },
