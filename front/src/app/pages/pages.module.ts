@@ -1,7 +1,14 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NbSecurityModule } from '@nebular/security';
-import { NbAlertModule, NbButtonModule, NbCheckboxModule, NbInputModule, NbMenuModule } from '@nebular/theme';
+import {
+  NbAlertModule,
+  NbButtonModule, NbCardModule,
+  NbCheckboxModule, NbIconModule,
+  NbInputModule,
+  NbMenuModule,
+  NbTreeGridModule,
+} from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { ThemeModule } from '../@theme/theme.module';
@@ -35,6 +42,9 @@ import { LogoutComponent } from './auth/logout/logout.component';
     NbCheckboxModule,
     NbAlertModule,
     NbButtonModule,
+    NbTreeGridModule,
+    NbCardModule,
+    NbIconModule,
   ],
   declarations: [
     PagesComponent,

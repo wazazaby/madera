@@ -1,4 +1,4 @@
-export interface SmartTables {
+export interface SmartTableSetting {
   add: {
     addButtonContent: string;
     createButtonContent: string;
