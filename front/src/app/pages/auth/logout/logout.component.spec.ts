@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NbAuthModule } from '@nebular/auth';
+import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
 
 import { LogoutComponent } from './logout.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('LogoutComponent', () => {
   let component: LogoutComponent;
@@ -13,9 +14,16 @@ describe('LogoutComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ LogoutComponent ],
       imports: [
+        HttpClientTestingModule,
         FormsModule,
         RouterTestingModule,
-        NbAuthModule.forRoot(),
+        NbAuthModule.forRoot({
+          strategies: [
+            NbPasswordAuthStrategy.setup({
+              name: 'email',
+            }),
+          ],
+        }),
       ],
     })
     .compileComponents();

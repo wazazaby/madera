@@ -1,8 +1,9 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { NbAuthModule, NbAuthService, NbTokenService } from '@nebular/auth';
+import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
 
 import { StatesService } from './states.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('StatesServiceService', () => {
   let service: StatesService;
@@ -10,7 +11,15 @@ describe('StatesServiceService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        NbAuthModule.forRoot(),
+        RouterTestingModule,
+        HttpClientTestingModule,
+        NbAuthModule.forRoot({
+          strategies: [
+            NbPasswordAuthStrategy.setup({
+              name: 'email',
+            }),
+          ],
+        }),
       ],
     });
     service = TestBed.inject(StatesService);
