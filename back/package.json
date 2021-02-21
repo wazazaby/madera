@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon --exec babel-node server.js"
+    "dev": "nodemon --exec babel-node server.js",
+    "pmig": "npx prisma migrate dev --preview-feature",
+    "pgen": "npx prisma generate"
   },
   "repository": {
     "type": "git",
@@ -21,7 +23,7 @@
     "@prisma/client": "^2.17.0",
     "dotenv": "^8.2.0",
     "fastify": "^3.12.0",
-    "fastify-mysql": "^2.1.0"
+    "fastify-jwt": "^2.3.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.16",
