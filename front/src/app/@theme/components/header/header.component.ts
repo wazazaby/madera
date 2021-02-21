@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPictureOnly: boolean = false;
   user: any;
 
-  currentTheme = 'dark';
+  currentTheme = 'cosmic';
 
   userMenu: NbMenuItem[] = [
     { data: {id: 1}, title: 'Profile' },
@@ -61,7 +61,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl('pages/profil').then();
         break;
       case 2:
-        this.router.navigateByUrl('auth/login').then();
+        this.router.navigateByUrl('auth/logout').then();
         break;
     }
   }

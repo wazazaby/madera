@@ -1,12 +1,10 @@
+import { APP_BASE_HREF } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { CoreModule } from './@core/core.module';
-import { ThemeModule } from './@theme/theme.module';
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { AuthguardService } from './services/authguard.service';
+import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
+import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -16,6 +14,13 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { CoreModule } from './@core/core.module';
+import { ThemeModule } from './@theme/theme.module';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AuthguardService } from './services/authguard.service';
+import { StatesService } from './services/states.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,9 +40,64 @@ import {
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    NbSecurityModule.forRoot({
+      accessControl: {
+        user: {
+          view: '',
+        },
+        admin: {
+          parent: 'user',
+          view: ['admin'],
+        },
+        commercial: {
+          parent: 'user',
+          view: ['commercial'],
+        },
+        stock: {
+          parent: 'user',
+          view: ['stock'],
+        },
+      },
+    }),
+    // TODO fonctionnera quand l'API sera dispo -> /login
+    // NbAuthModule.forRoot({
+    //   strategies: [
+    //     NbPasswordAuthStrategy.setup({
+    //       name: 'email',
+    //       baseEndpoint: '/api/',
+    //       login: {
+    //         endpoint: '/api/login',
+    //         method: 'post',
+    //         defaultErrors: ['Compte incorrect, merci de contacter votre administrateur'],
+    //         defaultMessages: ['Bienvenue Madara Ushiha'],
+    //         redirect: {
+    //           success: '/dashboard/',
+    //           failure: null, // stay on the same page
+    //         },
+    //       },
+    //
+    //       logout: {
+    //         redirect: {
+    //           success: '/auth/login',
+    //           failure: null, // stay on the same page
+    //         },
+    //       },
+    //
+    //       requestPass: {
+    //         redirect: {
+    //           success: '/auth/login',
+    //           failure: null, // stay on the same page
+    //         },
+    //       },
+    //     }),
+    //   ],
+    //   forms: {},
+    // }),
   ],
   providers: [
     AuthguardService,
+    { provide: APP_BASE_HREF, useValue: '/' },
+    { provide : NbRoleProvider, useClass: StatesService },
   ],
   bootstrap: [AppComponent],
 })

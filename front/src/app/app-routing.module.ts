@@ -1,21 +1,17 @@
-import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import {
-  NbAuthComponent,
-  NbLoginComponent,
-  NbLogoutComponent,
-  NbRegisterComponent,
-  NbRequestPasswordComponent,
-  NbResetPasswordComponent,
-} from '@nebular/auth';
-import { AuthguardService } from '../app/services/authguard.service';
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
+import { NbAuthComponent } from '@nebular/auth';
+import { LoginComponent } from './pages/auth/login/login.component';
+import { LogoutComponent } from './pages/auth/logout/logout.component';
+import { RequestPasswordComponent } from './pages/auth/request-password/request-password.component';
+import { AuthguardService } from './services/authguard.service';
 
 export const routes: Routes = [
   {
     path: 'pages',
     loadChildren: () => import('./pages/pages.module')
       .then(m => m.PagesModule),
-    // canActivate: [AuthguardService],
+    canActivate: [AuthguardService],
   },
   {
     path: 'auth',
@@ -23,32 +19,28 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: NbLoginComponent,
+        component: LoginComponent,
       },
       {
         path: 'login',
-        component: NbLoginComponent,
-      },
-      {
-        path: 'register',
-        component: NbRegisterComponent,
-      },
-      {
-        path: 'logout',
-        component: NbLogoutComponent,
+        component: LoginComponent,
       },
       {
         path: 'request-password',
-        component: NbRequestPasswordComponent,
+        component: RequestPasswordComponent,
       },
       {
-        path: 'reset-password',
-        component: NbResetPasswordComponent,
+        path: 'logout',
+        component: LogoutComponent,
       },
+      // {
+      //   path: 'reset-password',
+      //   component: NbResetPasswordComponent,
+      // },
     ],
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  {path: '', redirectTo: 'pages', pathMatch: 'full'},
+  {path: '**', redirectTo: 'pages'},
 ];
 
 const config: ExtraOptions = {
