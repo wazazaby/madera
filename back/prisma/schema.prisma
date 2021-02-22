@@ -11,62 +11,62 @@ generator client {
 
 
 
-// =================== ENUMS ===================
-enum UsageUnit {
-    CENTIMETER
-    SQUARE_METER
-    LINEAR_METER
-    UNIT
-}
-
-enum QuotationStatus {
-    WAITING
-    ACCEPTED
-    DENIED
-}
-
-enum OrderStatus {
-    WAITING
-    IN_PRODUCTION
-    IN_ASSEMBLY
-    IN_DELIVERY
-    INSTALLED
-}
-
-enum PaymentType {
-    AT_SIGNATURE
-    AT_CONSTRUCTION_LICENCE_OBTENTION
-    AT_SITE_OPENING
-    AT_FOUNDATION_COMPLETION
-    AT_WALLS_COMPLETION
-    AT_WATER_AIR_PUT_OUT
-    AT_EQUIPMENT_WORK_COMPLETION
-    AT_KEY_HANDING
-}
-// =================== ENUMS ===================
-
-
-
-// =================== ADMINISTRATOR ===================
-model Administrator {
+// =================== ENUMERATORS AS TABLES ===================
+model UsageUnit {
     id                  Int                 @default(autoincrement()) @id
-    firstName           String
-    lastName            String
-    email               String              @unique
-    password            String
+    label               String              @unique
+    code                String              @unique
     createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
     // <==> RELATIONS <==>
     // <==> DOWN <==>
-    commercials         Commercial[]
-    stockists           Stockist[]
+    components          Component[]
 }
-// =================== ADMINISTRATOR ===================
+
+model QuotationStatus {
+    id                  Int                 @default(autoincrement()) @id
+    label               String              @unique
+    code                String              @unique
+    createdAt           DateTime            @default(now())
+    // <==> RELATIONS <==>
+    // <==> DOWN <==>
+    quotations          Quotation[]
+}
+
+model OrderStatus {
+    id                  Int                 @default(autoincrement()) @id
+    label               String              @unique
+    code                String              @unique
+    createdAt           DateTime            @default(now())
+    // <==> RELATIONS <==>
+    // <==> DOWN <==>
+    orders              Order[]
+}
+
+model PaymentType {
+    id                  Int                 @default(autoincrement()) @id
+    label               String              @unique
+    code                String              @unique
+    createdAt           DateTime            @default(now())
+    // <==> RELATIONS <==>
+    // <==> DOWN <==>
+    payments            Payment[]
+}
+// =================== ENUMERATORS AS TABLES ===================
 
 
 
-// =================== COMMERCIAL ===================
-model Commercial {
+// =================== USER ===================
+model Role {
+    id                  Int                 @default(autoincrement()) @id
+    label               String              @unique
+    code                String              @unique
+    createdAt           DateTime            @default(now())
+    // <==> RELATIONS <==>
+    // <==> DOWN <==>
+    user                User[]
+}
+
+model User {
     id                  Int                 @default(autoincrement()) @id
     firstName           String
     lastName            String
@@ -77,59 +77,68 @@ model Commercial {
     updatedAt           DateTime            @updatedAt
     // <==> RELATIONS <==>
     // <==> UP <==>
+    role                Role                @relation(fields: [roleId], references: [id])
+    roleId              Int
+    // <==> DOWN <==>
+    administrator       Administrator?
+    commercial          Commercial?
+    stockist            Stockist?
+    client              Client?
+}
+
+model Administrator {
+    id                  Int                 @default(autoincrement()) @id
+    // <==> RELATIONS <==>
+    // <==> UP <==>
+    user                User                @relation(fields: [userId], references: [id])
+    userId              Int
+    // <==> DOWN <==>
+    commercials         Commercial[]
+    stockists           Stockist[]
+}
+
+model Commercial {
+    id                  Int                 @default(autoincrement()) @id
+    // <==> RELATIONS <==>
+    // <==> UP <==>
+    user                User                @relation(fields: [userId], references: [id])
     administrator       Administrator       @relation(fields: [administratorId], references: [id])
+    userId              Int
     administratorId     Int
     // <==> DOWN <==>
     quotations          Quotation[]
     clients             Client[]
 }
-// =================== COMMERCIAL ===================
 
-
-
-// =================== STOCKIST ===================
 model Stockist {
     id                  Int                 @default(autoincrement()) @id
-    firstName           String
-    lastName            String
-    email               String              @unique
-    password            String
-    createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
     // <==> RELATIONS <==>
     // <==> UP <==>
+    user                User                @relation(fields: [userId], references: [id])
     administrator       Administrator       @relation(fields: [administratorId], references: [id])
+    userId              Int
     administratorId     Int
     // <==> DOWN <==>
     stocks              Stock[]
     providers           Provider[]
 }
-// =================== STOCKIST ===================
 
-
-
-// =================== CLIENT ===================
 model Client {
     id                  Int                 @default(autoincrement()) @id
-    firstName           String
-    lastName            String
     city                String
     postalCode          Int             
     adressLine1         String
     adressLine2         String
-    email               String              @unique
-    phoneNumber         String              @db.VarChar(10) @unique
-    password            String
-    createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
     // <==> RELATIONS <==>
     // <==> UP <==>
+    user                User                @relation(fields: [userId], references: [id])
     commercial          Commercial          @relation(fields: [commercialId], references: [id])
+    userId              Int
     commercialId        Int
     // <==> DOWN <==>
     quotations          Quotation[]
 }
-// =================== CLIENT ===================
+// =================== USER ===================
 
 
 
@@ -156,14 +165,15 @@ model Component {
     reference           String              @unique
     shortDescription    String?             @db.Text
     description         String              @db.MediumText
-    unit                UsageUnit        
     price               Float
     createdAt           DateTime            @default(now())
     updatedAt           DateTime            @updatedAt
     // <==> RELATIONS <==>
     // <==> UP <==>
     provider            Provider            @relation(fields: [providerId], references: [id])
+    unit                UsageUnit           @relation(fields: [unitId], references: [id])
     providerId          Int
+    unitId              Int
     // <==> DOWN <==>
     modules             Module[]
 }
@@ -198,8 +208,8 @@ model Stock {
     // <==> RELATIONS <==>
     // <==> UP <==>
     stockist            Stockist            @relation(fields: [stockistId], references: [id])
-    stockistId          Int
     component           Component           @relation(fields: [componentId], references: [id])
+    stockistId          Int
     componentId         Int
 }
 // =================== STOCK ===================
@@ -211,16 +221,17 @@ model Quotation {
     id                  Int                 @default(autoincrement()) @id
     label               String
     shortDescription    String?             @db.Text
-    status              QuotationStatus
     price               Float
     createdAt           DateTime            @default(now())
     updatedAt           DateTime            @updatedAt
     // <==> RELATIONS <==>
     // <==> UP <==>
     commercial          Commercial          @relation(fields: [commercialId], references: [id])
-    commercialId        Int
     client              Client              @relation(fields: [clientId], references: [id])
+    status              QuotationStatus     @relation(fields: [statusId], references: [id])
+    commercialId        Int
     clientId            Int
+    statusId            Int
     // <==> DOWN <==>
     orders              Order[]
     modules             Module[]
@@ -232,12 +243,13 @@ model Quotation {
 // =================== ORDER ===================
 model Order {
     id                  Int                 @default(autoincrement()) @id
-    status              OrderStatus
     totalPaid           Float
     // <==> RELATIONS <==>
     // <==> UP <==>
     quotation           Quotation           @relation(fields: [quotationId], references: [id])
+    status              OrderStatus         @relation(fields: [statusId], references: [id])
     quotationId         Int
+    statusId            Int
     // <==> DOWN <==>
     payments            Payment[]
 }
@@ -248,7 +260,6 @@ model Order {
 // =================== PAYMENT ===================
 model Payment {
     id                  Int                 @default(autoincrement()) @id
-    type                PaymentType
     total               Float
     currentlyPaid       Float
     leftToPay           Float
@@ -257,6 +268,8 @@ model Payment {
     // <==> RELATIONS <==>
     // <==> UP <==>
     order               Order               @relation(fields: [orderId], references: [id])
+    type                PaymentType         @relation(fields: [typeId], references: [id])
     orderId             Int
+    typeId              Int
 }
 // =================== PAYMENT ===================
