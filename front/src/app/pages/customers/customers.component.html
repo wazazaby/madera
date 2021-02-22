@@ -1,3 +1,9 @@
-<pre *ngIf="customers.length > 0">
-  {{customers | json}}
-</pre>
+<app-smart-table
+    *ngIf="dataCustomers.length > 0"
+    [columns]="columns"
+    [data]="dataCustomers"
+    (create)="onCreate($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+>
+</app-smart-table>

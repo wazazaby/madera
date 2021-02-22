@@ -1,7 +1,7 @@
 import { Quotation } from './quotation';
 
 export interface Client {
-  id: number;
+  id?: number;
   firstName: string;
   lastName: string;
   city: string;
@@ -11,7 +11,7 @@ export interface Client {
   email: string;
   phoneNumber: string;
   password: string;
-  quotation: Quotation[];
-  createdAt: Date;
-  updatedAt: Date;
+  quotation?: Quotation[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }

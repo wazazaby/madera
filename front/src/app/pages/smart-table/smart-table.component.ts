@@ -33,7 +33,7 @@ export class SmartTableComponent implements OnInit {
   // Init les intitulés de colonne
   @Input() public columns: any;
   // Charge les datas
-  @Input() public data: [];
+  @Input() public data: any[];
   // Init le tableau en data
   private _source: LocalDataSource = new LocalDataSource();
 
@@ -54,23 +54,17 @@ export class SmartTableComponent implements OnInit {
   }
 
   public onCreate(event) {
-    console.log('*create', event);
-    // event.confirm.resolve();
     this.create.emit(event);
   }
 
 
   public onEdit(event) {
-    console.log('*edit', event);
-    // event.confirm.resolve();
     this.edit.emit(event);
   }
 
   public onDelete(event) {
-    console.log('*delete', event);
-    if (window.confirm('Are you sure you want to delete?')) {
+    if (window.confirm('Voulez vous supprimez cette élément ?')) {
       this.delete.emit(event);
-      // event.confirm.resolve();
     } else {
       event.confirm.reject();
     }
@@ -80,11 +74,15 @@ export class SmartTableComponent implements OnInit {
    * Alimente le tableau avec les datas
    * @return LocalDataSource
    */
-  getSource(): LocalDataSource {
+  public getSource(): LocalDataSource {
     return this._source;
   }
 
-  getSetting() {
+  /**
+   * Alimente la configuration du tableau
+   * @return any
+   */
+  public getSetting(): any {
     return this._setting;
   }
 }

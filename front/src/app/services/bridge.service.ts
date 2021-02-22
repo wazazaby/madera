@@ -34,12 +34,16 @@ export class BridgeService implements OnDestroy {
     // return this._http.get<any>(environment.apiUrlService + 'clients', { withCredentials: true });
   }
 
-  public setClient(): Observable<Client> {
+  public setClient(cli: Client): Observable<Client> {
     return;
   }
 
-  public addClient(): Observable<Client> {
-    return;
+  public addClient(cli: Client): Observable<Client[]> {
+    return new Observable<Client[]>((obs) => {
+      this._statesService.clients.push(cli);
+      obs.next(this._statesService.clients);
+      obs.complete();
+    });
   }
 
   // ===================================================================================================================

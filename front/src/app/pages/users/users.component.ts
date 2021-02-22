@@ -36,7 +36,8 @@ export class UsersComponent implements OnInit {
     },
   };
 
-  public data = [{
+  public data = [
+  {
     id: 1,
     firstName: 'Mark',
     lastName: 'Otto',

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NbMenuItem } from '@nebular/theme';
 
-import { MENU_ADMIN, MENU_COMMERCIAL, MENU_STOCK, MENU_USER } from './pages-menu';
+import { DEFAULT_MENU, MENU_ADMIN, MENU_COMMERCIAL, MENU_STOCK, MENU_USER } from './pages-menu';
 
 @Component({
   selector: 'ngx-pages',
@@ -19,8 +19,8 @@ import { MENU_ADMIN, MENU_COMMERCIAL, MENU_STOCK, MENU_USER } from './pages-menu
 export class PagesComponent {
 
   public user: NbMenuItem[] = MENU_USER;
-  public admin: NbMenuItem[] = MENU_ADMIN;
-  public commercial: NbMenuItem[] = MENU_COMMERCIAL;
-  public stock: NbMenuItem[] = MENU_STOCK;
+  public admin: NbMenuItem[] = [...DEFAULT_MENU, ...MENU_ADMIN];
+  public commercial: NbMenuItem[] = [...DEFAULT_MENU, ...MENU_COMMERCIAL];
+  public stock: NbMenuItem[] = [...DEFAULT_MENU, ...MENU_STOCK];
 
 }
