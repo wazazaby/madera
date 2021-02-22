@@ -18,13 +18,9 @@ export default (fastify, _, done) => {
     fastify.route({
         method: 'POST',
         url: `${BASE}/test`,
-        onRequest: async (req, rep) => {
-            try {
-                await req.jwtVerify()
-            } catch (err) {
-                rep.send(err)
-            }
-        },
+        preHandler: fastify.auth([
+            fastify.verifyJWT
+        ]),
         handler: async (req, rep) => {
             rep.send(req.user);
         }

@@ -24,4 +24,13 @@ const generateEnums = async () => {
     ]);
 }
 
-export { clearEnums, generateEnums };
+const verifyJWT = async (req, rep) => {
+    try {
+        const res = await req.jwtVerify();
+        console.log(res);
+    } catch (err) {
+        throw err;
+    }
+}
+
+export { clearEnums, generateEnums, verifyJWT };
