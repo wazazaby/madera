@@ -7,6 +7,8 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { NbAuthService } from '@nebular/auth';
 import { Router } from '@angular/router';
+import { StatesService } from '../../../services/states.service';
+import { BridgeService } from '../../../services/bridge.service';
 
 @Component({
   selector: 'ngx-header',
@@ -32,10 +34,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private userService: UserData,
               private authService: NbAuthService,
               private layoutService: LayoutService,
+              private _stateService: StatesService,
+              private _bridgeService: BridgeService,
               public router: Router) {
   }
 
   ngOnInit() {
+    // Si aucune data n'est trouver on load tout
+    if (this._stateService.ifNodata()) {
+      this._bridgeService.initData();
+    }
+
     this.currentTheme = this.themeService.currentTheme;
 
     this.userService.getUsers()

@@ -6,6 +6,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { getDeepFromObject, NB_AUTH_OPTIONS, NbAuthResult, NbAuthService, NbAuthSocialLink } from '@nebular/auth';
+import { BridgeService } from '../../../services/bridge.service';
 
 @Component({
   selector: 'nb-login',
@@ -27,7 +28,8 @@ export class LoginComponent {
   constructor(protected service: NbAuthService,
               @Inject(NB_AUTH_OPTIONS) protected options = {},
               protected cd: ChangeDetectorRef,
-              protected router: Router) {
+              protected router: Router,
+              private _bridgeService: BridgeService) {
 
     this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
     this.showMessages = this.getConfigValue('forms.login.showMessages');
@@ -46,6 +48,8 @@ export class LoginComponent {
 
       if (result.isSuccess()) {
         this.messages = result.getMessages();
+        // Initialise les datas de l'application
+        this._bridgeService.initData();
       } else {
         this.errors = result.getErrors();
       }

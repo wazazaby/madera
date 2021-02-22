@@ -1,10 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { forkJoin, Observable, Subject } from 'rxjs';
+import { forkJoin, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { StatesService } from './states.service';
+import { Client } from '../interfaces/client';
+import { Component } from '../interfaces/component';
+import { Module } from '../interfaces/module';
+import { clientsMock } from '../mocks/clients.mock';
 
 @Injectable({
   providedIn: 'root',
@@ -22,23 +26,31 @@ export class BridgeService implements OnDestroy {
   // ===================================================================================================================
   // Client
 
-  public getClient(): Observable<any> {
-    return this._http.get<any>(environment.apiUrlService + '/clients', { withCredentials: true });
+  public getClients(): Observable<Client[]> {
+    return new Observable<Client[]>((obs) => {
+      obs.next(clientsMock);
+      obs.complete();
+    });
+    // return this._http.get<any>(environment.apiUrlService + 'clients', { withCredentials: true });
   }
 
-  public setClient(): Observable<any> {
+  public setClient(): Observable<Client> {
     return;
   }
 
-  public addClient(): Observable<any> {
+  public addClient(): Observable<Client> {
     return;
   }
 
   // ===================================================================================================================
   // Composant
 
-  public getComposant(): Observable<any> {
-    return this._http.get<any>(environment.apiUrlService + '/composants', { withCredentials: true });
+  public getComposant(): Observable<Component[]> {
+    return new Observable<Component[]>((obs) => {
+      obs.next([]);
+      obs.complete();
+    });
+    // return this._http.get<any>(environment.apiUrlService + 'composants', { withCredentials: true });
   }
 
   public setComposant(): Observable<any> {
@@ -52,15 +64,18 @@ export class BridgeService implements OnDestroy {
   // ===================================================================================================================
   // Modele
 
-  public getModele(): Observable<any> {
-    return this._http.get<any>(environment.apiUrlService + '/modeles', { withCredentials: true });
+  public getModule(): Observable<Module[]> {
+    return new Observable<Module[]>((obs) => {
+      obs.next([]);
+      obs.complete();
+    });    // return this._http.get<any>(environment.apiUrlService + 'modeles', { withCredentials: true });
   }
 
-  public setModele(): Observable<any> {
+  public setModule(): Observable<any> {
     return;
   }
 
-  public addModele(): Observable<any> {
+  public addModule(): Observable<any> {
     return;
   }
 
@@ -69,13 +84,24 @@ export class BridgeService implements OnDestroy {
 
   public initData() {
     return forkJoin([
-      this.getClient(),
+      this.getClients(),
       this.getComposant(),
-      this.getModele(),
+      this.getModule(),
     ])
       .pipe(takeUntil(this.destroyed))
-      .subscribe(([clients, composants, modeles]) => {
-        console.log('*initData', clients, composants, modeles);
+      .subscribe(([clients, composants, modules]) => {
+        if (clients && clients.length > 0) {
+          this._statesService.clients = clients;
+        }
+
+        if (composants && composants.length > 0) {
+          this._statesService.composents = composants;
+        }
+
+        if (modules && modules.length > 0) {
+          this._statesService.modules.next(modules);
+        }
+        console.log('*initData', clients, composants, modules);
     });
   }
 
