@@ -24,13 +24,37 @@ const generateEnums = async () => {
     ]);
 }
 
-const verifyJWT = async (req, rep) => {
-    try {
-        const res = await req.jwtVerify();
-        console.log(res);
-    } catch (err) {
-        throw err;
-    }
+const verifyJWT = async req => {
+    await req.jwtVerify();
 }
 
-export { clearEnums, generateEnums, verifyJWT };
+const lvlMessage = 'Vous n\'avez pas un niveau d\'authentification assez élevé pour effectuer cette tâche';
+const isAdmin = async (req, rep) => {
+    if (req.user.role !== 'ADMIN') {
+        return rep.unauthorized(lvlMessage);
+    }
+    return;
+}
+
+const isCommercial = async (req, rep) => {
+    if (req.user.role !== 'COMMERCIAL') {
+        return rep.unauthorized(lvlMessage);
+    }
+    return;
+}
+
+const isStockist = async (req, rep) => {
+    if (req.user.role !== 'STOCKIST') {
+        return rep.unauthorized(lvlMessage);
+    }
+    return;
+}
+
+const isClient = async (req, rep) => {
+    if (req.user.role !== 'CLIENT') {
+        return rep.unauthorized(lvlMessage);
+    }
+    return;
+}
+
+export { clearEnums, generateEnums, verifyJWT, isAdmin, isCommercial, isStockist, isClient };

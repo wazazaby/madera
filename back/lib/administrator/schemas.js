@@ -7,26 +7,17 @@ export const create = {
                 'firstName',
                 'lastName',
                 'email',
-                'password'
+                'password',
+                'phoneNumber'
             ],
             properties: {
                 firstName: { type: 'string' },
                 lastName: { type: 'string' },
                 email: { type: 'string' },
-                password: { type: 'string' }
+                password: { type: 'string' },
+                phoneNumber: { type: 'string', minLength: 10, maxLength: 10 }
             },
-            required: ['firstName', 'lastName', 'email', 'password']
+            required: ['firstName', 'lastName', 'email', 'password', 'phoneNumber']
         }
     }
-};
-
-export const login = {
-    body: {
-        type: 'object',
-        properties: {
-            email: { type: 'string' },
-            password: { type: 'string' }
-        },
-        required: ['email', 'password']
-    }
-};
+}

@@ -10,11 +10,20 @@ import fastifySensible from 'fastify-sensible';
 import { 
     clearEnums, 
     generateEnums, 
-    verifyJWT 
+    verifyJWT,
+    isAdmin,
+    isCommercial,
+    isStockist,
+    isClient
 } from './utils/functions';
+
+import globalSchemas from './utils/globalSchemas';
 
 // Import des routes
 import userRouter from './lib/user/routes';
+import adminRouter from './lib/administrator/routes';
+import moduleRouter from './lib/module/routes';
+import componentRouter from './lib/component/routes';
 
 // Init de la config dotenv
 dotenv.config();
@@ -31,11 +40,21 @@ app.register(fastifyHelmet);
 app.register(fastifyAuth);
 app.register(fastifySensible);
 
-//
+// Ajout des schemas de validations globaux
+app.register(globalSchemas);
+
+// Gestion de l'authentification
 app.decorate('verifyJWT', verifyJWT);
+app.decorate('isAdmin', isAdmin);
+app.decorate('isCommercial', isCommercial);
+app.decorate('isStockist', isStockist);
+app.decorate('isClient', isClient);
 
 // Register des routes
 app.register(userRouter);
+app.register(adminRouter);
+app.register(moduleRouter);
+app.register(componentRouter);
 
 // Route par défaut
 app.get('/', async (_, rep) => rep.code(200).send({ message: 'Hello, World!' }));
