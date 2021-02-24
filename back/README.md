@@ -11,7 +11,7 @@ Madera API
 `npm run pgen`
 
 ## TODO
-* Créer les fichiers qui stockeront les handlers
-* Créer le handler du `onRequest` pour la validation du JWT
-* Gérer l'auth de l'admin / commercial (voir pour gérer sous forme de middleware)
-* Passer la lib sous cette forme -> /back/lib/core, /back/lib/entities
+* Créer les routes du provider
+* Créer quelques providers
+* Créer les routes des components
+* Créer les routes des modules
