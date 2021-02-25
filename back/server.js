@@ -7,9 +7,9 @@ import fastifyHelmet from 'fastify-helmet';
 import fastifyAuth from 'fastify-auth';
 import fastifySensible from 'fastify-sensible';
 
-import { 
-    clearEnums, 
-    generateEnums, 
+import {
+    clearEnums,
+    generateEnums,
     verifyJWT,
     isAdmin,
     isCommercial,
@@ -28,10 +28,10 @@ import componentRouter from './lib/component/routes';
 // Init de la config dotenv
 dotenv.config();
 
-const app = fastify({ 
+const app = fastify({
     logger: {
         prettyPrint: true
-    } 
+    }
 });
 
 // Register des middlewares
@@ -59,8 +59,8 @@ app.register(componentRouter);
 // Route par défaut
 app.get('/', async (_, rep) => rep.code(200).send({ message: 'Hello, World!' }));
 app.get('/generate-enums', async (_, rep) => {
-    await clearEnums()
-    await generateEnums();
+    await clearEnums().then();
+    await generateEnums().then();
     rep.code(200).send({ done: true });
 });
 

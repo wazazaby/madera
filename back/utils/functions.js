@@ -6,21 +6,21 @@ import * as role from '../lib/role/handlers';
 
 const clearEnums = async () => {
     return await Promise.all([
-        usageUnit.clear(),
-        quotationStatus.clear(),
-        orderStatus.clear(),
-        paymentType.clear(),
-        role.clear()
+        await paymentType.clear(),
+        await role.clear(),
+        await orderStatus.clear(),
+        await quotationStatus.clear(),
+        await usageUnit.clear(),
     ]);
 }
 
 const generateEnums = async () => {
     return await Promise.all([
-        usageUnit.generate(),
-        quotationStatus.generate(),
-        orderStatus.generate(),
-        paymentType.generate(),
-        role.generate()
+        await paymentType.generate(),
+        await role.generate(),
+        await quotationStatus.generate(),
+        await usageUnit.generate(),
+        await orderStatus.generate(),
     ]);
 }
 
