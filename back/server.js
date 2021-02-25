@@ -24,6 +24,7 @@ import userRouter from './lib/user/routes';
 import adminRouter from './lib/administrator/routes';
 import moduleRouter from './lib/module/routes';
 import componentRouter from './lib/component/routes';
+import fastifyCors from "fastify-cors";
 
 // Init de la config dotenv
 dotenv.config();
@@ -35,7 +36,7 @@ const app = fastify({
 });
 
 // Register des middlewares
-app.register(fastifyJWT, { secret: process.env.JWT_SECRET });
+app.register(fastifyJWT, {secret: process.env.JWT_SECRET});
 app.register(fastifyHelmet);
 app.register(fastifyAuth);
 app.register(fastifySensible);
@@ -56,12 +57,24 @@ app.register(adminRouter);
 app.register(moduleRouter);
 app.register(componentRouter);
 
+// TODO modifier les CORS
+app.register(require('fastify-cors'), {
+    origin: (origin, cb) => {
+        if(/localhost/.test(origin)){
+            //  Request from localhost will pass
+            cb(null, true)
+            return
+        }
+        // Generate an error on other origins, disabling access
+        cb(new Error("nique tes mort"))
+    }
+})
 // Route par défaut
-app.get('/', async (_, rep) => rep.code(200).send({ message: 'Hello, World!' }));
+app.get('/', async (_, rep) => rep.code(200).send({message: 'Hello, World!'}));
 app.get('/generate-enums', async (_, rep) => {
     await clearEnums().then();
     await generateEnums().then();
-    rep.code(200).send({ done: true });
+    rep.code(200).send({done: true});
 });
 
 // Lancement du serveur

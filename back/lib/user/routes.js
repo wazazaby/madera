@@ -20,7 +20,7 @@ export default async app => {
                 stockist: true
             }
         });
-    
+
         if (user === null) {
             return rep.notFound();
         }
@@ -28,7 +28,7 @@ export default async app => {
         if (!await bcrypt.compare(password, user.password)) {
             return rep.unauthorized();
         }
-    
+
         // Si tout ce passe bien on renvoit le JWT
         const token = app.jwt.sign({
             firstName: user.firstName,
@@ -36,10 +36,14 @@ export default async app => {
             email: user.email,
             role: user.role.code
         });
-        return { 
-            statusCode: 200, 
-            message: 'Vous êtes connecté', 
-            data: { token } 
+        return {
+            statusCode: 200,
+            message: 'Vous êtes connecté',
+            data: { token }
         }
+    });
+
+    app.post(`${BASE}/logout`, async (_, rep) => {
+        rep.code(200).send({done: true});
     });
 }
