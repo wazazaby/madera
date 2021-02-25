@@ -24,6 +24,13 @@ export class BridgeService implements OnDestroy {
   private destroyed = new Subject();
 
   // ===================================================================================================================
+  // Test API
+
+  public testApi() {
+    return this._http.get<any>(environment.apiUrlService);
+  }
+
+  // ===================================================================================================================
   // Client
 
   public getClients(): Observable<Client[]> {

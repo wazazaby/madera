@@ -71,4 +71,10 @@ export class LoginComponent {
   public getConfigValue(key: string): any {
     return getDeepFromObject(this.options, key, null);
   }
+
+  testApi() {
+    this._bridgeService.testApi().subscribe(res => {
+      console.log('test API === ', res);
+    });
+  }
 }
