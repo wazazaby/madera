@@ -6,11 +6,9 @@
 export const environment = {
   production: true,
   // url de l'API node
-  apiUrlService: 'http://localhost:3000/api/',
-  // url de l'api basique
-  apiUrlBase: 'http://localhost:3000',
-  // token d'identification pour l'API
-  tokenApi: 'token',
+  apiUrlService: 'http://localhost:3306',
+  // token
+  jwtToken: 'In0rKljpHXUa1ulOGUoG',
   // url de base de l'application
   baseUrl: 'http://localhost:4200',
   // domaine

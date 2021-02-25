@@ -14,7 +14,6 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppRoutingModule } from './app-routing.module';
@@ -60,44 +59,46 @@ import { StatesService } from './services/states.service';
       },
     }),
     // TODO fonctionnera quand l'API sera dispo -> /login
-    // NbAuthModule.forRoot({
-    //   strategies: [
-    //     NbPasswordAuthStrategy.setup({
-    //       name: 'email',
-    //       baseEndpoint: '/api/',
-    //       login: {
-    //         endpoint: '/api/login',
-    //         method: 'post',
-    //         defaultErrors: ['Compte incorrect, merci de contacter votre administrateur'],
-    //         defaultMessages: ['Bienvenue Madara Ushiha'],
-    //         redirect: {
-    //           success: '/dashboard/',
-    //           failure: null, // stay on the same page
-    //         },
-    //       },
-    //
-    //       logout: {
-    //         redirect: {
-    //           success: '/auth/login',
-    //           failure: null, // stay on the same page
-    //         },
-    //       },
-    //
-    //       requestPass: {
-    //         redirect: {
-    //           success: '/auth/login',
-    //           failure: null, // stay on the same page
-    //         },
-    //       },
-    //     }),
-    //   ],
-    //   forms: {},
-    // }),
+    NbAuthModule.forRoot({
+      strategies: [
+        NbPasswordAuthStrategy.setup({
+          name: 'email',
+          baseEndpoint: 'http://127.0.0.1:3306/',
+          login: {
+            endpoint: 'user/login',
+            method: 'POST',
+            defaultErrors: ['Compte incorrect, merci de contacter votre administrateur'],
+            defaultMessages: ['Bienvenue Madara Uchiha'],
+            redirect: {
+              success: '/dashboard/',
+              failure: null, // stay on the same page
+            },
+          },
+
+          logout: {
+            method: 'POST',
+            endpoint: 'user/logout',
+            redirect: {
+              success: '/auth/login',
+              failure: null, // stay on the same page
+            },
+          },
+
+          requestPass: {
+            redirect: {
+              success: '/auth/login',
+              failure: null, // stay on the same page
+            },
+          },
+        }),
+      ],
+      forms: {},
+    }),
   ],
   providers: [
     AuthguardService,
     { provide: APP_BASE_HREF, useValue: '/' },
-    { provide : NbRoleProvider, useClass: StatesService },
+    { provide: NbRoleProvider, useClass: StatesService },
   ],
   bootstrap: [AppComponent],
 })
