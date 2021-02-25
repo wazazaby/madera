@@ -60,13 +60,14 @@ app.register(componentRouter);
 // TODO modifier les CORS
 app.register(require('fastify-cors'), {
     origin: (origin, cb) => {
-        if(/localhost/.test(origin)){
-            //  Request from localhost will pass
-            cb(null, true)
-            return
+        if (/undefined/.test(origin) || /localhost/.test(origin)) {
+            //  Request from localhost and postmane
+            // TODO postman orgin === undefined ??? vérifier cette merde
+            cb(null, true);
+        } else {
+            // Generate an error on other origins, disabling access
+            cb(new Error("nique tout tes grand mort"))
         }
-        // Generate an error on other origins, disabling access
-        cb(new Error("nique tes mort"))
     }
 })
 // Route par défaut

@@ -46,4 +46,30 @@ export default async app => {
     app.post(`${BASE}/logout`, async (_, rep) => {
         rep.code(200).send({done: true});
     });
-}
+
+    // Affiches tout les users
+    app.post(`${BASE}s`, schemas.login, async (req, rep) => {
+        const users = await db.user.findMany({
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                phoneNumber: true,
+                createdAt: true,
+                updatedAt: true,
+                roleId: true,
+            }
+        });
+
+        // Check si un users est ici
+        if (users === null) {
+            return rep.notFound();
+        }
+
+        return {
+            statusCode: 200,
+            message: 'Liste des utilisateurs',
+            data: { users }
+        }
+    });}
