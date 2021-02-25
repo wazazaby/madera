@@ -12,8 +12,7 @@
     <nb-action class="user-action">
       <nb-user [nbContextMenu]="userMenu"
                [onlyPicture]="userPictureOnly"
-               [name]="user?.name"
-               [picture]="user?.picture">
+               [name]="user?.firstName + user?.lastName">
       </nb-user>
     </nb-action>
   </nb-actions>

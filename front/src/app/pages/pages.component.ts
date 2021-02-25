@@ -11,7 +11,7 @@ import { DEFAULT_MENU, MENU_ADMIN, MENU_COMMERCIAL, MENU_STOCK, MENU_USER } from
       <nb-menu *nbIsGranted="['view', 'user']" [items]="user"></nb-menu>
       <nb-menu *nbIsGranted="['view', 'admin']" [items]="admin"></nb-menu>
       <nb-menu *nbIsGranted="['view', 'commercial']" [items]="commercial"></nb-menu>
-      <nb-menu *nbIsGranted="['view', 'stock']" [items]="stock"></nb-menu>
+      <nb-menu *nbIsGranted="['view', 'stockist']" [items]="stockist"></nb-menu>
       <router-outlet></router-outlet>
     </ngx-one-column-layout>
   `,
@@ -21,6 +21,6 @@ export class PagesComponent {
   public user: NbMenuItem[] = MENU_USER;
   public admin: NbMenuItem[] = [...DEFAULT_MENU, ...MENU_ADMIN];
   public commercial: NbMenuItem[] = [...DEFAULT_MENU, ...MENU_COMMERCIAL];
-  public stock: NbMenuItem[] = [...DEFAULT_MENU, ...MENU_STOCK];
+  public stockist: NbMenuItem[] = [...DEFAULT_MENU, ...MENU_STOCK];
 
 }

@@ -52,9 +52,9 @@ import { StatesService } from './services/states.service';
           parent: 'user',
           view: ['commercial'],
         },
-        stock: {
+        stockist: {
           parent: 'user',
-          view: ['stock'],
+          view: ['stockist'],
         },
       },
     }),

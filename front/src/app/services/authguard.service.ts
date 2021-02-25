@@ -12,18 +12,13 @@ export class AuthguardService implements CanActivate {
               private router: Router) {}
 
   canActivate() {
-    return this.authService.isAuthenticated().pipe(
-      tap(
+    return this.authService.isAuthenticated()
+      .pipe(tap(
         (authenticated: boolean) => {
-          console.log('canActivate', authenticated);
-          // TODO supprimer le !
           if (!authenticated) {
             this.router.navigate(['auth/login']);
           }
-        },
-        (error) => {
-          console.log('*error', error);
         }),
-    );
+      );
   }
 }

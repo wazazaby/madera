@@ -12,8 +12,6 @@ export const environment = {
   production: false,
   // url de l'API node
   apiUrlService: 'http://127.0.0.1:3306',
-  // token
-  jwtToken: 'In0rKljpHXUa1ulOGUoG',
   // url de base de l'application
   baseUrl: 'http://localhost:4200',
   // domaine

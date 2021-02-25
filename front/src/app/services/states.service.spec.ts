@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
+import { NbAuthModule, NbAuthService, NbPasswordAuthStrategy } from '@nebular/auth';
 
 import { StatesService } from './states.service';
 import { RouterTestingModule } from '@angular/router/testing';
