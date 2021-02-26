@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Roles } from '../../interfaces/roles';
@@ -92,8 +92,6 @@ export class UsersComponent implements OnInit, OnDestroy {
       addable: false,
     },
   };
-
-
 
   public data: Users[] = [];
   /** Liste de rôles sous la forme de select */

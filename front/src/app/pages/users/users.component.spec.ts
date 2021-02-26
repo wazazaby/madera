@@ -1,4 +1,8 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NbAuthModule } from '@nebular/auth';
+import { NbThemeModule, NbToastrModule } from '@nebular/theme';
 
 import { UsersComponent } from './users.component';
 
@@ -9,6 +13,14 @@ describe('UsersComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ UsersComponent ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        RouterTestingModule.withRoutes([]),
+        NbThemeModule.forRoot(),
+        NbToastrModule.forRoot(),
+        NbAuthModule.forRoot(),
+      ],
     })
     .compileComponents();
   });
