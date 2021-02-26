@@ -73,7 +73,7 @@ export class LoginComponent {
   }
 
   testApi() {
-    this._bridgeService.testApi().subscribe(res => {
+    this._bridgeService.getUsers().subscribe(res => {
       console.log('test API === ', res);
     });
   }

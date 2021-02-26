@@ -15,3 +15,8 @@ export interface SmartTableSetting {
   };
   columns: any;
 }
+
+export interface SmartSelectConfig {
+  value: string | number;
+  title: string;
+}

@@ -11,6 +11,7 @@ export class AuthguardService implements CanActivate {
   constructor(private authService: NbAuthService,
               private router: Router) {}
 
+  // Vérifie si l'utilisateur est authentifier
   canActivate() {
     return this.authService.isAuthenticated()
       .pipe(tap(

@@ -1,4 +1,5 @@
 <app-smart-table
+    *ngIf="data.length > 0"
     [columns]="columns"
     [data]="data"
     (create)="onCreate($event)"

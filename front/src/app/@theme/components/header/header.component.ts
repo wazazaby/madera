@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { Users } from '../../../interfaces/users';
 import { StatesService } from '../../../services/states.service';
 import { BridgeService } from '../../../services/bridge.service';
+import { UtilsService } from '../../../services/utils.service';
 
 @Component({
   selector: 'ngx-header',
@@ -37,12 +38,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private layoutService: LayoutService,
               private _stateService: StatesService,
               private _bridgeService: BridgeService,
+              private _utilsService: UtilsService,
               public router: Router) {
   }
 
   ngOnInit() {
     // Si aucune data n'est trouver on load tout
-    if (this._stateService.ifNodata()) {
+    if (this._utilsService.ifNodata()) {
       this._bridgeService.initData();
     }
 

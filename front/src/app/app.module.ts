@@ -20,6 +20,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthguardService } from './services/authguard.service';
 import { StatesService } from './services/states.service';
+import { UtilsService } from './services/utils.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -98,7 +99,7 @@ import { StatesService } from './services/states.service';
   providers: [
     AuthguardService,
     { provide: APP_BASE_HREF, useValue: '/' },
-    { provide: NbRoleProvider, useClass: StatesService },
+    { provide: NbRoleProvider, useClass: UtilsService },
   ],
   bootstrap: [AppComponent],
 })

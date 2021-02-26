@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { forkJoin, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { ResponsesApi } from '../interfaces/responses-api';
+import { Users } from '../interfaces/users';
 import { StatesService } from './states.service';
 import { Client } from '../interfaces/client';
 import { Component } from '../interfaces/component';
@@ -29,6 +31,31 @@ export class BridgeService implements OnDestroy {
   public testApi() {
     return this._http.get<any>(environment.apiUrlService);
   }
+
+  // ===================================================================================================================
+  // Users
+
+  /**
+   * Affiche la liste des utilisateurs
+   */
+  public getUsers(): Observable<ResponsesApi<Users[]>> {
+    return this._http.post<ResponsesApi<Users[]>>(`${environment.apiUrlService}/users`, {});
+  }
+
+  /**
+   * Modifie l'utilisateur
+   */
+  public setUsers(id: number, users: Users) {
+    return;
+  }
+
+  /**
+   * Supprime l'utilisateur
+   */
+  public deleteUsers(id: number) {
+    return;
+  }
+
 
   // ===================================================================================================================
   // Client
@@ -93,26 +120,45 @@ export class BridgeService implements OnDestroy {
   // ===================================================================================================================
   // All Data
 
+  /**
+   * Initialise toute les datas après la connection
+   */
   public initData() {
     return forkJoin([
       this.getClients(),
       this.getComposant(),
       this.getModule(),
-    ])
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(([clients, composants, modules]) => {
+      this.getUsers(),
+    ]).pipe(takeUntil(this.destroyed))
+      .subscribe(([clients, composants, modules, users]) => {
+        // Ajout les clients
         if (clients && clients.length > 0) {
           this._statesService.clients = clients;
         }
-
+        // Ajout les composants
         if (composants && composants.length > 0) {
           this._statesService.composents = composants;
         }
 
+        // Ajout les modules
         if (modules && modules.length > 0) {
           this._statesService.modules.next(modules);
         }
-        console.log('*initData', clients, composants, modules);
+
+        // Check le token
+        if (users && users.data && users.data['users'].length > 0) {
+          this._statesService.users = users.data['users'];
+        }
+
+        // TODO ATTENDRE APPEL WS DES ROLES
+        // Ajoute les rôles
+        this._statesService.roles = [
+          {id: 58, label: 'Administrateur', code: 'ADMIN', createdAt: '2021-02-25 10:43:14.688'},
+          {id: 59, label: 'Commercial', code: 'COMMERCIAL', createdAt: '2021-02-25 10:43:14.692'},
+          {id: 60, label: 'Stockiste', code: 'STOCKIST', createdAt: '2021-02-25 10:43:14.696'},
+          {id: 61, label: 'Client', code: 'CLIENT', createdAt: '2021-02-25 10:43:14.700'},
+        ];
+        // console.log('*initData', clients, composants, modules, users);
     });
   }
 

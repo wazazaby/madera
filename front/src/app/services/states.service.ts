@@ -6,36 +6,53 @@ import { map } from 'rxjs/operators';
 import { Client } from '../interfaces/client';
 import { Module } from '../interfaces/module';
 import { Component } from '../interfaces/component';
+import { Roles } from '../interfaces/roles';
 import { Users } from '../interfaces/users';
 
 @Injectable({
   providedIn: 'root',
 })
-export class StatesService implements NbRoleProvider {
+export class StatesService {
 
-  /** Utilisateur */
-  private _user: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   /** Clients */
   private _clients: BehaviorSubject<Client[]> = new BehaviorSubject<Client[]>([]);
+  /** Users */
+  private _users: BehaviorSubject<Users[]> = new BehaviorSubject<Users[]>([]);
   /** Composants */
   private _composents: BehaviorSubject<Component[]> = new BehaviorSubject<Component[]>([]);
   /** Modules */
   private _modules: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([]);
-  /** Si aucune données n'est charger */
-  private _ifNodata: boolean = true;
+  /** Roles users */
+  private _roles: BehaviorSubject<Roles[]> = new BehaviorSubject<Roles[]>([]);
 
-  constructor(private authService: NbAuthService) {}
+  constructor() {}
 
-  /**
-   * Attribut le rôle à l'application
-   * @return Observable<string> => rôle
-   */
-  public getRole(): Observable<string> {
-    return this.authService.onTokenChange()
-      .pipe(map((token: NbAuthJWTToken) => {
-        const user: Users = decodeJwtPayload(token.getValue());
-        return token.isValid() && user ? user.role.toLowerCase() : '';
-      }));
+  // ===================================================================================================================
+
+  public get roles(): Roles[] {
+    return this._roles.getValue();
+  }
+
+  public set roles(value: Roles[]) {
+    this._roles.next(value);
+  }
+
+  public rolesAsObservable(): Observable<Roles[]> {
+    return this._roles.asObservable();
+  }
+
+  // ===================================================================================================================
+
+  public get users(): Users[] {
+    return this._users.getValue();
+  }
+
+  public set users(value: Users[]) {
+    this._users.next(value);
+  }
+
+  public usersAsObservable(): Observable<Users[]> {
+    return this._users.asObservable();
   }
 
   // ===================================================================================================================
@@ -78,12 +95,6 @@ export class StatesService implements NbRoleProvider {
 
   public modulesAsObservable(): Observable<Module[]> {
     return this._modules.asObservable();
-  }
-
-  // ===================================================================================================================
-
-  public ifNodata(): boolean {
-    return (this.clients.length === 0);
   }
 
   // ===================================================================================================================

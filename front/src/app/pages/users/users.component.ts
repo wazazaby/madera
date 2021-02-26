@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Roles } from '../../interfaces/roles';
+import { SmartSelectConfig } from '../../interfaces/SmartTableSetting';
+import { Users } from '../../interfaces/users';
+import { StatesService } from '../../services/states.service';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
   selector: 'ngx-users',
@@ -7,68 +14,110 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsersComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _stateService: StatesService,
+              private _utilsService: UtilsService) { }
 
   public columns = {
-    id: {
-      title: 'ID',
-      type: 'number',
-    },
     firstName: {
-      title: 'First Name',
+      title: 'Prénom',
       type: 'string',
     },
     lastName: {
-      title: 'Last Name',
+      title: 'Nom',
       type: 'string',
     },
-    username: {
-      title: 'Username',
+    phoneNumber: {
+      title: 'Téléphone',
       type: 'string',
     },
     email: {
-      title: 'E-mail',
+      title: 'Email',
       type: 'string',
     },
-    age: {
-      title: 'Age',
-      type: 'number',
+    roleId: {
+      title: 'Rôle',
+      valuePrepareFunction: (date) => {
+        return this._utilsService.formatRole(date);
+      },
+      filter: {
+        type: 'list',
+        config: {
+          type: 'list',
+          selectText: 'Choisissez le rôle',
+          list: [],
+        },
+      },
+      filterFunction(cell: any, search?: string): boolean {
+        if (search === JSON.stringify(cell)) {
+          return true;
+        }
+      },
+      editor: {
+        type: 'list',
+        config: {
+          list: [],
+        },
+      },
+    },
+    createdAt: {
+      title: 'Crée le',
+      type: 'string',
+      valuePrepareFunction: (date) => {
+        return this._utilsService.formatDate(date);
+      },
+      editable: false,
+      addable: false,
+    },
+    updatedAt: {
+      title: 'Modifier le',
+      type: 'date',
+      valuePrepareFunction: (date) => {
+        return this._utilsService.formatDate(date);
+      },
+      editable: false,
+      addable: false,
     },
   };
 
-  public data = [
-  {
-    id: 1,
-    firstName: 'Mark',
-    lastName: 'Otto',
-    username: '@mdo',
-    email: 'mdo@gmail.com',
-    age: '28',
-  }, {
-    id: 2,
-    firstName: 'Jacob',
-    lastName: 'Thornton',
-    username: '@fat',
-    email: 'fat@yandex.ru',
-    age: '45',
-  }, {
-    id: 3,
-    firstName: 'Larry',
-    lastName: 'Bird',
-    username: '@twitter',
-    email: 'twitter@outlook.com',
-    age: '18',
-  }, {
-    id: 4,
-    firstName: 'John',
-    lastName: 'Snow',
-    username: '@snow',
-    email: 'snow@gmail.com',
-    age: '20',
-  }];
+  /** Liste de rôles sous la forme de select */
+  private listRoles: SmartSelectConfig[] = [];
+
+  public data: Users[] = [];
+
+  /** Subject utilisé pour le unsubscribe de tout les obs */
+  private destroyed = new Subject();
 
   ngOnInit(): void {
+    this.loadUser();
+    this.loadRoles();
+  }
 
+  /**
+   * Charge la liste des utilisateurs
+   */
+  private loadUser() {
+    this._stateService.usersAsObservable()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((user: Users[]) => {
+        this.data = user;
+      });
+  }
+
+  /**
+   * Charge la liste des rôles
+   */
+  private loadRoles() {
+    this._stateService.rolesAsObservable()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((role: Roles[]) => {
+        this.listRoles = [];
+        role.forEach(r => {
+          this.listRoles.push({value: r.id, title: r.label});
+        });
+        this.columns.roleId.filter.config.list = this.listRoles;
+        this.columns.roleId.editor.config.list = this.listRoles;
+        this.columns = Object.assign({}, this.columns);
+      });
   }
 
   onCreate($event: any) {
@@ -81,5 +130,10 @@ export class UsersComponent implements OnInit {
 
   onDelete($event: any) {
     console.log('*evt onDelete user', $event);
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 }
