@@ -62,6 +62,14 @@ export class BridgeService implements OnDestroy {
   }
 
   /**
+   * Récupère toute les informations de l'utilisateur
+   * @param id: identification de l'utilisateur
+   */
+  public getUserInfo(id: number): Observable<ResponsesApi<Users>>  {
+    return this._http.get<ResponsesApi<Users>>(`${environment.apiUrlService}/users/${id}`);
+  }
+
+  /**
    * Envoie une demande pour reset le mot de passe de l'utilisateur
    * @param id: identifiant de l'utilisateur
    * @return Observable

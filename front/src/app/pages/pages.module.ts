@@ -27,6 +27,7 @@ import { SmartTableComponent } from './smart-table/smart-table.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RequestPasswordComponent } from './auth/request-password/request-password.component';
 import { LogoutComponent } from './auth/logout/logout.component';
+import { ButtonTableComponent } from './smart-table/button-table/button-table.component';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { LogoutComponent } from './auth/logout/logout.component';
     RequestPasswordComponent,
     LogoutComponent,
     SmartTableComponent,
+    ButtonTableComponent,
   ],
 })
 export class PagesModule {

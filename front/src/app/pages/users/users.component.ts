@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Roles } from '../../interfaces/roles';
@@ -7,6 +7,7 @@ import { Users } from '../../interfaces/users';
 import { BridgeService } from '../../services/bridge.service';
 import { StatesService } from '../../services/states.service';
 import { UtilsService } from '../../services/utils.service';
+import { ButtonTableComponent } from '../smart-table/button-table/button-table.component';
 
 @Component({
   selector: 'ngx-users',
@@ -77,7 +78,23 @@ export class UsersComponent implements OnInit, OnDestroy {
       editable: false,
       addable: false,
     },
+    button: {
+      title: 'Réinitialisation du mot de passe',
+      type: 'custom',
+      renderComponent: ButtonTableComponent,
+      onComponentInitFunction: (instance: any) => {
+        instance.save.subscribe(row => {
+          this.resetPass(row);
+        });
+      },
+      filter: false,
+      editable: false,
+      addable: false,
+    },
   };
+
+
+
   public data: Users[] = [];
   /** Liste de rôles sous la forme de select */
   private listRoles: SmartSelectConfig[] = [];
@@ -150,6 +167,24 @@ export class UsersComponent implements OnInit, OnDestroy {
         .subscribe(
           (res) => {
             this._utilsService.showToast(res.messages );
+          },
+          (err) => {
+            this._utilsService.showToast(err.statusText, 'danger');
+          },
+        );
+    }
+  }
+
+  public resetPass(row: Users): void {
+    if (row && row.id) {
+      const id: number = row.id;
+      this._bridgeService.resetPassword(id)
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(
+          (res) => {
+            if (res) {
+              this._utilsService.showToast(res.messages);
+            }
           },
           (err) => {
             this._utilsService.showToast(err.statusText, 'danger');
