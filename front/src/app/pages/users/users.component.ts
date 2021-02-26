@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Roles } from '../../interfaces/roles';
-import { SmartSelectConfig } from '../../interfaces/SmartTableSetting';
+import { SmartSelectConfig, SmartTableAdd, SmartTableDelete, SmartTableEdit } from '../../interfaces/SmartTableSetting';
 import { Users } from '../../interfaces/users';
+import { BridgeService } from '../../services/bridge.service';
 import { StatesService } from '../../services/states.service';
 import { UtilsService } from '../../services/utils.service';
 
@@ -12,10 +13,7 @@ import { UtilsService } from '../../services/utils.service';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
 })
-export class UsersComponent implements OnInit {
-
-  constructor(private _stateService: StatesService,
-              private _utilsService: UtilsService) { }
+export class UsersComponent implements OnInit, OnDestroy {
 
   public columns = {
     firstName: {
@@ -58,6 +56,8 @@ export class UsersComponent implements OnInit {
           list: [],
         },
       },
+      editable: false,
+      addable: true,
     },
     createdAt: {
       title: 'Crée le',
@@ -78,24 +78,98 @@ export class UsersComponent implements OnInit {
       addable: false,
     },
   };
-
+  public data: Users[] = [];
   /** Liste de rôles sous la forme de select */
   private listRoles: SmartSelectConfig[] = [];
-
-  public data: Users[] = [];
-
   /** Subject utilisé pour le unsubscribe de tout les obs */
   private destroyed = new Subject();
+
+  constructor(private _stateService: StatesService,
+              private _bridgeService: BridgeService,
+              private _utilsService: UtilsService) {
+  }
 
   ngOnInit(): void {
     this.loadUser();
     this.loadRoles();
   }
 
+  public onCreate(evt: SmartTableAdd<Users>): void {
+    if (evt && evt.newData) {
+      const user: Users = evt.newData;
+
+      this._bridgeService.addUsers(user)
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(
+          (res) => {
+            if (res) {
+              evt.confirm.resolve();
+              this._utilsService.showToast(res.messages);
+            }
+          },
+          (err) => {
+            this._utilsService.showToast(err.statusText, 'danger');
+          },
+        );
+
+    }
+  }
+
+  public onEdit(evt: SmartTableEdit<Users>): void {
+    if (evt && evt.data && evt.newData) {
+      const id: number = evt.data.id;
+      const newUser: Users = {
+        createdAt: evt.data.createAt,
+        email: evt.newData.email || evt.data.email,
+        firstName: evt.newData.firstName || evt.newData.firstName,
+        lastName: evt.newData.lastName || evt.newData.lastName,
+        phoneNumber: evt.newData.phoneNumber || evt.newData.phoneNumber,
+        roleId: evt.data.roleId,
+        updatedAt: evt.data.updatedAt,
+      };
+
+      this._bridgeService.setUsers(id, newUser)
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(
+          (res) => {
+            if (res) {
+              evt.confirm.resolve();
+              this._utilsService.showToast(res.messages);
+            }
+          },
+          (err) => {
+            this._utilsService.showToast(err.statusText, 'danger');
+          });
+    }
+  }
+
+  public onDelete(evt: SmartTableDelete<Users>): void {
+    if (evt.data) {
+      this._bridgeService.deleteUsers(evt.data.id)
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(
+          (res) => {
+            this._utilsService.showToast(res.messages );
+          },
+          (err) => {
+            this._utilsService.showToast(err.statusText, 'danger');
+          },
+        );
+    }
+  }
+
+  /**
+   * Détruit les observables
+   */
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
+  }
+
   /**
    * Charge la liste des utilisateurs
    */
-  private loadUser() {
+  private loadUser(): void {
     this._stateService.usersAsObservable()
       .pipe(takeUntil(this.destroyed))
       .subscribe((user: Users[]) => {
@@ -106,7 +180,7 @@ export class UsersComponent implements OnInit {
   /**
    * Charge la liste des rôles
    */
-  private loadRoles() {
+  private loadRoles(): void {
     this._stateService.rolesAsObservable()
       .pipe(takeUntil(this.destroyed))
       .subscribe((role: Roles[]) => {
@@ -118,22 +192,5 @@ export class UsersComponent implements OnInit {
         this.columns.roleId.editor.config.list = this.listRoles;
         this.columns = Object.assign({}, this.columns);
       });
-  }
-
-  onCreate($event: any) {
-    console.log('*evt onCreate user', $event);
-  }
-
-  onEdit($event: any) {
-    console.log('*evt onEdit user', $event);
-  }
-
-  onDelete($event: any) {
-    console.log('*evt onDelete user', $event);
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed.next();
-    this.destroyed.complete();
   }
 }

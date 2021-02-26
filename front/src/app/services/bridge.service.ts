@@ -36,6 +36,15 @@ export class BridgeService implements OnDestroy {
   // Users
 
   /**
+   * Ajoute un utilisateur
+   * @param user: information de l'utilisateur
+   * @return Observable
+   */
+  public addUsers(user: Users): Observable<ResponsesApi<any>> {
+    return this._http.post<ResponsesApi<any>>(`${environment.apiUrlService}/users/add`, {user});
+  }
+
+  /**
    * Affiche la liste des utilisateurs
    */
   public getUsers(): Observable<ResponsesApi<Users[]>> {
@@ -44,16 +53,30 @@ export class BridgeService implements OnDestroy {
 
   /**
    * Modifie l'utilisateur
+   * @param id: identifiant de l'utilisateur
+   * @param users: utilisateur modifier
+   * @return Observable
    */
-  public setUsers(id: number, users: Users) {
-    return;
+  public setUsers(id: number, users: Users): Observable<ResponsesApi<any>> {
+    return this._http.put<ResponsesApi<any>>(`${environment.apiUrlService}/users/${id}`, {users});
+  }
+
+  /**
+   * Envoie une demande pour reset le mot de passe de l'utilisateur
+   * @param id: identifiant de l'utilisateur
+   * @return Observable
+   */
+  public resetPassword(id: number): Observable<ResponsesApi<any>> {
+    return this._http.get<ResponsesApi<any>>(`${environment.apiUrlService}/users/${id}/reset-password`, {});
   }
 
   /**
    * Supprime l'utilisateur
+   * @param id: identifiant de l'utilisateur
+   * @return Observable
    */
-  public deleteUsers(id: number) {
-    return;
+  public deleteUsers(id: number): Observable<ResponsesApi<any>> {
+    return this._http.delete<ResponsesApi<any>>(`${environment.apiUrlService}/users?id=${id}`);
   }
 
 

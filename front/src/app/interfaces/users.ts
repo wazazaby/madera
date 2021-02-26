@@ -4,9 +4,9 @@ export interface Users {
   firstName: string;
   lastName: string;
   iat?: number;
-  role: string;
-  phoneNumber?: true;
-  createdAt?: true;
-  updatedAt?: true;
-  roleId?: true;
+  phoneNumber?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  role?: string;
+  roleId?: number;
 }

@@ -2,6 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { decodeJwtPayload, NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { NbRoleProvider } from '@nebular/security';
+import { NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { NbComponentStatus } from '@nebular/theme/components/component-status';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Users } from '../interfaces/users';
@@ -13,15 +15,36 @@ import { StatesService } from './states.service';
 export class UtilsService implements NbRoleProvider {
 
   constructor(private _stateService: StatesService,
-              private authService: NbAuthService) { }
+              private _authService: NbAuthService,
+              private _toastrService: NbToastrService) { }
 
+  /**
+   *
+   * @param title: titre du toast
+   * @param status: success, basic, primary, info, warning, danger, control
+   */
+  public showToast(title: string, status?: NbComponentStatus ) {
+    if (!status) {
+      status = 'success';
+    }
+
+    if (title) {
+      this._toastrService.show(
+        null,
+        `${title}`,
+        {
+          position: NbGlobalPhysicalPosition.TOP_RIGHT,
+          status,
+        });
+    }
+  }
 
   /**
    * Attribut le rôle à l'application
    * @return Observable<string> => rôle
    */
   public getRole(): Observable<string> {
-    return this.authService.onTokenChange()
+    return this._authService.onTokenChange()
       .pipe(map((token: NbAuthJWTToken) => {
         const user: Users = decodeJwtPayload(token.getValue());
         return token.isValid() && user ? user.role.toLowerCase() : '';

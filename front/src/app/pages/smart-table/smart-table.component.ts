@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
+import { SmartTableAdd, SmartTableDelete, SmartTableEdit } from '../../interfaces/SmartTableSetting';
 
 @Component({
   selector: 'app-smart-table',
@@ -38,9 +39,9 @@ export class SmartTableComponent implements OnInit {
   // Init le tableau en data
   private _source: LocalDataSource = new LocalDataSource();
 
-  @Output() public create: EventEmitter<any> = new EventEmitter<any>();
-  @Output() public edit: EventEmitter<any> = new EventEmitter<any>();
-  @Output() public delete: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public create: EventEmitter<SmartTableAdd<any>> = new EventEmitter<SmartTableAdd<any>>();
+  @Output() public edit: EventEmitter<SmartTableEdit<any>> = new EventEmitter<SmartTableEdit<any>>();
+  @Output() public delete: EventEmitter<SmartTableDelete<any>> = new EventEmitter<SmartTableDelete<any>>();
 
   constructor() { }
 
@@ -54,16 +55,16 @@ export class SmartTableComponent implements OnInit {
     }
   }
 
-  public onCreate(event) {
+  public onCreate(event: SmartTableAdd<any>) {
     this.create.emit(event);
   }
 
 
-  public onEdit(event) {
+  public onEdit(event: SmartTableEdit<any>) {
     this.edit.emit(event);
   }
 
-  public onDelete(event) {
+  public onDelete(event: SmartTableDelete<any>) {
     if (window.confirm('Voulez vous supprimez cette élément ?')) {
       this.delete.emit(event);
     } else {

@@ -2,3 +2,10 @@
 input, select {
   color: black!important;
 }
+
+// Change la couleur des champs disabled
+.form-control:disabled, .form-control[readonly] {
+  background: #323259;
+  color: #FFFFFF!important;
+}
+

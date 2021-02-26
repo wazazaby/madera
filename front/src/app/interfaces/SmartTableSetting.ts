@@ -1,3 +1,5 @@
+import { LocalDataSource } from 'ng2-smart-table';
+
 export interface SmartTableSetting {
   add: {
     addButtonContent: string;
@@ -19,4 +21,21 @@ export interface SmartTableSetting {
 export interface SmartSelectConfig {
   value: string | number;
   title: string;
+}
+
+export interface SmartTableAdd<T> {
+  confirm: any;
+  newData: T | any;
+  source: LocalDataSource;
+}
+export interface SmartTableEdit<T> {
+  confirm: any;
+  data: T | any;
+  newData: T | any;
+  source: LocalDataSource;
+}
+export interface SmartTableDelete<T> {
+  confirm: any;
+  data: T | any;
+  source: LocalDataSource;
 }
