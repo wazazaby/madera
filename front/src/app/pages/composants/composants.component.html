@@ -1,1 +1,9 @@
-<p>composants list</p>
+<app-smart-table
+    *ngIf="data && data.length > 0"
+    [columns]="columns"
+    [data]="data"
+    (create)="onCreate($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+>
+</app-smart-table>

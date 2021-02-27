@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,6 +22,7 @@ import { AuthguardService } from './services/authguard.service';
 import { StatesService } from './services/states.service';
 import { UtilsService } from './services/utils.service';
 import { environment } from '../environments/environment';
+import { InterceptorService } from './services/interceptor.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -100,6 +101,7 @@ import { environment } from '../environments/environment';
     AuthguardService,
     { provide: APP_BASE_HREF, useValue: '/' },
     { provide: NbRoleProvider, useClass: UtilsService },
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
   ],
   bootstrap: [AppComponent],
 })

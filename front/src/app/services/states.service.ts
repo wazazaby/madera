@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Client } from '../interfaces/client';
 import { Module } from '../interfaces/module';
-import { Component } from '../interfaces/component';
+import { Components } from '../interfaces/components';
 import { Roles } from '../interfaces/roles';
 import { Users } from '../interfaces/users';
 
@@ -19,7 +19,7 @@ export class StatesService {
   /** Users */
   private _users: BehaviorSubject<Users[]> = new BehaviorSubject<Users[]>([]);
   /** Composants */
-  private _composents: BehaviorSubject<Component[]> = new BehaviorSubject<Component[]>([]);
+  private _composents: BehaviorSubject<Components[]> = new BehaviorSubject<Components[]>([]);
   /** Modules */
   private _modules: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([]);
   /** Roles users */
@@ -71,15 +71,15 @@ export class StatesService {
 
   // ===================================================================================================================
 
-  public get composents(): Component[] {
+  public get composents(): Components[] {
     return this._composents.getValue();
   }
 
-  public set composents(value: Component[]) {
+  public set composents(value: Components[]) {
     this._composents.next(value);
   }
 
-  public composentsAsObservable(): Observable<Component[]> {
+  public composentsAsObservable(): Observable<Components[]> {
     return this._composents.asObservable();
   }
 

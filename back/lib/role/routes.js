@@ -13,7 +13,7 @@ export default async app => {
         const roles = await db.role.findMany();
         return {
             statusCode: 200,
-            message: '',
+            message: 'Liste des rôles',
             data: { roles }
         }
     });
@@ -26,8 +26,8 @@ export default async app => {
         const role = await db.role.findFirst({
             where: { id }
         });
-        return role === null 
-            ? rep.notFound('Rôle introuvable') 
+        return role === null
+            ? rep.notFound('Rôle introuvable')
             : { statusCode: 200, message: '', data: { role } };
     });
 }

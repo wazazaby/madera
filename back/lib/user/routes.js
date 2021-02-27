@@ -48,7 +48,10 @@ export default async app => {
     });
 
     // Affiches tout les users
-    app.post(`${BASE}s`, async (req, rep) => {
+    app.post(`${BASE}s`, {
+        schemas: schemas.all,
+        preHandler: app.auth([app.verifyJWT])
+    }, async (req, rep) => {
         const users = await db.user.findMany({
             select: {
                 id: true,
