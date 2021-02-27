@@ -1,5 +1,5 @@
 import { Stocklist } from './stocklist';
-import { Component } from './component';
+import { Components } from './components';
 
 export interface Provider {
   id: number;
@@ -9,5 +9,5 @@ export interface Provider {
   createdAt: Date;
   updatedAt: Date;
   stockists?: Stocklist[];
-  components?: Component[];
+  components?: Components[];
 }

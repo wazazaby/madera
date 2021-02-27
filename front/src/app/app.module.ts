@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,6 +21,8 @@ import { AppComponent } from './app.component';
 import { AuthguardService } from './services/authguard.service';
 import { StatesService } from './services/states.service';
 import { UtilsService } from './services/utils.service';
+import { environment } from '../environments/environment';
+import { InterceptorService } from './services/interceptor.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -59,15 +61,14 @@ import { UtilsService } from './services/utils.service';
         },
       },
     }),
-    // TODO fonctionnera quand l'API sera dispo -> /login
     NbAuthModule.forRoot({
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
-          baseEndpoint: 'http://127.0.0.1:3306/',
+          baseEndpoint: environment.apiUrlService + '/',
           login: {
             endpoint: 'user/login',
-            method: 'POST',
+            method: 'post',
             defaultErrors: ['Compte incorrect, merci de contacter votre administrateur'],
             defaultMessages: ['Bienvenue Madara Uchiha'],
             redirect: {
@@ -100,6 +101,7 @@ import { UtilsService } from './services/utils.service';
     AuthguardService,
     { provide: APP_BASE_HREF, useValue: '/' },
     { provide: NbRoleProvider, useClass: UtilsService },
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
   ],
   bootstrap: [AppComponent],
 })

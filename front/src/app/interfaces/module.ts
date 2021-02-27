@@ -1,4 +1,4 @@
-import { Component } from './component';
+import { Components } from './components';
 import { Quotation } from './quotation';
 
 export interface Module {
@@ -9,6 +9,6 @@ export interface Module {
   description: string;
   createdAt: Date;
   updatedAt: Date;
-  components: Component[];
+  components: Components[];
   quotations: Quotation[];
 }

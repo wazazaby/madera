@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { forkJoin, Observable, of, Subject } from 'rxjs';
@@ -8,9 +8,11 @@ import { ResponsesApi } from '../interfaces/responses-api';
 import { Users } from '../interfaces/users';
 import { StatesService } from './states.service';
 import { Client } from '../interfaces/client';
-import { Component } from '../interfaces/component';
+import { Components } from '../interfaces/components';
 import { Module } from '../interfaces/module';
 import { clientsMock } from '../mocks/clients.mock';
+import { NbAuthService } from '@nebular/auth';
+import { Roles } from '../interfaces/roles';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +21,7 @@ export class BridgeService implements OnDestroy {
 
   constructor(private _http: HttpClient,
               private _statesService: StatesService,
+              private _auth: NbAuthService,
               private _router: Router) { }
 
 
@@ -30,6 +33,33 @@ export class BridgeService implements OnDestroy {
 
   public testApi() {
     return this._http.get<any>(environment.apiUrlService);
+  }
+
+  // ===================================================================================================================
+  // Provider
+
+  public addProviders(data: any): Observable<ResponsesApi<any>> {
+    return this._http.post<ResponsesApi<any>>(`${environment.apiUrlService}/provider/create`, {data});
+  }
+
+  // ===================================================================================================================
+  // Rôles
+
+  /**
+   * Récupère tout les rôles
+   * @return Observable
+   */
+  public getRoles(): Observable<ResponsesApi<Roles[]>> {
+    return this._http.get<ResponsesApi<Roles[]>>(`${environment.apiUrlService}/role/all`);
+  }
+
+  /**
+   * Récupère un rôle par id
+   * @param id: identifiant
+   * @return Observable
+   */
+  public getRolesById(id: number): Observable<ResponsesApi<Roles>> {
+    return this._http.get<ResponsesApi<Roles>>(`${environment.apiUrlService}/role/${id}`);
   }
 
   // ===================================================================================================================
@@ -114,20 +144,41 @@ export class BridgeService implements OnDestroy {
   // ===================================================================================================================
   // Composant
 
-  public getComposant(): Observable<Component[]> {
-    return new Observable<Component[]>((obs) => {
-      obs.next([]);
-      obs.complete();
-    });
-    // return this._http.get<any>(environment.apiUrlService + 'composants', { withCredentials: true });
+  /**
+   * récupère tout les composants
+   * @return Observable
+   */
+  public getComposant(): Observable<ResponsesApi<Components[]>> {
+    return this._http.get<ResponsesApi<Components[]>>(environment.apiUrlService + '/component/all',
+      { withCredentials: true });
   }
 
-  public setComposant(): Observable<any> {
+  /**
+   * récupère tout un composants par id
+   * @param id: identifiant
+   * @return Observable
+   */
+  public getComposantById(id: number): Observable<Components> {
+    return this._http.get<any>(environment.apiUrlService + '/component/${id}', { withCredentials: true });
+  }
+
+  /**
+   * Modifie un composant
+   * @param id: identifiant
+   * @return Observable
+   */
+  public setComposant(id: number): Observable<any> {
     return;
+    // return this._http.get<any>(environment.apiUrlService + 'component/${id}', { withCredentials: true });
   }
 
+  /**
+   * Ajoute un composant
+   * @param data: composant
+   * @return Observable
+   */
   public addComposant(): Observable<any> {
-    return;
+    return this._http.post<any>(environment.apiUrlService + 'component/create', { withCredentials: true });
   }
 
   // ===================================================================================================================
@@ -160,15 +211,17 @@ export class BridgeService implements OnDestroy {
       this.getComposant(),
       this.getModule(),
       this.getUsers(),
+      this.getRoles(),
+      this._auth.getToken(),
     ]).pipe(takeUntil(this.destroyed))
-      .subscribe(([clients, composants, modules, users]) => {
+      .subscribe(([clients, composants, modules, users, roles, token]) => {
         // Ajout les clients
         if (clients && clients.length > 0) {
           this._statesService.clients = clients;
         }
         // Ajout les composants
-        if (composants && composants.length > 0) {
-          this._statesService.composents = composants;
+        if (composants && composants.data && composants.data['components']) {
+          this._statesService.composents = composants.data['components'];
         }
 
         // Ajout les modules
@@ -181,15 +234,12 @@ export class BridgeService implements OnDestroy {
           this._statesService.users = users.data['users'];
         }
 
-        // TODO ATTENDRE APPEL WS DES ROLES
         // Ajoute les rôles
-        this._statesService.roles = [
-          {id: 58, label: 'Administrateur', code: 'ADMIN', createdAt: '2021-02-25 10:43:14.688'},
-          {id: 59, label: 'Commercial', code: 'COMMERCIAL', createdAt: '2021-02-25 10:43:14.692'},
-          {id: 60, label: 'Stockiste', code: 'STOCKIST', createdAt: '2021-02-25 10:43:14.696'},
-          {id: 61, label: 'Client', code: 'CLIENT', createdAt: '2021-02-25 10:43:14.700'},
-        ];
-        // console.log('*initData', clients, composants, modules, users);
+        if (roles && roles.data && roles.data['roles']) {
+          this._statesService.roles = roles.data['roles'];
+        }
+
+        console.log('*initData', clients, composants, modules, users, roles);
     });
   }
 

@@ -18,7 +18,7 @@ export default async app => {
                 unit: getUnit === undefined ? false : getUnit
             }
         });
-        return { statusCode: 200, message: '', data: { components }}
+        return { statusCode: 200, message: 'Liste des composants', data: { components }}
     });
 
     app.get(`${base}/:id`, {
@@ -34,8 +34,8 @@ export default async app => {
                 provider: getProvider === undefined ? false : getProvider
             }
         });
-        return component === null 
-            ? rep.notFound('Composant introuvable') 
+        return component === null
+            ? rep.notFound('Composant introuvable')
             : { statusCode: 200, message: '', data: { component } }
     });
 
@@ -52,7 +52,7 @@ export default async app => {
         if (component !== null) {
             return rep.conflict('Il existe déjà un composant avec cette référence');
         }
-        
+
         const newComponent =  await db.component.create({
             data: {
                 label,
