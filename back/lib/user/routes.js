@@ -5,53 +5,59 @@ import * as bcrypt from 'bcrypt';
 import * as schemas from './schemas';
 
 export default async app => {
-    const BASE = '/user';
+    const base = '/user';
     const db = new PrismaClient();
 
-    app.post(`${BASE}/login`, schemas.login, async (req, rep) => {
+    app.post(`${base}/login`, { 
+        schema: schemas.login 
+    }, async (req, rep) => {
         const { email, password } = req.body;
         const user = await db.user.findUnique({
             where: { email },
             include: {
-                role: true,
-                administrator: true,
-                commercial: true,
-                client: true,
-                stockist: true
+                role: true
             }
         });
 
         if (user === null) {
-            return rep.notFound();
+            return rep.notFound('Adresse email invalide ou compte non existant');
         }
 
         if (!await bcrypt.compare(password, user.password)) {
-            return rep.unauthorized();
+            return rep.unauthorized('Mot de passe invalide');
         }
 
-        // Si tout ce passe bien on renvoit le JWT
+        // Si tout se passe bien on renvoit le JWT
         const token = app.jwt.sign({
+            id: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
             role: user.role.code
         });
+
         return {
             statusCode: 200,
-            message: 'Vous êtes connecté',
+            message: 'Connexion réussie',
             data: { token }
         }
     });
 
-    app.post(`${BASE}/logout`, async (_, rep) => {
-        rep.code(200).send({done: true});
+    app.post(`${base}/logout`, {
+        preHandler: app.auth([app.verifyJWT])
+    }, async () => {
+        return {
+            statusCode: 200,
+            message: 'Vous êtes déconnecté',
+            data: {}
+        }
     });
 
     // Affiches tout les users
-    app.post(`${BASE}s`, {
-        schemas: schemas.all,
+    app.post(`${base}s`, {
+        //schemas: schemas.all,
         preHandler: app.auth([app.verifyJWT])
-    }, async (req, rep) => {
+    }, async (_, rep) => {
         const users = await db.user.findMany({
             select: {
                 id: true,
@@ -75,4 +81,5 @@ export default async app => {
             message: 'Liste des utilisateurs',
             data: { users }
         }
-    });}
+    });
+}

@@ -4,26 +4,33 @@ Madera API
 ## Start server
 `npm run dev`
 
-## Generate migration
+## Apply migration
+`npm run pmd`
+
+## Generate migration /!\
 `npm run pmig`
 
-## Generate Prisma client
+## Generate Prisma client /!\
 `npm run pgen`
 
 ## TODO
-* Créer les routes du provider
-* Créer quelques providers
-* Créer les routes des components
-* Créer les routes des modules
+* Créer les routes clients
+* Modifier les fonctions d'auth pour que ça passe en "at-least"
+* Créa. client -> verif adressLine2 (undefined)
 
 
-## .env
-
-DB_USER=
-DB_PASSWORD=
-DB_HOST=
-DB_NAME=
-FRONT_HOST=
-PORT=
-DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${PORT}/${DB_NAME}
-JWT_SECRET=
+## Contenu .env
+Utilisé pour le cryptage des passwords
+`SALT_ROUNDS`
+URL du frontend pour autorisé les requêtes (CORS)
+`FRONT_HOST`
+Le port de l'API
+`PORT`
+Secret pour la signature des JWT
+`JWT_SECRET`
+DB
+`DB_NAME`
+`DB_HOST`
+`DB_PASSWORD`
+`DB_USER`
+`DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${PORT}/${DB_NAME}`

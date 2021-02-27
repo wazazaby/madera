@@ -29,6 +29,9 @@ import usageUnitRouter from './lib/usageUnit/routes';
 import quotationStatusRouter from './lib/quotationStatus/routes';
 import orderStatusRouter from './lib/orderStatus/routes';
 import paymentTypeRouter from './lib/paymentType/routes';
+import commercialRouter from './lib/commercial/routes';
+import stockistRouter from './lib/stockist/routes';
+import clientRouter from './lib/client/routes';
 
 // Init de la config dotenv
 dotenv.config();
@@ -69,13 +72,16 @@ app.register(usageUnitRouter);
 app.register(quotationStatusRouter);
 app.register(orderStatusRouter);
 app.register(paymentTypeRouter);
+app.register(commercialRouter);
+app.register(stockistRouter);
+app.register(clientRouter);
 
 // Route par défaut
 app.get('/', async (_, rep) => rep.code(200).send({ message: 'Hello, World!' }));
 app.get('/generate-enums', async (_, rep) => {
     await clearEnums();
     await generateEnums();
-    rep.code(200).send({ done: true });
+    return { done: true }
 });
 
 // Lancement du serveur

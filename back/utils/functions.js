@@ -33,21 +33,18 @@ const isAdmin = async (req, rep) => {
     if (req.user.role !== 'ADMIN') {
         return rep.unauthorized(lvlMessage);
     }
-    return;
 }
 
 const isCommercial = async (req, rep) => {
     if (req.user.role !== 'COMMERCIAL') {
         return rep.unauthorized(lvlMessage);
     }
-    return;
 }
 
 const isStockist = async (req, rep) => {
     if (req.user.role !== 'STOCKIST') {
         return rep.unauthorized(lvlMessage);
     }
-    return;
 }
 
 const isClient = async (req, rep) => {
