@@ -21,6 +21,7 @@ import { AppComponent } from './app.component';
 import { AuthguardService } from './services/authguard.service';
 import { StatesService } from './services/states.service';
 import { UtilsService } from './services/utils.service';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -59,15 +60,14 @@ import { UtilsService } from './services/utils.service';
         },
       },
     }),
-    // TODO fonctionnera quand l'API sera dispo -> /login
     NbAuthModule.forRoot({
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
-          baseEndpoint: 'http://127.0.0.1:3306/',
+          baseEndpoint: environment.apiUrlService + '/',
           login: {
             endpoint: 'user/login',
-            method: 'POST',
+            method: 'post',
             defaultErrors: ['Compte incorrect, merci de contacter votre administrateur'],
             defaultMessages: ['Bienvenue Madara Uchiha'],
             redirect: {

@@ -15,3 +15,15 @@ Madera API
 * Créer quelques providers
 * Créer les routes des components
 * Créer les routes des modules
+
+
+## .env
+
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+DB_NAME=
+FRONT_HOST=
+PORT=
+DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${PORT}/${DB_NAME}
+JWT_SECRET=
