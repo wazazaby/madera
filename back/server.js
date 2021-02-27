@@ -38,7 +38,7 @@ const app = fastify({
 app.register(fastifyCors, {
     origin: ['localhost', process.env.FRONT_HOST],
     credentials: true,
-    methods: ['GET', 'POST', 'DELETE', 'PATCH']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
 });
 
 // Register des middlewares
