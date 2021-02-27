@@ -32,3 +32,14 @@ export const create = {
     },
     querystring: all.querystring
 }
+
+export const byId = {
+    params: {
+        type: 'object',
+        properties: {
+            id: { type: 'integer' },
+        },
+        required: ['id']
+    },
+    querystring: all.querystring
+}

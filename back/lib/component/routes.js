@@ -21,6 +21,24 @@ export default async app => {
         return { statusCode: 200, message: '', data: { components }}
     });
 
+    app.get(`${base}/:id`, {
+        schema: schemas.byId,
+        preHandler: app.auth([app.verifyJWT])
+    }, async (req, rep) => {
+        const { id } = req.params;
+        const { getUnit, getProvider } = req.query;
+        const component = await db.component.findFirst({
+            where: { id },
+            include: {
+                unit: getUnit === undefined ? false : getUnit,
+                provider: getProvider === undefined ? false : getProvider
+            }
+        });
+        return component === null 
+            ? rep.notFound('Composant introuvable') 
+            : { statusCode: 200, message: '', data: { component } }
+    });
+
     app.post(`${base}/create`, {
         schema: schemas.create,
         preHandler: app.auth([app.verifyJWT])

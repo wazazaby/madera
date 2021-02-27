@@ -1,5 +1,5 @@
 'use strict';
-export const getById = {
+export const byId = {
     params: {
         type: 'object',
         properties: {

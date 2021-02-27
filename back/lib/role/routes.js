@@ -19,7 +19,7 @@ export default async app => {
     });
 
     app.get(`${BASE}/:id`, {
-        schema: schemas.getById,
+        schema: schemas.byId,
         preHandler: app.auth([app.verifyJWT])
     }, async (req, rep) => {
         const { id } = req.params;
