@@ -6,6 +6,7 @@ import fastifyJWT from 'fastify-jwt';
 import fastifyHelmet from 'fastify-helmet';
 import fastifyAuth from 'fastify-auth';
 import fastifySensible from 'fastify-sensible';
+import fastifyCors from 'fastify-cors';
 
 import {
     clearEnums,
@@ -17,32 +18,34 @@ import {
     isClient
 } from './utils/functions';
 
-import globalSchemas from './utils/globalSchemas';
-
 // Import des routes
 import userRouter from './lib/user/routes';
 import adminRouter from './lib/administrator/routes';
 import moduleRouter from './lib/module/routes';
 import componentRouter from './lib/component/routes';
-import fastifyCors from "fastify-cors";
+import roleRouter from './lib/role/routes';
+import providerRouter from './lib/provider/routes';
 
 // Init de la config dotenv
 dotenv.config();
 
+// Initialisation de l'app
 const app = fastify({
-    logger: {
-        prettyPrint: true
-    }
+    logger: { prettyPrint: true }
+});
+
+// Gestion des CORS
+app.register(fastifyCors, {
+    origin: ['localhost', process.env.FRONT_HOST],
+    credentials: true,
+    methods: ['GET', 'POST', 'DELETE', 'PATCH']
 });
 
 // Register des middlewares
-app.register(fastifyJWT, {secret: process.env.JWT_SECRET});
+app.register(fastifyJWT, { secret: process.env.JWT_SECRET });
 app.register(fastifyHelmet);
 app.register(fastifyAuth);
 app.register(fastifySensible);
-
-// Ajout des schemas de validations globaux
-app.register(globalSchemas);
 
 // Gestion de l'authentification
 app.decorate('verifyJWT', verifyJWT);
@@ -56,31 +59,16 @@ app.register(userRouter);
 app.register(adminRouter);
 app.register(moduleRouter);
 app.register(componentRouter);
+app.register(roleRouter);
+app.register(providerRouter);
 
-// TODO modifier les CORS
-app.register(require('fastify-cors'), {
-    origin: (origin, cb) => {
-        if (/undefined/.test(origin) || /localhost/.test(origin)) {
-            //  Request from localhost and postmane
-            // TODO postman orgin === undefined ??? vérifier cette merde
-            cb(null, true);
-        } else {
-            // Generate an error on other origins, disabling access
-            cb(new Error("nique tout tes grand mort"))
-        }
-    }
-})
 // Route par défaut
-app.get('/', async (_, rep) => rep.code(200).send({message: 'Hello, World!'}));
+app.get('/', async (_, rep) => rep.code(200).send({ message: 'Hello, World!' }));
 app.get('/generate-enums', async (_, rep) => {
-    await clearEnums().then();
-    await generateEnums().then();
-    rep.code(200).send({done: true});
+    await clearEnums();
+    await generateEnums();
+    rep.code(200).send({ done: true });
 });
 
 // Lancement du serveur
-(async () => {
-    await app
-        .listen(process.env.PORT)
-        .catch(e => app.log.error(e));
-})();
+app.listen(process.env.PORT);

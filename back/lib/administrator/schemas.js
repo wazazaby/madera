@@ -3,13 +3,6 @@ export const create = {
     schema: {
         body: {
             type: 'object',
-            required: [
-                'firstName',
-                'lastName',
-                'email',
-                'password',
-                'phoneNumber'
-            ],
             properties: {
                 firstName: { type: 'string' },
                 lastName: { type: 'string' },
