@@ -25,6 +25,10 @@ import moduleRouter from './lib/module/routes';
 import componentRouter from './lib/component/routes';
 import roleRouter from './lib/role/routes';
 import providerRouter from './lib/provider/routes';
+import usageUnitRouter from './lib/usageUnit/routes';
+import quotationStatusRouter from './lib/quotationStatus/routes';
+import orderStatusRouter from './lib/orderStatus/routes';
+import paymentTypeRouter from './lib/paymentType/routes';
 
 // Init de la config dotenv
 dotenv.config();
@@ -61,6 +65,10 @@ app.register(moduleRouter);
 app.register(componentRouter);
 app.register(roleRouter);
 app.register(providerRouter);
+app.register(usageUnitRouter);
+app.register(quotationStatusRouter);
+app.register(orderStatusRouter);
+app.register(paymentTypeRouter);
 
 // Route par défaut
 app.get('/', async (_, rep) => rep.code(200).send({ message: 'Hello, World!' }));
