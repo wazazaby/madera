@@ -36,7 +36,7 @@ export default async app => {
                 },
                 commercial: { 
                     create: {
-                        administrator: { connect: { id: req.user.id } }
+                        administrator: { connect: { id: req.user.entityId } }
                     } 
                 }
             },

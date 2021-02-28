@@ -36,22 +36,21 @@ const isAdmin = async (req, rep) => {
 }
 
 const isCommercial = async (req, rep) => {
-    if (req.user.role !== 'COMMERCIAL') {
+    if (!['ADMIN', 'COMMERCIAL'].includes(req.user.role)) {
         return rep.unauthorized(lvlMessage);
     }
 }
 
 const isStockist = async (req, rep) => {
-    if (req.user.role !== 'STOCKIST') {
+    if (!['ADMIN', 'STOCKIST'].includes(req.user.role)) {
         return rep.unauthorized(lvlMessage);
     }
 }
 
 const isClient = async (req, rep) => {
-    if (req.user.role !== 'CLIENT') {
+    if (!['ADMIN', 'CLIENT'].includes(req.user.role)) {
         return rep.unauthorized(lvlMessage);
     }
-    return;
 }
 
 export { clearEnums, generateEnums, verifyJWT, isAdmin, isCommercial, isStockist, isClient };

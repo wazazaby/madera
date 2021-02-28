@@ -15,7 +15,11 @@ export default async app => {
         const user = await db.user.findUnique({
             where: { email },
             include: {
-                role: true
+                role: true,
+                administrator: true,
+                stockist: true,
+                commercial: true,
+                client: true
             }
         });
 
@@ -26,10 +30,29 @@ export default async app => {
         if (!await bcrypt.compare(password, user.password)) {
             return rep.unauthorized('Mot de passe invalide');
         }
+        
+        let entityId;
+        switch (user.role.code) {
+            case 'ADMIN':
+                entityId = user.administrator.id;
+                break;
+            case 'COMMERCIAL':
+                entityId = user.commercial.id; 
+                break;
+            case 'STOCKIST':
+                entityId = user.stockist.id; 
+                break;
+            case 'CLIENT':
+                entityId = user.client.id; 
+                break;
+            default:
+                entityId = user.id;
+        }
 
         // Si tout se passe bien on renvoit le JWT
         const token = app.jwt.sign({
-            id: user.id,
+            userId: user.id,
+            entityId,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,

@@ -18,9 +18,6 @@ export default async app => {
             city, postalCode,
             adressLine1, adressLine2
         } = req.body;
-
-        return req.body;
-
         const { getRole } = req.query;
         const user = await db.user.findFirst({
             where: {
@@ -29,7 +26,7 @@ export default async app => {
         });
 
         if (user !== null) {
-            return rep.conflict('Il existe déjà un stockiste avec ce mail/numéro de téléphone');
+            return rep.conflict('Il existe déjà un client avec ce mail/numéro de téléphone');
         }
 
         const cryptedPass = await bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS));
@@ -41,23 +38,27 @@ export default async app => {
                 phoneNumber,
                 password: cryptedPass,
                 role: {
-                    connect: { code: 'STOCKIST' }
+                    connect: { code: 'CLIENT' }
                 },
-                stockist: { 
+                client: { 
                     create: {
-                        administrator: { connect: { id: req.user.id } }
+                        city,
+                        adressLine1,
+                        postalCode,
+                        adressLine2,
+                        commercial: { connect: { id: req.user.entityId } }
                     } 
                 }
             },
             include: {
-                stockist: true,
+                client: true,
                 role: getRole === undefined ? false : getRole
             }
         });
 
         return {
             statusCode: 200,
-            message: 'Stockiste créé',
+            message: 'Client créé',
             data: {
                 stockist: newUser
             }
