@@ -1,4 +1,13 @@
 'use strict';
+export const getRole = {
+    querystring: {
+        type: 'object',
+        properties: {
+            getRole: { type: 'boolean' }
+        }
+    }
+}
+
 export const create = {
     body: {
         type: 'object',
@@ -24,10 +33,5 @@ export const create = {
             'adressLine1'
         ]
     },
-    querystring: {
-        type: 'object',
-        properties: {
-            getRole: { type: 'boolean' }
-        }
-    }
+    querystring: getRole.querystring
 }

@@ -15,8 +15,7 @@ Madera API
 
 ## TODO
 * Créer les routes clients
-* Modifier les fonctions d'auth pour que ça passe en "at-least"
-* Créa. client -> verif adressLine2 (undefined)
+* Créer des datas Stockist / provider / component pour pouvoir attaquer les modules
 
 
 ## Contenu .env

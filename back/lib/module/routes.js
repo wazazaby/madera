@@ -3,15 +3,13 @@
 import { PrismaClient } from '@prisma/client';
 
 export default async app => {
-    const BASE = '/module';
+    const base = '/module';
     const db = new PrismaClient();
 
-    
-
-    app.post(`${BASE}/create`, {
-        preHandler: app.auth([app.verifyJWT, app.isAdmin, app.isCommercial])
+    app.post(`${base}/create`, {
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
-        const { label, reference, shortDescription, description } = req.body;
+        const { label, reference, shortDescription, description, componentsId } = req.body;
         
     });
 }

@@ -9,9 +9,9 @@ export default async app => {
 
     app.post(`${base}/create`, {
         schema: schemas.create,
-        preHandler: app.auth([app.verifyJWT])
+        preHandler: app.auth([app.verifyJWT, app.isStockist], { relation: 'and' })
     }, async (req, rep) => {
-        const { name, reference, logoUrl, stockistsId, componentsId } = req.body;
+        const { name, reference, logoUrl } = req.body;
         const provider = await db.provider.findFirst({
             where: { reference }
         });
@@ -26,10 +26,7 @@ export default async app => {
                 reference,
                 logoUrl,
                 stockists: {
-                    connect: stockistsId?.map(id => ({ id }))
-                },
-                components: {
-                    connect: componentsId?.map(id => ({ id }))
+                    connect: { id: req.user.entityId }
                 }
             }
          });

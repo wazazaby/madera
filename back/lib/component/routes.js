@@ -9,7 +9,7 @@ export default async app => {
 
     app.get(`${base}/all`, {
         schema: schemas.all,
-        preHandler: app.auth([app.verifyJWT])
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async req => {
         const { getUnit, getProvider } = req.query;
         const components = await db.component.findMany({
@@ -18,12 +18,12 @@ export default async app => {
                 unit: getUnit === undefined ? false : getUnit
             }
         });
-        return { statusCode: 200, message: 'Liste des composants', data: { components }}
+        return { statusCode: 200, message: '', data: { components }}
     });
 
     app.get(`${base}/:id`, {
         schema: schemas.byId,
-        preHandler: app.auth([app.verifyJWT])
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
         const { id } = req.params;
         const { getUnit, getProvider } = req.query;

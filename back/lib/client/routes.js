@@ -7,6 +7,24 @@ export default async app => {
     const base = '/client';
     const db = new PrismaClient();
 
+    app.get(`${base}/all`, {
+        schema: schemas.getRole,
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
+    }, async (req, rep) => {
+        const { getRole } = req.query;
+        const clients = await db.user.findMany({
+            where: {
+                client: { commercialId: req.user.entityId }
+            },
+            include: {
+                client: true,
+                role: getRole === undefined ? false : getRole
+            }
+        });
+
+        return clients;
+    });
+
     app.post(`${base}/create`, {
         schema: schemas.create,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
