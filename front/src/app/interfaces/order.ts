@@ -1,9 +1,9 @@
-import { OrderStatus } from './enumList';
+import { OrderStatusModel } from '../models/enumList';
 import { Payment } from './payment';
 
 export interface Order {
   id: number;
-  status: OrderStatus;
+  status: OrderStatusModel;
   totalPaid: number;
   quotationId: number;
   payments: Payment[];

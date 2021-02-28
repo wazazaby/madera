@@ -1,6 +1,3 @@
-import { Stocklist } from './stocklist';
-import { Components } from './components';
-
 export interface Provider {
   id: number;
   name: string;
@@ -8,6 +5,6 @@ export interface Provider {
   logoUrl: string;
   createdAt: Date;
   updatedAt: Date;
-  stockists?: Stocklist[];
-  components?: Components[];
+  stockistsId: number;
+  componentsId: number;
 }

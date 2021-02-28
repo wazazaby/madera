@@ -1,8 +1,8 @@
-import { PaymentType } from './enumList';
+import { PaymentTypeModel } from '../models/enumList';
 
 export interface Payment {
   id: number;
-  type: PaymentType;
+  type: PaymentTypeModel;
   total: number;
   currentlyPaid: number;
   leftToPay: number;

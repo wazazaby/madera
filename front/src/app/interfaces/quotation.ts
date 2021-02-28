@@ -1,4 +1,4 @@
-import { QuotationStatus } from './enumList';
+import { QuotationStatusModel } from '../models/enumList';
 import { Order } from './order';
 import { Module } from './module';
 
@@ -6,7 +6,7 @@ export interface Quotation {
   id: number;
   label: string;
   shortDescription?: string;
-  status: QuotationStatus;
+  status: QuotationStatusModel;
   price: number;
   createdAt: Date;
   updatedAt: Date;

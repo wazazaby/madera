@@ -1,17 +1,17 @@
-export enum UsageUnit {
+export enum UsageUnitModel {
   CENTIMETER = 'CENTIMETER',
   SQUARE_METER = 'SQUARE_METER',
   LINEAR_METER = 'LINEAR_METER',
   UNIT = 'UNIT',
 }
 
-export enum QuotationStatus {
+export enum QuotationStatusModel {
   WAITING = 'WAITING',
   ACCEPTED = 'ACCEPTED',
   DENIED = 'DENIED',
 }
 
-export enum OrderStatus {
+export enum OrderStatusModel {
   WAITING = 'WAITING',
   IN_PRODUCTION = 'IN_PRODUCTION',
   IN_ASSEMBLY = 'IN_ASSEMBLY',
@@ -19,7 +19,7 @@ export enum OrderStatus {
   INSTALLED = 'INSTALLED',
 }
 
-export enum PaymentType {
+export enum PaymentTypeModel {
   AT_SIGNATURE = 'AT_SIGNATURE',
   AT_CONSTRUCTION_LICENCE_OBTENTION = 'AT_CONSTRUCTION_LICENCE_OBTENTION',
   AT_SITE_OPENING = 'AT_SITE_OPENING',
