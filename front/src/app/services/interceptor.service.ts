@@ -3,20 +3,22 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { NbAuthService, NbAuthToken } from '@nebular/auth';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { StatesService } from './states.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InterceptorService implements HttpInterceptor, OnDestroy {
 
-  private token: string = '';
+  private token: string = this._stateService.token;
   private request: HttpRequest<any>;
 
 
   /** Subject utilisé pour le unsubscribe de tout les obs */
   private destroyed = new Subject();
 
-  constructor(private _authService: NbAuthService) {
+  constructor(private _authService: NbAuthService,
+              private _stateService: StatesService) {
     // Récup le token
     this._authService.getToken()
       .pipe(takeUntil(this.destroyed))

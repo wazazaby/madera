@@ -1,8 +1,10 @@
+<button class="btn btn-outline-primary mb-4" (click)="openModal()">Ajouter un utilisateur</button>
+
 <app-smart-table
     *ngIf="data.length > 0"
     [columns]="columns"
     [data]="data"
-    (create)="onCreate($event)"
+    [refresh]="refresh"
     (edit)="onEdit($event)"
     (delete)="onDelete($event)"
 >

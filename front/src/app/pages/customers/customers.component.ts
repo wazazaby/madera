@@ -82,12 +82,13 @@ export class CustomersComponent implements OnInit, OnDestroy {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    this._bridgeService.addClient(newUser).subscribe((res) => {
-      if (res && res.length > 0) {
-        this.dataCustomers = res;
-        $event.confirm.resolve();
-      }
-    });
+
+    // this._bridgeService.addClient(newUser).subscribe((res) => {
+    //   if (res && res.length > 0) {
+    //     this.dataCustomers = res;
+    //     $event.confirm.resolve();
+    //   }
+    // });
     console.log('*evt onCreate customers', $event);
   }
 

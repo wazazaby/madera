@@ -1,0 +1,130 @@
+<nb-card>
+  <nb-card-header>{{ title }}</nb-card-header>
+  <nb-card-body>
+
+    <form (ngSubmit)="onCreate()" #form="ngForm" aria-labelledby="title">
+
+        <!-- Prénom-->
+        <div class="form-control-group">
+          <label class="label" for="input-firstName">Prénom</label>
+          <input nbInput
+                 fullWidth
+                 [(ngModel)]="user.firstName"
+                 #firstName="ngModel"
+                 name="firstName"
+                 id="input-firstName"
+                 placeholder="Prénom"
+                 autofocus
+                 [status]="firstName.dirty ? (firstName.invalid  ? 'danger' : 'success') : ''"
+                 [required]="true"
+                 [attr.aria-invalid]="firstName.invalid && firstName.touched ? true : null">
+          <ng-container *ngIf="firstName.invalid && firstName.touched">
+            <p class="text-danger" *ngIf="firstName.errors?.required">
+              Le prénom est obligatoire!
+            </p>
+          </ng-container>
+        </div>
+
+        <!-- Nom -->
+        <div class="form-control-group">
+          <label class="label" for="input-lastName">Nom</label>
+          <input nbInput
+                 fullWidth
+                 [(ngModel)]="user.lastName"
+                 #lastName="ngModel"
+                 name="lastName"
+                 id="input-lastName"
+                 placeholder="Nom"
+                 autofocus
+                 [status]="lastName.dirty ? (lastName.invalid  ? 'danger' : 'success') : ''"
+                 [required]="true"
+                 [attr.aria-invalid]="lastName.invalid && lastName.touched ? true : null">
+          <ng-container *ngIf="lastName.invalid && lastName.touched">
+            <p class="text-danger" *ngIf="lastName.errors?.required">
+              Le nom est obligatoire!
+            </p>
+          </ng-container>
+        </div>
+
+        <!-- Téléphone-->
+        <div class="form-control-group">
+          <label class="label" for="input-phoneNumber">Téléphone</label>
+          <input nbInput
+                 fullWidth
+                 [(ngModel)]="user.phoneNumber"
+                 #phoneNumber="ngModel"
+                 name="phoneNumber"
+                 id="input-phoneNumber"
+                 pattern="^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$"
+                 placeholder="Nom"
+                 autofocus
+                 [status]="phoneNumber.dirty ? (phoneNumber.invalid  ? 'danger' : 'success') : ''"
+                 [required]="true"
+                 [attr.aria-invalid]="phoneNumber.invalid && phoneNumber.touched ? true : null">
+          <ng-container *ngIf="phoneNumber.invalid && phoneNumber.touched">
+            <p class="text-danger" *ngIf="phoneNumber.errors?.required">
+              Le numéro de téléphone est obligatoire!
+            </p>
+            <p class="text-danger" *ngIf="phoneNumber.errors?.pattern">
+              Le numéro de téléphone est incorrecte !
+            </p>
+          </ng-container>
+        </div>
+
+        <!-- Email-->
+        <div class="form-control-group">
+          <label class="label" for="input-email">Email:</label>
+          <input nbInput
+                 fullWidth
+                 [(ngModel)]="user.email"
+                 #email="ngModel"
+                 name="email"
+                 id="input-email"
+                 pattern=".+@.+\..+"
+                 placeholder="Email"
+                 autofocus
+                 [status]="email.dirty ? (email.invalid  ? 'danger' : 'success') : ''"
+                 [required]="true"
+                 [attr.aria-invalid]="email.invalid && email.touched ? true : null">
+          <ng-container *ngIf="email.invalid && email.touched">
+            <p class="text-danger" *ngIf="email.errors?.required">
+              L'email est obligatoire!
+            </p>
+            <p class="text-danger" *ngIf="email.errors?.pattern">
+              L'email est incorrecte !
+            </p>
+          </ng-container>
+        </div>
+
+        <!-- Rôle-->
+        <!--TODO fix les erreurs, si on aura le temps-->
+<!--      [(ngModel)]="user.role"-->
+<!--      #role="ngModel"-->
+<!--      [required]="true"-->
+<!--      [status]="role.dirty ? (role.invalid  ? 'danger' : 'success') : ''"-->
+
+        <div class="form-control-group">
+          <label class="label" for="input-email">Role:</label>
+          <nb-select placeholder="Sélectionner un role"
+                     fullWidth
+                     [(selected)]="user.role"
+          >
+            <nb-select-label> {{ user.role }} </nb-select-label>
+            <nb-option [value]="r.label" *ngFor="let r of roles">{{r.label}}</nb-option>
+          </nb-select>
+
+<!--          <ng-container *ngIf="role.invalid && role.touched">-->
+<!--            <p class="text-danger" *ngIf="role.errors?.required">-->
+<!--              Le rôle est obligatoire!-->
+<!--            </p>-->
+<!--          </ng-container>-->
+        </div>
+
+        <nb-card-footer class="d-flex justify-content-between">
+          <button class="btn btn-outline-danger" (click)="dismiss()">Annuler</button>
+          <button class="btn btn-outline-success" [disabled]="isValid()">Ajouter</button>
+        </nb-card-footer>
+    </form>
+  </nb-card-body>
+
+</nb-card>

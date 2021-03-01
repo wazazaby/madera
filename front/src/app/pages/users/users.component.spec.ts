@@ -2,7 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NbAuthModule } from '@nebular/auth';
-import { NbThemeModule, NbToastrModule } from '@nebular/theme';
+import { NbDialogModule, NbDialogService, NbThemeModule, NbToastrModule } from '@nebular/theme';
 
 import { UsersComponent } from './users.component';
 
@@ -11,6 +11,7 @@ describe('UsersComponent', () => {
   let fixture: ComponentFixture<UsersComponent>;
 
   beforeEach(async () => {
+    const dialMock = jasmine.createSpy();
     await TestBed.configureTestingModule({
       declarations: [ UsersComponent ],
       imports: [
@@ -20,6 +21,10 @@ describe('UsersComponent', () => {
         NbThemeModule.forRoot(),
         NbToastrModule.forRoot(),
         NbAuthModule.forRoot(),
+        NbDialogModule,
+      ],
+      providers: [
+        {provide: NbDialogService, useClass: dialMock},
       ],
     })
     .compileComponents();

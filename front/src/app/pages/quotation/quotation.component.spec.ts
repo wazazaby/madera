@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { QuotationComponent } from './quotation.component';
-import { NbInputModule, NbThemeModule, NbTreeGridModule } from '@nebular/theme';
+import { NbInputModule, NbThemeModule, NbToastrService, NbTreeGridModule } from '@nebular/theme';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -14,6 +14,7 @@ describe('QuotationComponent', () => {
   let fixture: ComponentFixture<QuotationComponent>;
 
   beforeEach(async () => {
+    const toastMock = jasmine.createSpy();
     await TestBed.configureTestingModule({
       declarations: [ QuotationComponent ],
       imports: [
@@ -33,6 +34,9 @@ describe('QuotationComponent', () => {
           ],
           forms: {},
         }),
+      ],
+      providers: [
+        {provide: NbToastrService, useClass: toastMock},
       ],
     })
     .compileComponents();

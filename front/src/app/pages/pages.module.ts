@@ -6,7 +6,7 @@ import {
   NbButtonModule, NbCardModule,
   NbCheckboxModule, NbIconModule,
   NbInputModule,
-  NbMenuModule,
+  NbMenuModule, NbRadioModule, NbSelectModule,
   NbTreeGridModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -28,6 +28,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RequestPasswordComponent } from './auth/request-password/request-password.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { ButtonTableComponent } from './smart-table/button-table/button-table.component';
+import { UserModalAddComponent } from './users/user-modal-add/user-modal-add.component';
 
 @NgModule({
   imports: [
@@ -46,6 +47,8 @@ import { ButtonTableComponent } from './smart-table/button-table/button-table.co
     NbTreeGridModule,
     NbCardModule,
     NbIconModule,
+    NbSelectModule,
+    NbRadioModule,
   ],
   declarations: [
     PagesComponent,
@@ -62,6 +65,7 @@ import { ButtonTableComponent } from './smart-table/button-table/button-table.co
     LogoutComponent,
     SmartTableComponent,
     ButtonTableComponent,
+    UserModalAddComponent,
   ],
 })
 export class PagesModule {

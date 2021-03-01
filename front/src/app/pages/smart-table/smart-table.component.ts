@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { SmartTableAdd, SmartTableDelete, SmartTableEdit } from '../../interfaces/SmartTableSetting';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-smart-table',
@@ -8,17 +10,20 @@ import { SmartTableAdd, SmartTableDelete, SmartTableEdit } from '../../interface
   styleUrls: ['./smart-table.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SmartTableComponent implements OnInit {
+export class SmartTableComponent implements OnInit, OnDestroy {
 
   // Paramètres des boutons du tableau
   private _setting: any = {
     mode: 'inline',
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-      confirmCreate: true,
+    actions: {
+      add: false,
     },
+    // add: {
+    //   addButtonContent: '<i class="nb-plus"></i>',
+    //   createButtonContent: '<i class="nb-checkmark"></i>',
+    //   cancelButtonContent: '<i class="nb-close"></i>',
+    //   confirmCreate: true,
+    // },
     edit: {
       editButtonContent: '<i class="nb-edit"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
@@ -36,8 +41,12 @@ export class SmartTableComponent implements OnInit {
   @Input() public columns: any;
   // Charge les datas
   @Input() public data: any[];
+  // Observe les ajout/modification de data
+  @Input() public refresh: EventEmitter<any>;
   // Init le tableau en data
   private _source: LocalDataSource = new LocalDataSource();
+  /** Subject utilisé pour le unsubscribe de tout les obs */
+  private destroyed = new Subject();
 
   @Output() public create: EventEmitter<SmartTableAdd<any>> = new EventEmitter<SmartTableAdd<any>>();
   @Output() public edit: EventEmitter<SmartTableEdit<any>> = new EventEmitter<SmartTableEdit<any>>();
@@ -53,12 +62,22 @@ export class SmartTableComponent implements OnInit {
     if (this.data && this.data.length > 0) {
       this._source.load(this.data).then();
     }
+
+    // Observe les changements sur la table
+    if (this.refresh) {
+      this.refresh
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(res => {
+          this.data = res;
+          this._source.load(this.data).then();
+          this._source.refresh();
+        });
+    }
   }
 
   public onCreate(event: SmartTableAdd<any>) {
     this.create.emit(event);
   }
-
 
   public onEdit(event: SmartTableEdit<any>) {
     this.edit.emit(event);
@@ -86,5 +105,13 @@ export class SmartTableComponent implements OnInit {
    */
   public getSetting(): any {
     return this._setting;
+  }
+
+  /**
+   * Détruit les observables
+   */
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 }

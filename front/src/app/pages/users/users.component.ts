@@ -1,13 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Roles } from '../../interfaces/roles';
-import { SmartSelectConfig, SmartTableAdd, SmartTableDelete, SmartTableEdit } from '../../interfaces/SmartTableSetting';
+import { SmartSelectConfig, SmartTableDelete, SmartTableEdit } from '../../interfaces/SmartTableSetting';
 import { Users } from '../../interfaces/users';
 import { BridgeService } from '../../services/bridge.service';
 import { StatesService } from '../../services/states.service';
 import { UtilsService } from '../../services/utils.service';
 import { ButtonTableComponent } from '../smart-table/button-table/button-table.component';
+import { NbDialogService } from '@nebular/theme';
+import { UserModalAddComponent } from './user-modal-add/user-modal-add.component';
 
 @Component({
   selector: 'ngx-users',
@@ -99,35 +101,27 @@ export class UsersComponent implements OnInit, OnDestroy {
   /** Subject utilisé pour le unsubscribe de tout les obs */
   private destroyed = new Subject();
 
+  public refresh: EventEmitter<Users[]> = new EventEmitter<Users[]>(null);
+
+
   constructor(private _stateService: StatesService,
               private _bridgeService: BridgeService,
-              private _utilsService: UtilsService) {
+              private _utilsService: UtilsService,
+              private _dialogService: NbDialogService) {
   }
 
   ngOnInit(): void {
-    this.loadUser();
     this.loadRoles();
+    this.loadUser();
   }
 
-  public onCreate(evt: SmartTableAdd<Users>): void {
-    if (evt && evt.newData) {
-      const user: Users = evt.newData;
 
-      this._bridgeService.addUsers(user)
-        .pipe(takeUntil(this.destroyed))
-        .subscribe(
-          (res) => {
-            if (res) {
-              evt.confirm.resolve();
-              this._utilsService.showToast(res.messages);
-            }
-          },
-          (err) => {
-            this._utilsService.showToast(err.statusText, 'danger');
-          },
-        );
-
-    }
+  public openModal() {
+    this._dialogService.open(UserModalAddComponent, {
+      context: {
+        title: 'Ajouter un utilisateur',
+      },
+    });
   }
 
   public onEdit(evt: SmartTableEdit<Users>): void {
@@ -149,7 +143,7 @@ export class UsersComponent implements OnInit, OnDestroy {
           (res) => {
             if (res) {
               evt.confirm.resolve();
-              this._utilsService.showToast(res.messages);
+              this._utilsService.showToast(res.message);
             }
           },
           (err) => {
@@ -164,7 +158,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroyed))
         .subscribe(
           (res) => {
-            this._utilsService.showToast(res.messages );
+            this._utilsService.showToast(res.message);
           },
           (err) => {
             this._utilsService.showToast(err.statusText, 'danger');
@@ -181,7 +175,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         .subscribe(
           (res) => {
             if (res) {
-              this._utilsService.showToast(res.messages);
+              this._utilsService.showToast(res.message);
             }
           },
           (err) => {
@@ -207,6 +201,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe((user: Users[]) => {
         this.data = user;
+        this.refresh.emit(this.data);
       });
   }
 

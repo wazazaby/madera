@@ -24,8 +24,20 @@ export class StatesService {
   private _modules: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([]);
   /** Roles users */
   private _roles: BehaviorSubject<Roles[]> = new BehaviorSubject<Roles[]>([]);
+  /** Token utilisateur */
+  private _token: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   constructor() {}
+
+  // ===================================================================================================================
+
+  get token(): string {
+    return this._token.getValue();
+  }
+
+  set token(value: string) {
+    this._token.next(value);
+  }
 
   // ===================================================================================================================
 

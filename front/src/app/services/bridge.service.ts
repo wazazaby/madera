@@ -19,6 +19,7 @@ import { PaymentStatus } from '../interfaces/payment-status';
 import { Provider } from '../interfaces/provider';
 import { QuotationStatus } from '../interfaces/quotation-status';
 import { Stocklist } from '../interfaces/stocklist';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,7 @@ export class BridgeService implements OnDestroy {
   constructor(private _http: HttpClient,
               private _statesService: StatesService,
               private _auth: NbAuthService,
+              private _utilsService: UtilsService,
               private _router: Router) { }
 
 
@@ -39,13 +41,6 @@ export class BridgeService implements OnDestroy {
 
   public testApi() {
     return this._http.get<any>(environment.apiUrlService);
-  }
-
-  // ===================================================================================================================
-  // Administrator
-
-  public addAdmin(data: any): Observable<ResponsesApi<Users>> {
-    return this._http.post<ResponsesApi<Users>>(`${environment.apiUrlService}/administrator/create`, {data});
   }
 
   // ===================================================================================================================
@@ -77,27 +72,28 @@ export class BridgeService implements OnDestroy {
 
 
   // ===================================================================================================================
-  // Commercial
-
-  /**
-   * Ajoute un Commercial
-   * @param commercial: information de l'utilisateur
-   * @return Observable
-   */
-  public addCommercial(commercial: Commercial): Observable<ResponsesApi<Commercial>> {
-    return this._http.post<ResponsesApi<Commercial>>(`${environment.apiUrlService}/commercial/create`, {commercial});
-  }
-
-  // ===================================================================================================================
   // Users
 
   /**
    * Ajoute un utilisateur
    * @param user: information de l'utilisateur
+   * @param type: role des users
    * @return Observable
    */
-  public addUsers(user: Users): Observable<ResponsesApi<any>> {
-    return this._http.post<ResponsesApi<any>>(`${environment.apiUrlService}/users/add`, {user});
+  public addUsers(user: Users, type: string): Observable<ResponsesApi<any>> {
+    const routeRole = new Map()
+      .set('Administrateur', 'administrator')
+      .set('Client', 'client')
+      .set('Commercial', 'commercial')
+      .set('Stockiste', 'stockist');
+
+    return this._http.post<ResponsesApi<any>>(`${environment.apiUrlService}/${routeRole.get(type)}/create`, {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      phoneNumber: user.phoneNumber,
+      email: user.email,
+      password: 'motdepasse',
+    });
   }
 
 
@@ -167,15 +163,6 @@ export class BridgeService implements OnDestroy {
 
   public setClient(cli: Client): Observable<Client> {
     return;
-  }
-
-  public addClient(cli: Client): Observable<Client[]> {
-    return new Observable<Client[]>((obs) => {
-      this._statesService.clients.push(cli);
-      obs.next(this._statesService.clients);
-      obs.complete();
-    });
-    // return this._http.post<ResponsesApi<Client>>(environment.apiUrlService + 'clients/create', {});
   }
 
   // ===================================================================================================================
@@ -303,13 +290,6 @@ export class BridgeService implements OnDestroy {
     return this._http.get<ResponsesApi<QuotationStatus>>(environment.apiUrlService + `quotationStatus/${id}`);
   }
 
-  // ===================================================================================================================
-  // Stockist
-
-  public addStockist(data: Users): Observable<ResponsesApi<Stocklist>> {
-    return this._http.post<ResponsesApi<Stocklist>>(`${environment.apiUrlService}/stockist/create`, {data});
-  }
-
 
   // ===================================================================================================================
   // All Data
@@ -351,8 +331,10 @@ export class BridgeService implements OnDestroy {
           this._statesService.roles = roles.data['roles'];
         }
 
-        // console.log('*initData', clients, composants, modules, users, roles);
-    });
+        console.log('*initData', clients, composants, modules, users, roles);
+    }, (err) => {
+        this._utilsService.showToast(err.statusText, 'danger');
+      });
   }
 
   ngOnDestroy(): void {

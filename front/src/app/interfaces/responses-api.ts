@@ -1,5 +1,5 @@
 export interface ResponsesApi<T> {
   statusCode: number;
-  messages?: string;
+  message?: string;
   data?: T;
 }

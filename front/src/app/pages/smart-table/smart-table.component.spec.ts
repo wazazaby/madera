@@ -5,6 +5,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 
 
 import { SmartTableComponent } from './smart-table.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('SmartTableComponent', () => {
   let component: SmartTableComponent;
@@ -14,6 +15,7 @@ describe('SmartTableComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ SmartTableComponent ],
       imports: [
+        HttpClientTestingModule,
         NbCardModule,
         NbTreeGridModule,
         NbIconModule,

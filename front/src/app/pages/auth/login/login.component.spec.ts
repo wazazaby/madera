@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
-import { NbInputModule, NbThemeModule } from '@nebular/theme';
+import { NbInputModule, NbThemeModule, NbToastrModule } from '@nebular/theme';
 
 import { LoginComponent } from './login.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -28,6 +28,8 @@ describe('LoginComponent', () => {
           ],
           forms: {},
         }),
+        NbThemeModule.forRoot(),
+        NbToastrModule.forRoot(),
       ],
     })
       .compileComponents();

@@ -1,12 +1,8 @@
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { getDeepFromObject, NB_AUTH_OPTIONS, NbAuthResult, NbAuthService, NbAuthSocialLink } from '@nebular/auth';
+import { getDeepFromObject, NB_AUTH_OPTIONS, NbAuthResult, NbAuthService } from '@nebular/auth';
 import { BridgeService } from '../../../services/bridge.service';
+import { StatesService } from '../../../services/states.service';
 
 @Component({
   selector: 'nb-login',
@@ -29,7 +25,8 @@ export class LoginComponent {
               @Inject(NB_AUTH_OPTIONS) protected options = {},
               protected cd: ChangeDetectorRef,
               protected router: Router,
-              private _bridgeService: BridgeService) {
+              private _bridgeService: BridgeService,
+              private _stateService: StatesService) {
 
     this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
     this.showMessages = this.getConfigValue('forms.login.showMessages');
@@ -47,6 +44,7 @@ export class LoginComponent {
       this.submitted = false;
 
       if (result.isSuccess()) {
+        this._stateService.token = result.getToken().getValue();
         this.messages = result.getMessages();
         // Initialise les datas de l'application
         this._bridgeService.initData();

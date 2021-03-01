@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NbAuthModule } from '@nebular/auth';
 
 import { BridgeService } from './bridge.service';
+import { NbDialogModule, NbThemeModule, NbToastrModule } from '@nebular/theme';
 
 describe('BridgeService', () => {
   let service: BridgeService;
@@ -15,6 +16,9 @@ describe('BridgeService', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         NbAuthModule.forRoot(),
+        NbThemeModule.forRoot(),
+        NbToastrModule.forRoot(),
+        NbDialogModule,
       ],
     });
     service = TestBed.inject(BridgeService);

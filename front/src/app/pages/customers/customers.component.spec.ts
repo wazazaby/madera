@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
 
 import { CustomersComponent } from './customers.component';
+import { NbThemeModule, NbToastrModule } from '@nebular/theme';
 
 describe('CustomersComponent', () => {
   let component: CustomersComponent;
@@ -22,6 +23,9 @@ describe('CustomersComponent', () => {
             }),
           ],
         }),
+        RouterTestingModule.withRoutes([]),
+        NbThemeModule.forRoot(),
+        NbToastrModule.forRoot(),
       ],
     })
     .compileComponents();
