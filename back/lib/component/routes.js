@@ -41,7 +41,7 @@ export default async app => {
 
     app.post(`${base}/create`, {
         schema: schemas.create,
-        preHandler: app.auth([app.verifyJWT])
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
         const { label, reference, shortDescription, description, price, providerId, unitId } = req.body;
         const { getUnit, getProvider } = req.query;

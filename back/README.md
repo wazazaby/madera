@@ -7,6 +7,12 @@ Madera API
 ## Apply migration
 `npm run pmd`
 
+## Seed database
+`npm run seed`
+
+## Apply && seed
+`npm run depseed`
+
 ## Generate migration /!\
 `npm run pmig`
 
@@ -15,7 +21,8 @@ Madera API
 
 ## TODO
 * Créer les routes clients
-* Créer des datas Stockist / provider / component pour pouvoir attaquer les modules
+* Finir le seed
+* Gérer les modules et les quotations
 
 
 ## Contenu .env

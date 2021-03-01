@@ -8,7 +8,9 @@
     "dev": "nodemon --exec babel-node server.js",
     "pmig": "npx prisma migrate dev --preview-feature",
     "pgen": "npx prisma generate",
-    "pmd": "npx prisma migrate deploy --preview-feature"
+    "pmd": "npx prisma migrate deploy --preview-feature",
+    "seed": "npx prisma db seed --preview-feature",
+    "depseed": "npm run pmd && npm run seed"
   },
   "repository": {
     "type": "git",

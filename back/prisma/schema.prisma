@@ -6,6 +6,7 @@ datasource db {
 
 generator client {
     provider = "prisma-client-js"
+    previewFeatures = ["createMany"]
 }
 // =================== INIT ===================
 
@@ -175,9 +176,22 @@ model Component {
     providerId          Int
     unitId              Int
     // <==> DOWN <==>
-    modules             Module[]
+    modules             ComponentsOnModule[]
 }
 // =================== COMPONENT ===================
+
+
+
+// =================== COMPONENT ON MODULE ===================
+model ComponentsOnModule {
+    id                  Int                 @default(autoincrement()) @id
+    component           Component           @relation(fields: [componentId], references: [id])
+    module              Module              @relation(fields: [moduleId], references: [id])
+    componentId         Int
+    moduleId            Int
+    createdAt           DateTime            @default(now())
+}
+// =================== COMPONENT ON MODULE ===================
 
 
 
@@ -192,27 +206,23 @@ model Module {
     updatedAt           DateTime            @updatedAt
     // <==> RELATIONS <==>
     // <==> DOWN <==>
-    components          Component[]
-    quotations          Quotation[]
+    components          ComponentsOnModule[]
+    quotations          ModuleOnQuotation[]
 }
 // =================== MODULE ===================
 
 
 
-// =================== STOCK ===================
-model Stock {
+// =================== MODULE ON QUOTATION ===================
+model ModuleOnQuotation {
     id                  Int                 @default(autoincrement()) @id
-    quantity            Int
+    module              Module              @relation(fields: [moduleId], references: [id])
+    quotation           Quotation           @relation(fields: [quotationId], references: [id])
+    moduleId            Int
+    quotationId         Int
     createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    stockist            Stockist            @relation(fields: [stockistId], references: [id])
-    component           Component           @relation(fields: [componentId], references: [id])
-    stockistId          Int
-    componentId         Int
 }
-// =================== STOCK ===================
+// =================== MODULE ON QUOTATION ===================
 
 
 
@@ -234,9 +244,26 @@ model Quotation {
     statusId            Int
     // <==> DOWN <==>
     orders              Order[]
-    modules             Module[]
+    modules             ModuleOnQuotation[]
 }
 // =================== QUOTATION ===================
+
+
+
+// =================== STOCK ===================
+model Stock {
+    id                  Int                 @default(autoincrement()) @id
+    quantity            Int
+    createdAt           DateTime            @default(now())
+    updatedAt           DateTime            @updatedAt
+    // <==> RELATIONS <==>
+    // <==> UP <==>
+    stockist            Stockist            @relation(fields: [stockistId], references: [id])
+    component           Component           @relation(fields: [componentId], references: [id])
+    stockistId          Int
+    componentId         Int
+}
+// =================== STOCK ===================
 
 
 

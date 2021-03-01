@@ -32,6 +32,7 @@ import paymentTypeRouter from './lib/paymentType/routes';
 import commercialRouter from './lib/commercial/routes';
 import stockistRouter from './lib/stockist/routes';
 import clientRouter from './lib/client/routes';
+import quotationRouter from './lib/quotation/routes';
 
 // Init de la config dotenv
 dotenv.config();
@@ -75,6 +76,7 @@ app.register(paymentTypeRouter);
 app.register(commercialRouter);
 app.register(stockistRouter);
 app.register(clientRouter);
+app.register(quotationRouter);
 
 // Route par défaut
 app.get('/', async (_, rep) => rep.code(200).send({ message: 'Hello, World!' }));

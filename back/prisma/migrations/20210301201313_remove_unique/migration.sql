@@ -149,6 +149,16 @@ UNIQUE INDEX `Component.reference_unique`(`reference`),
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `ComponentsOnModule` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `componentId` INTEGER NOT NULL,
+    `moduleId` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Module` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `label` VARCHAR(191) NOT NULL,
@@ -163,13 +173,11 @@ UNIQUE INDEX `Module.reference_unique`(`reference`),
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Stock` (
+CREATE TABLE `ModuleOnQuotation` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `quantity` INTEGER NOT NULL,
+    `moduleId` INTEGER NOT NULL,
+    `quotationId` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
-    `stockistId` INTEGER NOT NULL,
-    `componentId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -185,6 +193,18 @@ CREATE TABLE `Quotation` (
     `commercialId` INTEGER NOT NULL,
     `clientId` INTEGER NOT NULL,
     `statusId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Stock` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `quantity` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `stockistId` INTEGER NOT NULL,
+    `componentId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -221,22 +241,6 @@ UNIQUE INDEX `_ProviderToStockist_AB_unique`(`A`, `B`),
 INDEX `_ProviderToStockist_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
-CREATE TABLE `_ComponentToModule` (
-    `A` INTEGER NOT NULL,
-    `B` INTEGER NOT NULL,
-UNIQUE INDEX `_ComponentToModule_AB_unique`(`A`, `B`),
-INDEX `_ComponentToModule_B_index`(`B`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `_ModuleToQuotation` (
-    `A` INTEGER NOT NULL,
-    `B` INTEGER NOT NULL,
-UNIQUE INDEX `_ModuleToQuotation_AB_unique`(`A`, `B`),
-INDEX `_ModuleToQuotation_B_index`(`B`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 -- AddForeignKey
 ALTER TABLE `User` ADD FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -268,10 +272,16 @@ ALTER TABLE `Component` ADD FOREIGN KEY (`providerId`) REFERENCES `Provider`(`id
 ALTER TABLE `Component` ADD FOREIGN KEY (`unitId`) REFERENCES `UsageUnit`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Stock` ADD FOREIGN KEY (`stockistId`) REFERENCES `Stockist`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `ComponentsOnModule` ADD FOREIGN KEY (`componentId`) REFERENCES `Component`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Stock` ADD FOREIGN KEY (`componentId`) REFERENCES `Component`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `ComponentsOnModule` ADD FOREIGN KEY (`moduleId`) REFERENCES `Module`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ModuleOnQuotation` ADD FOREIGN KEY (`moduleId`) REFERENCES `Module`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ModuleOnQuotation` ADD FOREIGN KEY (`quotationId`) REFERENCES `Quotation`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Quotation` ADD FOREIGN KEY (`commercialId`) REFERENCES `Commercial`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -281,6 +291,12 @@ ALTER TABLE `Quotation` ADD FOREIGN KEY (`clientId`) REFERENCES `Client`(`id`) O
 
 -- AddForeignKey
 ALTER TABLE `Quotation` ADD FOREIGN KEY (`statusId`) REFERENCES `QuotationStatus`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Stock` ADD FOREIGN KEY (`stockistId`) REFERENCES `Stockist`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Stock` ADD FOREIGN KEY (`componentId`) REFERENCES `Component`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Order` ADD FOREIGN KEY (`quotationId`) REFERENCES `Quotation`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -299,15 +315,3 @@ ALTER TABLE `_ProviderToStockist` ADD FOREIGN KEY (`A`) REFERENCES `Provider`(`i
 
 -- AddForeignKey
 ALTER TABLE `_ProviderToStockist` ADD FOREIGN KEY (`B`) REFERENCES `Stockist`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_ComponentToModule` ADD FOREIGN KEY (`A`) REFERENCES `Component`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_ComponentToModule` ADD FOREIGN KEY (`B`) REFERENCES `Module`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_ModuleToQuotation` ADD FOREIGN KEY (`A`) REFERENCES `Module`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_ModuleToQuotation` ADD FOREIGN KEY (`B`) REFERENCES `Quotation`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
