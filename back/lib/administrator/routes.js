@@ -39,7 +39,7 @@ export default async app => {
             },
             include: {
                 administrator: true,
-                role: getRole === undefined ? false : getRole
+                role: getRole === true
             }
         });
 

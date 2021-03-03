@@ -42,7 +42,7 @@ export default async app => {
             },
             include: {
                 stockist: true,
-                role: getRole === undefined ? false : getRole
+                role: getRole === true
             }
         });
 

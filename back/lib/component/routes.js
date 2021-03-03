@@ -11,11 +11,12 @@ export default async app => {
         schema: schemas.all,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async req => {
-        const { getUnit, getProvider } = req.query;
+        const { getUnit, getProvider, getStock } = req.query;
         const components = await db.component.findMany({
             include: {
-                provider: getProvider === undefined ? false : getProvider,
-                unit: getUnit === undefined ? false : getUnit
+                provider: getProvider === true,
+                unit: getUnit === true,
+                stock: getStock === true
             }
         });
         return { statusCode: 200, message: '', data: { components }}
@@ -26,12 +27,13 @@ export default async app => {
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
         const { id } = req.params;
-        const { getUnit, getProvider } = req.query;
+        const { getUnit, getProvider, getStock } = req.query;
         const component = await db.component.findFirst({
             where: { id },
             include: {
-                unit: getUnit === undefined ? false : getUnit,
-                provider: getProvider === undefined ? false : getProvider
+                unit: getUnit === true,
+                provider: getProvider === true,
+                stock: getStock === true
             }
         });
         return component === null
@@ -68,8 +70,8 @@ export default async app => {
                 }
             },
             include: {
-                unit: getUnit === undefined ? false : getUnit,
-                provider: getProvider === undefined ? false : getProvider
+                unit: getUnit === true,
+                provider: getProvider === true
             }
         });
 

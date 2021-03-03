@@ -32,7 +32,7 @@ export default async app => {
                 }
             },
             include: {
-                components: getComponents === undefined ? false : getComponents
+                components: getComponents === true
             }
         });
 

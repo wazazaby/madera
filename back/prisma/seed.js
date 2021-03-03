@@ -154,6 +154,9 @@ const main = async () => {
             role: {
                 connect: { code: 'STOCKIST' }
             }
+        },
+        include: {
+            stockist: true
         }
     });
     const sto2 = await db.user.upsert({
@@ -175,6 +178,9 @@ const main = async () => {
             role: {
                 connect: { code: 'STOCKIST' }
             }
+        },
+        include: {
+            stockist: true
         }
     });
     const cli1 = await db.user.upsert({
@@ -200,6 +206,9 @@ const main = async () => {
             role: {
                 connect: { code: 'CLIENT' }
             }
+        },
+        include: {
+            client: true
         }
     });
     const cli2 = await db.user.upsert({
@@ -224,6 +233,216 @@ const main = async () => {
             },
             role: {
                 connect: { code: 'CLIENT' }
+            }
+        },
+        include: {
+            client: true
+        }
+    });
+    const pro1 = await db.provider.upsert({
+        where: { reference: 'pro1' },
+        update: {},
+        create: {
+            name: 'Provider1',
+            reference: 'pro1',
+            logoUrl: 'https://images-eu.ssl-images-amazon.com/images/I/41cwNN2n2wL.png',
+            stockists: {
+                connect: {
+                    id: sto1.stockist.id
+                }
+            }
+        }
+    });
+    const pro2 = await db.provider.upsert({
+        where: { reference: 'pro2' },
+        update: {},
+        create: {
+            name: 'Provider2',
+            reference: 'pro2',
+            logoUrl: 'https://images-eu.ssl-images-amazon.com/images/I/41cwNN2n2wL.png',
+            stockists: {
+                connect: {
+                    id: sto2.stockist.id
+                }
+            }
+        }
+    });
+    const comp1 = await db.component.upsert({
+        where: { reference: 'comp1' },
+        update: {},
+        create: {
+            label: 'Component1',
+            reference: 'comp1',
+            shortDescription: 'Description courte',
+            description: 'Ceci est une description longue',
+            price: 76.4,
+            provider: { connect: { id: pro1.id } },
+            unit: { connect: { code: 'UNIT' } },
+            stock: {
+                create: {
+                    quantity: 1111,
+                    stockist: { connect: { id: sto1.stockist.id } }
+                }
+            }
+        }
+    });
+    const comp2 = await db.component.upsert({
+        where: { reference: 'comp2' },
+        update: {},
+        create: {
+            label: 'Component2',
+            reference: 'comp2',
+            shortDescription: 'Description courte',
+            description: 'Ceci est une description longue',
+            price: 714.3,
+            provider: { connect: { id: pro1.id } },
+            unit: { connect: { code: 'LINEAR_METER' } },
+            stock: {
+                create: {
+                    quantity: 1432,
+                    stockist: { connect: { id: sto1.stockist.id } }
+                }
+            }
+        }
+    });
+    const comp3 = await db.component.upsert({
+        where: { reference: 'comp3' },
+        update: {},
+        create: {
+            label: 'Component3',
+            reference: 'comp3',
+            shortDescription: 'Description courte',
+            description: 'Ceci est une description longue',
+            price: 1134.5,
+            provider: { connect: { id: pro2.id } },
+            unit: { connect: { code: 'CENTIMETER' } },
+            stock: {
+                create: {
+                    quantity: 9572,
+                    stockist: { connect: { id: sto2.stockist.id } }
+                }
+            }
+        }
+    });
+    const comp4 = await db.component.upsert({
+        where: { reference: 'comp4' },
+        update: {},
+        create: {
+            label: 'Component4',
+            reference: 'comp4',
+            shortDescription: 'Description courte',
+            description: 'Ceci est une description longue',
+            price: 666,
+            provider: { connect: { id: pro2.id } },
+            unit: { connect: { code: 'SQUARE_METER' } },
+            stock: {
+                create: {
+                    quantity: 335,
+                    stockist: { connect: { id: sto2.stockist.id } }
+                }
+            }
+        }
+    });
+    const mod1 = await db.module.upsert({
+        where: { reference: 'mod1' },
+        update: {},
+        create: {
+            label: 'Module1',
+            reference: 'mod1',
+            shortDescription: 'Description courte',
+            description: 'Ceci est une longue description',
+            components: { 
+                create: [
+                    { component: { connect: { id: comp1.id } } },
+                    { component: { connect: { id: comp1.id } } },
+                    { component: { connect: { id: comp1.id } } },
+                    { component: { connect: { id: comp2.id } } },
+                    { component: { connect: { id: comp2.id } } },
+                    { component: { connect: { id: comp4.id } } }
+                ]
+            }
+        },
+        include: { components: { include: { component: true } } }
+    });
+    const mod2 = await db.module.upsert({
+        where: { reference: 'mod2' },
+        update: {},
+        create: {
+            label: 'Module2',
+            reference: 'mod2',
+            shortDescription: 'Description courte',
+            description: 'Ceci est une longue description',
+            components: { 
+                create: [
+                    { component: { connect: { id: comp1.id } } },
+                    { component: { connect: { id: comp2.id } } },
+                    { component: { connect: { id: comp2.id } } },
+                    { component: { connect: { id: comp2.id } } },
+                    { component: { connect: { id: comp3.id } } },
+                    { component: { connect: { id: comp4.id } } }
+                ]
+            }
+        },
+        include: {
+            components: true
+        }
+    });
+    const mod3 = await db.module.upsert({
+        where: { reference: 'mod3' },
+        update: {},
+        create: {
+            label: 'Module2',
+            reference: 'mod3',
+            shortDescription: 'Description courte',
+            description: 'Ceci est une longue description',
+            components: { 
+                create: [
+                    { component: { connect: { id: comp1.id } } },
+                    { component: { connect: { id: comp2.id } } },
+                    { component: { connect: { id: comp3.id } } },
+                    { component: { connect: { id: comp4.id } } }
+                ]
+            }
+        },
+        include: { components: true }
+    });
+    const quo1 = await db.quotation.create({
+        data: {
+            label: 'Quotation1',
+            shortDescription: 'Description courte',
+            price: 123433,
+            commercial: { connect: { id: com1.commercial.id } },
+            client: { connect: { id: cli1.client.id } },
+            status: { connect: { code: 'WAITING' } },
+            modules: {
+                create: [
+                    { module: { connect: { id: mod1.id} } },
+                    { module: { connect: { id: mod2.id} } },
+                    { module: { connect: { id: mod2.id} } },
+                    { module: { connect: { id: mod2.id} } },
+                    { module: { connect: { id: mod3.id} } }
+                ]
+            }
+        }
+    });
+    const quo2 = await db.quotation.create({
+        data: {
+            label: 'Quotation2',
+            shortDescription: 'Description courte',
+            price: 341264,
+            commercial: { connect: { id: com2.commercial.id } },
+            client: { connect: { id: cli2.client.id } },
+            status: { connect: { code: 'WAITING' } },
+            modules: {
+                create: [
+                    { module: { connect: { id: mod1.id} } },
+                    { module: { connect: { id: mod1.id} } },
+                    { module: { connect: { id: mod1.id} } },
+                    { module: { connect: { id: mod2.id} } },
+                    { module: { connect: { id: mod2.id} } },
+                    { module: { connect: { id: mod3.id} } },
+                    { module: { connect: { id: mod3.id} } }
+                ]
             }
         }
     });

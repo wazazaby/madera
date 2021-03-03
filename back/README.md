@@ -20,9 +20,8 @@ Madera API
 `npm run pgen`
 
 ## TODO
-* Créer les routes clients
-* Finir le seed
-* Gérer les modules et les quotations
+* Gérer les commandes et paiments pour les devis
+* Création d'un module, ajout l'option d'avoir un stock direct
 
 
 ## Contenu .env

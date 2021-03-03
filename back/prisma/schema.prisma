@@ -1,302 +1,294 @@
 // =================== INIT ===================
 datasource db {
-    provider = "mysql"
-    url = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
-    provider = "prisma-client-js"
-    previewFeatures = ["createMany"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["createMany"]
 }
+
 // =================== INIT ===================
-
-
 
 // =================== ENUMERATORS AS TABLES ===================
 model UsageUnit {
-    id                  Int                 @default(autoincrement()) @id
-    label               String              @unique
-    code                String              @unique
-    createdAt           DateTime            @default(now())
-    // <==> RELATIONS <==>
-    // <==> DOWN <==>
-    components          Component[]
+  id         Int         @id @default(autoincrement())
+  label      String      @unique
+  code       String      @unique
+  createdAt  DateTime    @default(now())
+  // <==> RELATIONS <==>
+  // <==> DOWN <==>
+  components Component[]
 }
 
 model QuotationStatus {
-    id                  Int                 @default(autoincrement()) @id
-    label               String              @unique
-    code                String              @unique
-    createdAt           DateTime            @default(now())
-    // <==> RELATIONS <==>
-    // <==> DOWN <==>
-    quotations          Quotation[]
+  id         Int         @id @default(autoincrement())
+  label      String      @unique
+  code       String      @unique
+  createdAt  DateTime    @default(now())
+  // <==> RELATIONS <==>
+  // <==> DOWN <==>
+  quotations Quotation[]
 }
 
 model OrderStatus {
-    id                  Int                 @default(autoincrement()) @id
-    label               String              @unique
-    code                String              @unique
-    createdAt           DateTime            @default(now())
-    // <==> RELATIONS <==>
-    // <==> DOWN <==>
-    orders              Order[]
+  id        Int      @id @default(autoincrement())
+  label     String   @unique
+  code      String   @unique
+  createdAt DateTime @default(now())
+  // <==> RELATIONS <==>
+  // <==> DOWN <==>
+  orders    Order[]
 }
 
 model PaymentType {
-    id                  Int                 @default(autoincrement()) @id
-    label               String              @unique
-    code                String              @unique
-    createdAt           DateTime            @default(now())
-    // <==> RELATIONS <==>
-    // <==> DOWN <==>
-    payments            Payment[]
+  id        Int       @id @default(autoincrement())
+  label     String    @unique
+  code      String    @unique
+  createdAt DateTime  @default(now())
+  // <==> RELATIONS <==>
+  // <==> DOWN <==>
+  payments  Payment[]
 }
+
 // =================== ENUMERATORS AS TABLES ===================
-
-
 
 // =================== USER ===================
 model Role {
-    id                  Int                 @default(autoincrement()) @id
-    label               String              @unique
-    code                String              @unique
-    createdAt           DateTime            @default(now())
-    // <==> RELATIONS <==>
-    // <==> DOWN <==>
-    user                User[]
+  id        Int      @id @default(autoincrement())
+  label     String   @unique
+  code      String   @unique
+  createdAt DateTime @default(now())
+  // <==> RELATIONS <==>
+  // <==> DOWN <==>
+  user      User[]
 }
 
 model User {
-    id                  Int                 @default(autoincrement()) @id
-    firstName           String
-    lastName            String
-    email               String              @unique
-    phoneNumber         String              @db.VarChar(10) @unique
-    password            String
-    createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    role                Role                @relation(fields: [roleId], references: [id])
-    roleId              Int
-    // <==> DOWN <==>
-    administrator       Administrator?
-    commercial          Commercial?
-    stockist            Stockist?
-    client              Client?
+  id            Int            @id @default(autoincrement())
+  firstName     String
+  lastName      String
+  email         String         @unique
+  phoneNumber   String         @unique @db.VarChar(10)
+  password      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  // <==> RELATIONS <==>
+  // <==> UP <==>
+  role          Role           @relation(fields: [roleId], references: [id])
+  roleId        Int
+  // <==> DOWN <==>
+  administrator Administrator?
+  commercial    Commercial?
+  stockist      Stockist?
+  client        Client?
 }
 
 model Administrator {
-    id                  Int                 @default(autoincrement()) @id
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    user                User                @relation(fields: [userId], references: [id])
-    userId              Int
-    // <==> DOWN <==>
-    commercials         Commercial[]
-    stockists           Stockist[]
+  id          Int          @id @default(autoincrement())
+  // <==> RELATIONS <==>
+  // <==> UP <==>
+  user        User         @relation(fields: [userId], references: [id])
+  userId      Int
+  // <==> DOWN <==>
+  commercials Commercial[]
+  stockists   Stockist[]
 }
 
 model Commercial {
-    id                  Int                 @default(autoincrement()) @id
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    user                User                @relation(fields: [userId], references: [id])
-    administrator       Administrator       @relation(fields: [administratorId], references: [id])
-    userId              Int
-    administratorId     Int
-    // <==> DOWN <==>
-    quotations          Quotation[]
-    clients             Client[]
+  id              Int           @id @default(autoincrement())
+  // <==> RELATIONS <==>
+  // <==> UP <==>
+  user            User          @relation(fields: [userId], references: [id])
+  administrator   Administrator @relation(fields: [administratorId], references: [id])
+  userId          Int
+  administratorId Int
+  // <==> DOWN <==>
+  quotations      Quotation[]
+  clients         Client[]
 }
 
 model Stockist {
-    id                  Int                 @default(autoincrement()) @id
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    user                User                @relation(fields: [userId], references: [id])
-    administrator       Administrator       @relation(fields: [administratorId], references: [id])
-    userId              Int
-    administratorId     Int
-    // <==> DOWN <==>
-    stocks              Stock[]
-    providers           Provider[]
+  id              Int           @id @default(autoincrement())
+  // <==> RELATIONS <==>
+  // <==> UP <==>
+  user            User          @relation(fields: [userId], references: [id])
+  administrator   Administrator @relation(fields: [administratorId], references: [id])
+  userId          Int
+  administratorId Int
+  // <==> DOWN <==>
+  stocks          Stock[]
+  providers       Provider[]
 }
 
 model Client {
-    id                  Int                 @default(autoincrement()) @id
-    city                String
-    postalCode          Int
-    adressLine1         String
-    adressLine2         String?
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    user                User                @relation(fields: [userId], references: [id])
-    commercial          Commercial          @relation(fields: [commercialId], references: [id])
-    userId              Int
-    commercialId        Int
-    // <==> DOWN <==>
-    quotations          Quotation[]
+  id           Int         @id @default(autoincrement())
+  city         String
+  postalCode   Int
+  adressLine1  String
+  adressLine2  String?
+  // <==> RELATIONS <==>
+  // <==> UP <==>
+  user         User        @relation(fields: [userId], references: [id])
+  commercial   Commercial  @relation(fields: [commercialId], references: [id])
+  userId       Int
+  commercialId Int
+  // <==> DOWN <==>
+  quotations   Quotation[]
 }
+
 // =================== USER ===================
-
-
 
 // =================== PROVIDER ===================
 model Provider {
-    id                  Int                 @default(autoincrement()) @id
-    name                String
-    reference           String              @unique
-    logoUrl             String
-    createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
-    // <==> RELATIONS <==>
-    // <==> DOWN <==>
-    stockists           Stockist[]
-    components          Component[]
+  id         Int         @id @default(autoincrement())
+  name       String
+  reference  String      @unique
+  logoUrl    String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  // <==> RELATIONS <==>
+  // <==> DOWN <==>
+  stockists  Stockist[]
+  components Component[]
 }
-// =================== PROVIDER ===================
 
+// =================== PROVIDER ===================
 
 // =================== COMPONENT ===================
 model Component {
-    id                  Int                 @default(autoincrement()) @id
-    label               String
-    reference           String              @unique
-    shortDescription    String?             @db.Text
-    description         String              @db.MediumText
-    price               Float
-    createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    provider            Provider            @relation(fields: [providerId], references: [id])
-    unit                UsageUnit           @relation(fields: [unitId], references: [id])
-    providerId          Int
-    unitId              Int
-    // <==> DOWN <==>
-    modules             ComponentsOnModule[]
+  id               Int                  @id @default(autoincrement())
+  label            String
+  reference        String               @unique
+  shortDescription String?              @db.Text
+  description      String               @db.MediumText
+  price            Float
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  // <==> RELATIONS <==>
+  // <==> UP <==>
+  provider         Provider             @relation(fields: [providerId], references: [id])
+  unit             UsageUnit            @relation(fields: [unitId], references: [id])
+  providerId       Int
+  unitId           Int
+  // <==> DOWN <==>
+  stock            Stock?
+  modules          ComponentsOnModule[]
 }
+
 // =================== COMPONENT ===================
-
-
 
 // =================== COMPONENT ON MODULE ===================
 model ComponentsOnModule {
-    id                  Int                 @default(autoincrement()) @id
-    component           Component           @relation(fields: [componentId], references: [id])
-    module              Module              @relation(fields: [moduleId], references: [id])
-    componentId         Int
-    moduleId            Int
-    createdAt           DateTime            @default(now())
+  id          Int        @id @default(autoincrement())
+  component   Component? @relation(fields: [componentId], references: [id])
+  module      Module?    @relation(fields: [moduleId], references: [id])
+  componentId Int?
+  moduleId    Int?
+  createdAt   DateTime   @default(now())
 }
+
 // =================== COMPONENT ON MODULE ===================
-
-
 
 // =================== MODULE ===================
 model Module {
-    id                  Int                 @default(autoincrement()) @id
-    label               String
-    reference           String              @unique
-    shortDescription    String?             @db.Text
-    description         String              @db.MediumText
-    createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
-    // <==> RELATIONS <==>
-    // <==> DOWN <==>
-    components          ComponentsOnModule[]
-    quotations          ModuleOnQuotation[]
+  id               Int                  @id @default(autoincrement())
+  label            String
+  reference        String               @unique
+  shortDescription String?              @db.Text
+  description      String               @db.MediumText
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  // <==> RELATIONS <==>
+  // <==> DOWN <==>
+  components       ComponentsOnModule[]
+  quotations       ModuleOnQuotation[]
 }
+
 // =================== MODULE ===================
-
-
 
 // =================== MODULE ON QUOTATION ===================
 model ModuleOnQuotation {
-    id                  Int                 @default(autoincrement()) @id
-    module              Module              @relation(fields: [moduleId], references: [id])
-    quotation           Quotation           @relation(fields: [quotationId], references: [id])
-    moduleId            Int
-    quotationId         Int
-    createdAt           DateTime            @default(now())
+  id          Int       @id @default(autoincrement())
+  module      Module    @relation(fields: [moduleId], references: [id])
+  quotation   Quotation @relation(fields: [quotationId], references: [id])
+  moduleId    Int
+  quotationId Int
+  createdAt   DateTime  @default(now())
 }
+
 // =================== MODULE ON QUOTATION ===================
-
-
 
 // =================== QUOTATION ===================
 model Quotation {
-    id                  Int                 @default(autoincrement()) @id
-    label               String
-    shortDescription    String?             @db.Text
-    price               Float
-    createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    commercial          Commercial          @relation(fields: [commercialId], references: [id])
-    client              Client              @relation(fields: [clientId], references: [id])
-    status              QuotationStatus     @relation(fields: [statusId], references: [id])
-    commercialId        Int
-    clientId            Int
-    statusId            Int
-    // <==> DOWN <==>
-    orders              Order[]
-    modules             ModuleOnQuotation[]
+  id               Int                 @id @default(autoincrement())
+  label            String
+  shortDescription String?             @db.Text
+  price            Float
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  // <==> RELATIONS <==>
+  // <==> UP <==>
+  commercial       Commercial          @relation(fields: [commercialId], references: [id])
+  client           Client              @relation(fields: [clientId], references: [id])
+  status           QuotationStatus     @relation(fields: [statusId], references: [id])
+  commercialId     Int
+  clientId         Int
+  statusId         Int
+  // <==> DOWN <==>
+  orders           Order[]
+  modules          ModuleOnQuotation[]
 }
+
 // =================== QUOTATION ===================
-
-
 
 // =================== STOCK ===================
 model Stock {
-    id                  Int                 @default(autoincrement()) @id
-    quantity            Int
-    createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    stockist            Stockist            @relation(fields: [stockistId], references: [id])
-    component           Component           @relation(fields: [componentId], references: [id])
-    stockistId          Int
-    componentId         Int
+  id          Int       @id @default(autoincrement())
+  quantity    Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  // <==> RELATIONS <==>
+  // <==> UP <==>
+  stockist    Stockist  @relation(fields: [stockistId], references: [id])
+  component   Component @relation(fields: [componentId], references: [id])
+  stockistId  Int
+  componentId Int
 }
+
 // =================== STOCK ===================
-
-
 
 // =================== ORDER ===================
 model Order {
-    id                  Int                 @default(autoincrement()) @id
-    totalPaid           Float
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    quotation           Quotation           @relation(fields: [quotationId], references: [id])
-    status              OrderStatus         @relation(fields: [statusId], references: [id])
-    quotationId         Int
-    statusId            Int
-    // <==> DOWN <==>
-    payments            Payment[]
+  id          Int         @id @default(autoincrement())
+  totalPaid   Float
+  // <==> RELATIONS <==>
+  // <==> UP <==>
+  quotation   Quotation   @relation(fields: [quotationId], references: [id])
+  status      OrderStatus @relation(fields: [statusId], references: [id])
+  quotationId Int
+  statusId    Int
+  // <==> DOWN <==>
+  payments    Payment[]
 }
+
 // =================== ORDER ===================
-
-
 
 // =================== PAYMENT ===================
 model Payment {
-    id                  Int                 @default(autoincrement()) @id
-    total               Float
-    currentlyPaid       Float
-    leftToPay           Float
-    createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @updatedAt
-    // <==> RELATIONS <==>
-    // <==> UP <==>
-    order               Order               @relation(fields: [orderId], references: [id])
-    type                PaymentType         @relation(fields: [typeId], references: [id])
-    orderId             Int
-    typeId              Int
+  id            Int         @id @default(autoincrement())
+  total         Float
+  currentlyPaid Float
+  leftToPay     Float
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  // <==> RELATIONS <==>
+  // <==> UP <==>
+  order         Order       @relation(fields: [orderId], references: [id])
+  type          PaymentType @relation(fields: [typeId], references: [id])
+  orderId       Int
+  typeId        Int
 }
+
 // =================== PAYMENT ===================

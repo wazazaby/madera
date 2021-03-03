@@ -11,6 +11,13 @@ export const create = {
                 items: { type: 'integer' }
             }
         },
-        required: ['label', 'clientId', 'quotationStatusId', 'modulesId']
+        required: ['label', 'clientId', 'modulesId']
+    },
+    querystring: {
+        type: 'object',
+        properties: {
+            getStatus: { type: 'boolean' },
+            getModules: { type: 'boolean' }
+        }
     }
 }

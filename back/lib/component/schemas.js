@@ -4,7 +4,8 @@ export const all = {
         type: 'object',
         properties: {
             getUnit: { type: 'boolean' },
-            getProvider: { type: 'boolean' }
+            getProvider: { type: 'boolean' },
+            getStock: { type: 'boolean' }
         }
     }
 }

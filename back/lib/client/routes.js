@@ -70,7 +70,7 @@ export default async app => {
             },
             include: {
                 client: true,
-                role: getRole === undefined ? false : getRole
+                role: getRole === true
             }
         });
 
