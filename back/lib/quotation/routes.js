@@ -63,4 +63,143 @@ export default async app => {
             return rep.internalServerError('Il y a eu un problème lors de la création de votre devis, merci de réessayer');
         }
     });
+
+    app.post(`${base}/approve`, {
+        schema: schemas.approve,
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
+    }, async (req, rep) => {
+        const { quotationId } = req.body;
+        const quotation = await db.quotation.findFirst({
+            where: { id: quotationId }
+        });
+        if (quotation === null) {
+            return rep.notFound('Devis introuvable');
+        }
+        // Si le devis n'appartient pas à cet utilisateur, on renvoit
+        if (quotation.commercialId !== req.user.entityId) {
+            return rep.unauthorized('Opération interdite');
+        }
+        // Mise à jour du statut du devis
+        await db.quotation.update({
+            where: { id: quotationId },
+            data: {
+                status: {
+                    connect: {
+                        code: 'ACCEPTED'
+                    }
+                }
+            }
+        });
+        
+        const total = quotation.price / 8;
+        await db.order.create({
+            data: {
+                quotation: { connect: { id: quotationId } },
+                status: { connect: { code: 'WAITING' } },
+                totalPaid: 0,
+                payments: {
+                    create: [
+                        { 
+                            type: { connect: { code: 'AT_SIGNATURE'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_CONSTRUCTION_LICENCE_OBTENTION'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_SITE_OPENING'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_FOUNDATION_COMPLETION'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_WALLS_COMPLETION'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_WATER_AIR_PUT_OUT'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_EQUIPMENT_WORK_COMPLETION'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_KEY_HANDING'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        }
+                    ]
+                }
+            }            
+        });
+
+        const newQuotation = await db.quotation.findFirst({
+            where: { id: quotationId },
+            include: {
+                orders: {
+                    include: {
+                        payments: {
+                            include: {
+                                type: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        return { statusCode: 200, message: 'Devis approuvé avec succès', data: { newQuotation } }
+    });
+
+    app.post(`${base}/deny`, {
+        schema: schemas.approve,
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
+    }, async (req, rep) => {
+        const { quotationId } = req.body;
+        const quotation = await db.quotation.findFirst({
+            where: { id: quotationId }
+        });
+        if (quotation === null) {
+            return rep.notFound('Devis introuvable');
+        }
+        // Si le devis n'appartient pas à cet utilisateur, on renvoit
+        if (quotation.commercialId !== req.user.entityId) {
+            return rep.unauthorized('Opération interdite');
+        }
+        // Mise à jour du statut du devis
+        const denied = await db.quotation.update({
+            where: { id: quotationId },
+            data: {
+                status: {
+                    connect: {
+                        code: 'DENIED'
+                    }
+                }
+            },
+            include: {
+                status: true
+            }
+        });
+
+        return { statusCode: 200, message: 'Devis refusé avec succès', data: { denied } }
+    });
 }

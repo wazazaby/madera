@@ -21,3 +21,13 @@ export const create = {
         }
     }
 }
+
+export const approve = {
+    body: {
+        type: 'object',
+        properties: {
+            quotationId: { type: 'integer' }
+        },
+        required: ['quotationId']
+    }
+}
