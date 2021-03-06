@@ -101,12 +101,12 @@ export class StatesService {
 
   // ===================================================================================================================
 
-  public get modules(): BehaviorSubject<Module[]> {
-    return this._modules;
+  public get modules(): Module[] {
+    return this._modules.getValue();
   }
 
-  public set modules(value: BehaviorSubject<Module[]>) {
-    this._modules = value;
+  public set modules(value: Module[]) {
+    this._modules.next(value);
   }
 
   public modulesAsObservable(): Observable<Module[]> {

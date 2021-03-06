@@ -51,6 +51,7 @@ export class SmartTableComponent implements OnInit, OnDestroy {
   @Output() public create: EventEmitter<SmartTableAdd<any>> = new EventEmitter<SmartTableAdd<any>>();
   @Output() public edit: EventEmitter<SmartTableEdit<any>> = new EventEmitter<SmartTableEdit<any>>();
   @Output() public delete: EventEmitter<SmartTableDelete<any>> = new EventEmitter<SmartTableDelete<any>>();
+  @Output() public rowselect: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 
@@ -89,6 +90,10 @@ export class SmartTableComponent implements OnInit, OnDestroy {
     } else {
       event.confirm.reject();
     }
+  }
+
+  public rowSelect($event: any) {
+    this.rowselect.emit($event);
   }
 
   /**

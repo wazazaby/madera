@@ -11,6 +11,7 @@ import { ModulesComponent } from './modules/modules.component';
 import { ComposantsComponent } from './composants/composants.component';
 import { ProfilComponent } from './profil/profil.component';
 import { StockComponent } from './stock/stock.component';
+import { ModulebyidComponent } from './modules/modulebyid/modulebyid.component';
 
 export const routes: Routes = [{
   path: '',
@@ -31,6 +32,10 @@ export const routes: Routes = [{
     {
       path: 'modules',
       component: ModulesComponent,
+    },
+    {
+      path: 'modules/:id',
+      component: ModulebyidComponent,
     },
     {
       path: 'composant',

@@ -28,14 +28,22 @@ export interface SmartTableAdd<T> {
   newData: T | any;
   source: LocalDataSource;
 }
+
 export interface SmartTableEdit<T> {
   confirm: any;
   data: T | any;
   newData: T | any;
   source: LocalDataSource;
 }
+
 export interface SmartTableDelete<T> {
   confirm: any;
   data: T | any;
   source: LocalDataSource;
+}
+
+export interface SmartTableSelect<T> {
+  data: T | any;
+  source: LocalDataSource;
+  isSelected: boolean;
 }

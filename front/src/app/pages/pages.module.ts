@@ -30,6 +30,7 @@ import { LogoutComponent } from './auth/logout/logout.component';
 import { ButtonTableComponent } from './smart-table/button-table/button-table.component';
 import { UserModalAddComponent } from './users/user-modal-add/user-modal-add.component';
 import { CustomersModalAddComponent } from './customers/customers-modal-add/customers-modal-add.component';
+import { ModulebyidComponent } from './modules/modulebyid/modulebyid.component';
 
 @NgModule({
   imports: [
@@ -69,6 +70,7 @@ import { CustomersModalAddComponent } from './customers/customers-modal-add/cust
     ButtonTableComponent,
     UserModalAddComponent,
     CustomersModalAddComponent,
+    ModulebyidComponent,
   ],
 })
 export class PagesModule {

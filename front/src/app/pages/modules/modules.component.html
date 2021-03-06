@@ -1,1 +1,12 @@
-<p>modules list</p>
+<button disabled class="btn btn-outline-primary mb-4" (click)="openModal()">Ajouter un module</button>
+
+
+<app-smart-table
+    *ngIf="data && data.length > 0"
+    [columns]="columns"
+    [data]="data"
+    (rowselect)="select($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+>
+</app-smart-table>
