@@ -20,10 +20,9 @@ Madera API
 `npm run pgen`
 
 ## TODO
-* Ajout db en global pour pas avoir des générations d'entités de fou
 * All devis
 * All clients (par commercial) + devis
-* Tout les modules, tout les modules
+* Tout les components
 * Get devis by id
 
 

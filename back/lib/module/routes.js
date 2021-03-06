@@ -34,6 +34,30 @@ export default async app => {
             }
         });
 
-        return newModule
+        return { statusCode: 200, message: 'Module créé avec succès', data: { module: newModule } }
+    });
+
+    app.get(`${base}/all`, {
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
+    }, async () => {
+        const modules = await db.module.findMany();
+        return { statusCode: 200, message: '', data: { modules } }
+    });
+
+    app.get(`${base}/:id`, {
+        schema: schemas.byId,
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
+    }, async (req, rep) => {
+        const { id } = req.params;
+        const { getComponents } = req.query;
+        const module = await db.module.findFirst({
+            where: { id },
+            include: {
+                components: getComponents === true
+            }
+        });
+        return module === null 
+            ? rep.notFound('Module introuvable') 
+            : { statusCode: 200, message: '', data: { module } }
     });
 }

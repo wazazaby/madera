@@ -1,9 +1,10 @@
 'use strict';
-export const getRole = {
+export const all = {
     querystring: {
         type: 'object',
         properties: {
-            getRole: { type: 'boolean' }
+            getRole: { type: 'boolean' },
+            getQuotations: { type: 'boolean' }
         }
     }
 }
@@ -33,5 +34,5 @@ export const create = {
             'adressLine1'
         ]
     },
-    querystring: getRole.querystring
+    querystring: all.querystring
 }

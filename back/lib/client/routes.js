@@ -7,21 +7,25 @@ export default async app => {
     const base = '/client';
     
     app.get(`${base}/all`, {
-        schema: schemas.getRole,
+        schema: schemas.all,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
-    }, async (req, rep) => {
-        const { getRole } = req.query;
+    }, async req => {
+        const { getRole, getQuotations } = req.query;
         const clients = await db.user.findMany({
             where: {
                 client: { commercialId: req.user.entityId }
             },
             include: {
-                client: true,
-                role: getRole === undefined ? false : getRole
+                client: {
+                    include: {
+                        quotations: getQuotations === true
+                    }
+                },
+                role: getRole === true
             }
         });
 
-        return clients;
+        return { statusCode: 200, message: '', data: { clients } }
     });
 
     app.post(`${base}/create`, {
