@@ -1,12 +1,11 @@
 'use strict';
-import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import * as schemas from './schemas';
+import db from '../../utils/db';
 
 export default async app => {
     const base = '/administrator';
-    const db = new PrismaClient();
-
+    
     app.post(`${base}/create`, {
         schema: schemas.create,
         preHandler: app.auth([app.verifyJWT, app.isAdmin], { relation: 'and' })

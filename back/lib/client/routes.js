@@ -1,12 +1,11 @@
 'use strict';
-import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import * as schemas from './schemas';
+import db from '../../utils/db';
 
 export default async app => {
     const base = '/client';
-    const db = new PrismaClient();
-
+    
     app.get(`${base}/all`, {
         schema: schemas.getRole,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })

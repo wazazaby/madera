@@ -1,12 +1,10 @@
 'use strict';
-
-import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import * as schemas from './schemas';
+import db from '../../utils/db';
 
 export default async app => {
     const base = '/user';
-    const db = new PrismaClient();
 
     app.post(`${base}/login`, { 
         schema: schemas.login 

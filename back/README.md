@@ -20,8 +20,11 @@ Madera API
 `npm run pgen`
 
 ## TODO
-* Gérer les commandes et paiments pour les devis
-* Création d'un module, ajout l'option d'avoir un stock direct
+* Ajout db en global pour pas avoir des générations d'entités de fou
+* All devis
+* All clients (par commercial) + devis
+* Tout les modules, tout les modules
+* Get devis by id
 
 
 ## Contenu .env

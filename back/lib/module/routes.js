@@ -1,11 +1,9 @@
 'use strict';
-
-import { PrismaClient } from '@prisma/client';
 import * as schemas from './schemas';
+import db from '../../utils/db';
 
 export default async app => {
     const base = '/module';
-    const db = new PrismaClient();
 
     app.post(`${base}/create`, {
         schema: schemas.create,
