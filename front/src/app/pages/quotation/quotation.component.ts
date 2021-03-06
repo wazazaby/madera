@@ -4,8 +4,6 @@ import { FSEntry } from '../../interfaces/FsEntry';
 import { TreeNode } from '../../interfaces/TreeNode';
 import { StatesService } from '../../services/states.service';
 import { BridgeService } from '../../services/bridge.service';
-import { Client } from '../../interfaces/client';
-
 
 @Component({
   selector: 'ngx-quotation',

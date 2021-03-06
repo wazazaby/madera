@@ -9,5 +9,5 @@ export interface Module {
   description: string;
   createdAt: Date;
   updatedAt: Date;
-  components?: Components[];
+  components?: any[];
 }
