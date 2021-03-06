@@ -33,5 +33,6 @@ export const byId = {
             id: { type: 'integer' },
         },
         required: ['id']
-    }
+    },
+    querystring: all.querystring
 }

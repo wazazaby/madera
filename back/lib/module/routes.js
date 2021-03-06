@@ -43,7 +43,7 @@ export default async app => {
     }, async req => {
         const { getComponents } = req.query;
         const moar = getComponents === true 
-            ? { include: { components: { include: { component: getComponents === true } } } } 
+            ? { include: { components: { include: { component: true } } } } 
             : {}
         const modules = await db.module.findMany({
             ...moar
@@ -57,11 +57,12 @@ export default async app => {
     }, async (req, rep) => {
         const { id } = req.params;
         const { getComponents } = req.query;
+        const moar = getComponents === true 
+            ? { include: { components: { include: { component: true } } } } 
+            : {}
         const module = await db.module.findFirst({
             where: { id },
-            include: {
-                components: getComponents === true
-            }
+            ...moar
         });
         return module === null 
             ? rep.notFound('Module introuvable') 
