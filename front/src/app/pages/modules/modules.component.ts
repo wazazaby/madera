@@ -73,10 +73,14 @@ export class ModulesComponent implements OnInit, OnDestroy {
   }
 
 
+  /**
+   * Action au click sur la row du table
+   * @param evt: event smart table select row
+   * @return void
+   */
   select(evt: SmartTableSelect<Module>) {
-    if (evt) {
-      console.log(evt.data)
-      this.router.navigateByUrl(`pages/modules/${evt.data.id}`);
+    if (evt && evt.data && evt.data.id > 0) {
+      this.router.navigateByUrl(`pages/modules/${evt.data.id}`).then();
     }
   }
 
