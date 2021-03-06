@@ -68,7 +68,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
     this._stateService.clientsAsObservable()
       .pipe(takeUntil(this.destroyed))
       .subscribe((client: SoftClient[]) => {
-        console.log('*ici', client);
         if (client && client.length > 0) {
           this.dataCustomers = client;
           this.cdref.detectChanges();

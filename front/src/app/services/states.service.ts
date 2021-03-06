@@ -31,12 +31,16 @@ export class StatesService {
 
   // ===================================================================================================================
 
-  get token(): string {
+  public get token(): string {
     return this._token.getValue();
   }
 
-  set token(value: string) {
+  public set token(value: string) {
     this._token.next(value);
+  }
+
+  public tokenAsObservable(): Observable<string> {
+    return this._token.asObservable();
   }
 
   // ===================================================================================================================
@@ -107,6 +111,19 @@ export class StatesService {
 
   public modulesAsObservable(): Observable<Module[]> {
     return this._modules.asObservable();
+  }
+
+  // ===================================================================================================================
+
+  /**
+   * Supprime toute les datas stocker
+   */
+  public cleanUp() {
+    this._roles.next([]);
+    this._users.next(null);
+    this._clients.next([]);
+    this._composents.next([]);
+    this._modules.next([]);
   }
 
   // ===================================================================================================================
