@@ -1,18 +1,22 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { NbSortDirection, NbSortRequest, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { FSEntry } from '../../interfaces/FsEntry';
 import { TreeNode } from '../../interfaces/TreeNode';
 import { StatesService } from '../../services/states.service';
 import { BridgeService } from '../../services/bridge.service';
+import { ResponsesApi } from '../../interfaces/responses-api';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'ngx-quotation',
   templateUrl: './quotation.component.html',
   styleUrls: ['./quotation.component.scss'],
 })
-export class QuotationComponent implements OnInit {
-  public customColumn = 'Clients';
-  public defaultColumns = ['Nombre de devis', 'Documents', 'Date', 'Status'];
+export class QuotationComponent implements OnInit, OnDestroy {
+  public customColumn = 'Labels';
+  public defaultColumns = ['Nombres', 'Documents', 'Date', 'Statut'];
   public allColumns = [this.customColumn, ...this.defaultColumns];
 
   public dataSource: NbTreeGridDataSource<any>;
@@ -20,6 +24,9 @@ export class QuotationComponent implements OnInit {
   public sortColumn: string;
   public sortDirection: NbSortDirection = NbSortDirection.NONE;
   public data: TreeNode<any>[] = [];
+
+  /** Subject utilisé pour le unsubscribe de tout les obs */
+  private destroyed = new Subject();
 
   constructor(private _dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>,
               private _stateService: StatesService,
@@ -46,42 +53,58 @@ export class QuotationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this._stateService.clientsAsObservable().subscribe((cli: Client[]) => {
-    //   // Nettoie le tableau
-    //   this.data = [];
-    //   this.dataSource = this._dataSourceBuilder.create(this.data);
-    //   if (cli && cli.length > 0) {
-    //
-    //     console.log('*client', cli);
-    //
-    //     cli.forEach((c: Client) => {
-    //       const nbrQuotation = c.quotation && c.quotation.length > 0 ? c.quotation.length : 0;
-    //
-    //       this.data.push({
-    //         data: {
-    //           Clients: `${c.firstName} ${c.lastName}`,
-    //           'Nombre de devis': `${nbrQuotation}`,
-    //           type: 'folder',
-    //         },
-    //         children: [
-    //           {
-    //             data:
-    //               {
-    //                 Clients: 'devis-project-1.doc', Documents: 'Devis', Date: new Date(), Status: 'en cours',
-    //               },
-    //           },
-    //           {
-    //             data: {
-    //               Clients: 'devis-project-2.doc', Documents: 'Facture', Date: new Date(),
-    //             },
-    //           },
-    //         ],
-    //       });
-    //     });
-    //     this.dataSource = this._dataSourceBuilder.create(this.data);
-    //   }
-    //   this.cdref.detectChanges();
-    // });
+
+    this._bridgeService.getClientsQuotation()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((cli: ResponsesApi<any[]>) => {
+        if (cli && cli.data && cli.data['clients'] && cli.data['clients'].length > 0) {
+          this.data = [];
+          this.dataSource = this._dataSourceBuilder.create(this.data);
+
+          const clients: any[] = cli.data['clients'];
+
+          if (clients.length > 0) {
+
+            clients.forEach(c => {
+              const quotation: any[] = c.client.quotations;
+              const child = [];
+
+              const nbrQuotation = quotation.length;
+              quotation.forEach((q) => {
+
+                child.push(
+                  {
+                    data: {
+                      Labels: q.label,
+                      Nombres: 1,
+                      Documents: 'Devis',
+                      Date: formatDate(q.updatedAt, 'short', 'fr-FR'),
+                      Statut: this._stateService.quotationStatus.get(q.statusId).label,
+                    },
+                  },
+                );
+              });
+
+              this.data.push({
+                data: {
+                  Labels: `${c.firstName} ${c.lastName}`,
+                  Nombres: `${nbrQuotation}`,
+                  type: 'folder',
+                },
+                children: child,
+              });
+            });
+          }
+
+          this.dataSource = this._dataSourceBuilder.create(this.data);
+        }
+    });
+  }
+
+
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 
 }

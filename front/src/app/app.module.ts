@@ -1,6 +1,6 @@
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, registerLocaleData } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
@@ -24,6 +24,8 @@ import { UtilsService } from './services/utils.service';
 import { environment } from '../environments/environment';
 import { InterceptorService } from './services/interceptor.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import localeFr from '@angular/common/locales/fr';
+registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [AppComponent],
@@ -104,6 +106,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     { provide: APP_BASE_HREF, useValue: '/' },
     { provide: NbRoleProvider, useClass: UtilsService },
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    { provide: LOCALE_ID, useValue: 'fr-FR'},
   ],
   bootstrap: [AppComponent],
 })

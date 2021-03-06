@@ -59,6 +59,7 @@ export class LoginComponent {
       if (redirect) {
         setTimeout(() => {
           this._bridgeService.initData();
+          this._bridgeService.initDataV2();
           return this.router.navigateByUrl(redirect);
         }, this.redirectDelay);
       }
