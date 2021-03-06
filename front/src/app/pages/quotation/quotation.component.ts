@@ -48,42 +48,42 @@ export class QuotationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._stateService.clientsAsObservable().subscribe((cli: Client[]) => {
-      // Nettoie le tableau
-      this.data = [];
-      this.dataSource = this._dataSourceBuilder.create(this.data);
-      if (cli && cli.length > 0) {
-
-        console.log('*client', cli);
-
-        cli.forEach((c: Client) => {
-          const nbrQuotation = c.quotation && c.quotation.length > 0 ? c.quotation.length : 0;
-
-          this.data.push({
-            data: {
-              Clients: `${c.firstName} ${c.lastName}`,
-              'Nombre de devis': `${nbrQuotation}`,
-              type: 'folder',
-            },
-            children: [
-              {
-                data:
-                  {
-                    Clients: 'devis-project-1.doc', Documents: 'Devis', Date: new Date(), Status: 'en cours',
-                  },
-              },
-              {
-                data: {
-                  Clients: 'devis-project-2.doc', Documents: 'Facture', Date: new Date(),
-                },
-              },
-            ],
-          });
-        });
-        this.dataSource = this._dataSourceBuilder.create(this.data);
-      }
-      this.cdref.detectChanges();
-    });
+    // this._stateService.clientsAsObservable().subscribe((cli: Client[]) => {
+    //   // Nettoie le tableau
+    //   this.data = [];
+    //   this.dataSource = this._dataSourceBuilder.create(this.data);
+    //   if (cli && cli.length > 0) {
+    //
+    //     console.log('*client', cli);
+    //
+    //     cli.forEach((c: Client) => {
+    //       const nbrQuotation = c.quotation && c.quotation.length > 0 ? c.quotation.length : 0;
+    //
+    //       this.data.push({
+    //         data: {
+    //           Clients: `${c.firstName} ${c.lastName}`,
+    //           'Nombre de devis': `${nbrQuotation}`,
+    //           type: 'folder',
+    //         },
+    //         children: [
+    //           {
+    //             data:
+    //               {
+    //                 Clients: 'devis-project-1.doc', Documents: 'Devis', Date: new Date(), Status: 'en cours',
+    //               },
+    //           },
+    //           {
+    //             data: {
+    //               Clients: 'devis-project-2.doc', Documents: 'Facture', Date: new Date(),
+    //             },
+    //           },
+    //         ],
+    //       });
+    //     });
+    //     this.dataSource = this._dataSourceBuilder.create(this.data);
+    //   }
+    //   this.cdref.detectChanges();
+    // });
   }
 
 }

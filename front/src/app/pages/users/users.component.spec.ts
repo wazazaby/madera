@@ -5,6 +5,7 @@ import { NbAuthModule } from '@nebular/auth';
 import { NbDialogModule, NbDialogService, NbThemeModule, NbToastrModule } from '@nebular/theme';
 
 import { UsersComponent } from './users.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('UsersComponent', () => {
   let component: UsersComponent;
@@ -17,6 +18,7 @@ describe('UsersComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
+        ReactiveFormsModule,
         RouterTestingModule.withRoutes([]),
         NbThemeModule.forRoot(),
         NbToastrModule.forRoot(),

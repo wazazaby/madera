@@ -1,25 +1,26 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { CustomersModalAddComponent } from './customers-modal-add.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
+import { NbDialogModule, NbDialogRef, NbDialogService, NbThemeModule, NbToastrModule } from '@nebular/theme';
 
-import { CustomersComponent } from './customers.component';
-import { NbDialogRef, NbDialogService, NbThemeModule, NbToastrModule } from '@nebular/theme';
-import { ReactiveFormsModule } from '@angular/forms';
-
-describe('CustomersComponent', () => {
-  let component: CustomersComponent;
-  let fixture: ComponentFixture<CustomersComponent>;
+describe('CustomersModalAddComponent', () => {
+  let component: CustomersModalAddComponent;
+  let fixture: ComponentFixture<CustomersModalAddComponent>;
 
   beforeEach(async () => {
     const dialMock = jasmine.createSpy();
     const dialMockRef = jasmine.createSpy();
     await TestBed.configureTestingModule({
-      declarations: [ CustomersComponent ],
+      declarations: [ CustomersModalAddComponent ],
       imports: [
         RouterTestingModule,
-        ReactiveFormsModule,
         HttpClientTestingModule,
+        FormsModule,
+        ReactiveFormsModule,
         NbAuthModule.forRoot({
           strategies: [
             NbPasswordAuthStrategy.setup({
@@ -27,9 +28,9 @@ describe('CustomersComponent', () => {
             }),
           ],
         }),
-        RouterTestingModule.withRoutes([]),
         NbThemeModule.forRoot(),
         NbToastrModule.forRoot(),
+        NbDialogModule,
       ],
       providers: [
         {provide: NbDialogService, useClass: dialMock},
@@ -40,7 +41,7 @@ describe('CustomersComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CustomersComponent);
+    fixture = TestBed.createComponent(CustomersModalAddComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

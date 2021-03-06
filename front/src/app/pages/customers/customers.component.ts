@@ -1,9 +1,13 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { StatesService } from '../../services/states.service';
 import { BridgeService } from '../../services/bridge.service';
-import { Client } from '../../interfaces/client';
+import { Client, SoftClient } from '../../interfaces/client';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { Users } from '../../interfaces/users';
+import { UserModalAddComponent } from '../users/user-modal-add/user-modal-add.component';
+import { CustomersModalAddComponent } from './customers-modal-add/customers-modal-add.component';
+import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-customers',
@@ -13,7 +17,7 @@ import { Subject } from 'rxjs';
 export class CustomersComponent implements OnInit, OnDestroy {
 
   /** Liste des clients */
-  public dataCustomers: Client[] = this._stateService.clients;
+  public dataCustomers: SoftClient[] = this._stateService.clients;
   /** Subject utilisé pour le unsubscribe de tout les obs */
   private destroyed: Subject<any> = new Subject();
 
@@ -48,48 +52,29 @@ export class CustomersComponent implements OnInit, OnDestroy {
     },
   };
 
+  public refresh: EventEmitter<SoftClient[]> = new EventEmitter<SoftClient[]>(null);
+
   constructor(private _stateService: StatesService,
               private _bridgeService: BridgeService,
-              private cdref: ChangeDetectorRef) {
+              private cdref: ChangeDetectorRef,
+              private _dialogService: NbDialogService) {
   }
 
   ngOnInit(): void {
-    this.listenEvent();
+    this.loadClients();
   }
 
-  private listenEvent() {
+  private loadClients() {
     this._stateService.clientsAsObservable()
       .pipe(takeUntil(this.destroyed))
-      .subscribe((client: Client[]) => {
+      .subscribe((client: SoftClient[]) => {
+        console.log('*ici', client);
         if (client && client.length > 0) {
           this.dataCustomers = client;
           this.cdref.detectChanges();
+          this.refresh.emit(this.dataCustomers);
         }
       });
-  }
-
-  onCreate($event: any) {
-    const newUser: Client = {
-      firstName: $event.newData.firstName,
-      lastName: $event.newData.lastName,
-      city: $event.newData.city,
-      postalCode: $event.newData.postalCode,
-      adressLine1: $event.newData.adressLine1,
-      email: $event.newData.email,
-      phoneNumber: $event.newData.phoneNumber,
-      password: $event.newData.password,
-      quotation: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    // this._bridgeService.addClient(newUser).subscribe((res) => {
-    //   if (res && res.length > 0) {
-    //     this.dataCustomers = res;
-    //     $event.confirm.resolve();
-    //   }
-    // });
-    console.log('*evt onCreate customers', $event);
   }
 
   onEdit($event: any) {
@@ -104,5 +89,13 @@ export class CustomersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed.next();
     this.destroyed.complete();
+  }
+
+  public openModal() {
+    this._dialogService.open(CustomersModalAddComponent, {
+      context: {
+        title: 'Ajouter un client',
+      },
+    });
   }
 }

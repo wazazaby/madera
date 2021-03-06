@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
 import { NbDialogModule, NbDialogRef, NbDialogService, NbThemeModule, NbToastrModule } from '@nebular/theme';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('UserModalAddComponent', () => {
   let component: UserModalAddComponent;
@@ -20,6 +20,7 @@ describe('UserModalAddComponent', () => {
         RouterTestingModule,
         HttpClientTestingModule,
         FormsModule,
+        ReactiveFormsModule,
         NbAuthModule.forRoot({
           strategies: [
             NbPasswordAuthStrategy.setup({

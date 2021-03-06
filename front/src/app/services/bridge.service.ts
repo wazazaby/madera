@@ -7,10 +7,9 @@ import { environment } from '../../environments/environment';
 import { ResponsesApi } from '../interfaces/responses-api';
 import { Users } from '../interfaces/users';
 import { StatesService } from './states.service';
-import { Client } from '../interfaces/client';
+import { Client, SoftClient } from '../interfaces/client';
 import { Components } from '../interfaces/components';
 import { Module } from '../interfaces/module';
-import { clientsMock } from '../mocks/clients.mock';
 import { NbAuthService } from '@nebular/auth';
 import { Roles } from '../interfaces/roles';
 import { Commercial } from '../interfaces/commercial';
@@ -18,7 +17,6 @@ import { OrderStatus } from '../interfaces/order-status';
 import { PaymentStatus } from '../interfaces/payment-status';
 import { Provider } from '../interfaces/provider';
 import { QuotationStatus } from '../interfaces/quotation-status';
-import { Stocklist } from '../interfaces/stocklist';
 import { UtilsService } from './utils.service';
 
 @Injectable({
@@ -102,9 +100,19 @@ export class BridgeService implements OnDestroy {
    * @param client: information du client
    * @return Observable
    */
-  // public addClient(client: Client): Observable<ResponsesApi<Client>> {
-  //   return this._http.post<ResponsesApi<Client>>(`${environment.apiUrlService}/client/create`, {client});
-  // }
+  public addClient(client: SoftClient): Observable<ResponsesApi<any>> {
+    return this._http.post<ResponsesApi<any>>(`${environment.apiUrlService}/client/create`, {
+      firstName: client.firstName,
+      lastName: client.lastName,
+      email: client.email,
+      city: client.city,
+      phoneNumber: client.phoneNumber,
+      postalCode: client.postalCode,
+      adressLine1: client.adressLine1,
+      quotation: client.quotation,
+      password: 'motdepasse',
+    });
+  }
 
   /**
    * Affiche la liste des utilisateurs
@@ -154,11 +162,11 @@ export class BridgeService implements OnDestroy {
   // Client
 
   public getClients(): Observable<Client[]> {
-    return new Observable<Client[]>((obs) => {
-      obs.next(clientsMock);
-      obs.complete();
-    });
-    // return this._http.get<any>(environment.apiUrlService + 'clients', { withCredentials: true });
+    // return new Observable<Client[]>((obs) => {
+    //   obs.next(clientsMock);
+    //   obs.complete();
+    // });
+    return this._http.get<Client[]>(environment.apiUrlService + '/client/all');
   }
 
   public setClient(cli: Client): Observable<Client> {
@@ -309,7 +317,7 @@ export class BridgeService implements OnDestroy {
       .subscribe(([clients, composants, modules, users, roles, token]) => {
         // Ajout les clients
         if (clients && clients.length > 0) {
-          this._statesService.clients = clients;
+          this._statesService.clients = this._utilsService.clientToSoft(clients);
         }
         // Ajout les composants
         if (composants && composants.data && composants.data['components']) {

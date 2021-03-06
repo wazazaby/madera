@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Users } from '../interfaces/users';
 import { StatesService } from './states.service';
+import { Client, SoftClient } from '../interfaces/client';
 
 @Injectable({
   providedIn: 'root',
@@ -16,14 +17,15 @@ export class UtilsService implements NbRoleProvider {
 
   constructor(private _stateService: StatesService,
               private _authService: NbAuthService,
-              private _toastrService: NbToastrService) { }
+              private _toastrService: NbToastrService) {
+  }
 
   /**
    *
    * @param title: titre du toast
    * @param status: success, basic, primary, info, warning, danger, control
    */
-  public showToast(title: string, status?: NbComponentStatus ) {
+  public showToast(title: string, status?: NbComponentStatus) {
     if (!status) {
       status = 'success';
     }
@@ -74,6 +76,31 @@ export class UtilsService implements NbRoleProvider {
 
   public ifNodata(): boolean {
     return (this._stateService.clients.length === 0);
+  }
+
+  public clientToSoft(clients: Client[]): SoftClient[] {
+    const softClient: SoftClient[] = [];
+    // Transforme le User<Client> en clients simple
+    clients.forEach((c: Client) => {
+      softClient.push({
+        id: c.id,
+        firstName: c.firstName,
+        lastName: c.lastName,
+        email: c.email,
+        phoneNumber: c.phoneNumber,
+        createdAt: c.createdAt,
+        updatedAt: c.updatedAt,
+        roleId: c.roleId,
+        city: c.client.city,
+        postalCode: c.client.postalCode,
+        adressLine1: c.client.adressLine1,
+        adressLine2: c.client.adressLine2,
+        userId: c.client.userId,
+        commercialId: c.client.commercialId,
+        quotation: c.client.quotation || [],
+      });
+    });
+    return softClient;
   }
 
 }

@@ -23,6 +23,7 @@ import { StatesService } from './services/states.service';
 import { UtilsService } from './services/utils.service';
 import { environment } from '../environments/environment';
 import { InterceptorService } from './services/interceptor.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,6 +31,7 @@ import { InterceptorService } from './services/interceptor.service';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),

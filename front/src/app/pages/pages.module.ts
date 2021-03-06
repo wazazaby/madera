@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbSecurityModule } from '@nebular/security';
 import {
   NbAlertModule,
@@ -29,6 +29,7 @@ import { RequestPasswordComponent } from './auth/request-password/request-passwo
 import { LogoutComponent } from './auth/logout/logout.component';
 import { ButtonTableComponent } from './smart-table/button-table/button-table.component';
 import { UserModalAddComponent } from './users/user-modal-add/user-modal-add.component';
+import { CustomersModalAddComponent } from './customers/customers-modal-add/customers-modal-add.component';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { UserModalAddComponent } from './users/user-modal-add/user-modal-add.com
     NbIconModule,
     NbSelectModule,
     NbRadioModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     PagesComponent,
@@ -66,6 +68,7 @@ import { UserModalAddComponent } from './users/user-modal-add/user-modal-add.com
     SmartTableComponent,
     ButtonTableComponent,
     UserModalAddComponent,
+    CustomersModalAddComponent,
   ],
 })
 export class PagesModule {

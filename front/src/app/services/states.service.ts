@@ -3,7 +3,7 @@ import { decodeJwtPayload, NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { NbRoleProvider } from '@nebular/security';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Client } from '../interfaces/client';
+import { Client, SoftClient } from '../interfaces/client';
 import { Module } from '../interfaces/module';
 import { Components } from '../interfaces/components';
 import { Roles } from '../interfaces/roles';
@@ -15,7 +15,7 @@ import { Users } from '../interfaces/users';
 export class StatesService {
 
   /** Clients */
-  private _clients: BehaviorSubject<Client[]> = new BehaviorSubject<Client[]>([]);
+  private _clients: BehaviorSubject<SoftClient[]> = new BehaviorSubject<SoftClient[]>([]);
   /** Users */
   private _users: BehaviorSubject<Users[]> = new BehaviorSubject<Users[]>([]);
   /** Composants */
@@ -69,15 +69,15 @@ export class StatesService {
 
   // ===================================================================================================================
 
-  public get clients(): Client[] {
+  public get clients(): SoftClient[] {
     return this._clients.getValue();
   }
 
-  public set clients(value: Client[]) {
+  public set clients(value: SoftClient[]) {
     this._clients.next(value);
   }
 
-  public clientsAsObservable(): Observable<Client[]> {
+  public clientsAsObservable(): Observable<SoftClient[]> {
     return this._clients.asObservable();
   }
 

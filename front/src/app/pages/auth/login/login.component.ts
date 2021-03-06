@@ -31,7 +31,6 @@ export class LoginComponent {
     this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
     this.showMessages = this.getConfigValue('forms.login.showMessages');
     this.strategy = this.getConfigValue('forms.login.strategy');
-    this.rememberMe = this.getConfigValue('forms.login.rememberMe') || false;
   }
 
   login(): void {
