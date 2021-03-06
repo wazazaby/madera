@@ -45,7 +45,11 @@ export default async app => {
         schema: schemas.create,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
-        const { label, reference, shortDescription, description, price, providerId, unitId } = req.body;
+        const { 
+            label, reference, 
+            shortDescription, description, 
+            price, providerId, unitId, stockistId, quantity 
+        } = req.body;
         const { getUnit, getProvider } = req.query;
         const component = await db.component.findFirst({
             where: { reference }
@@ -54,6 +58,10 @@ export default async app => {
         if (component !== null) {
             return rep.conflict('Il existe déjà un composant avec cette référence');
         }
+
+        const moar = stockistId !== null && quantity 
+            ? { stock: { create: { quantity, stockist: { connect: { id: stockistId } } } } }
+            : {};
 
         const newComponent =  await db.component.create({
             data: {
@@ -67,7 +75,8 @@ export default async app => {
                 },
                 unit: {
                     connect: { id: unitId }
-                }
+                },
+                ...moar
             },
             include: {
                 unit: getUnit === true,

@@ -20,7 +20,9 @@ export const create = {
             description: { type: 'string' },
             price: { type: 'number' },
             providerId: { type: 'integer' },
-            unitId: { type: 'integer' }
+            unitId: { type: 'integer' },
+            stockistId: { type: 'integer' },
+            quantity: { type: 'integer' }
         },
         required: [
             'label',
