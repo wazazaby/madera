@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { StatesService } from '../../services/states.service';
 import { BridgeService } from '../../services/bridge.service';
 import { UtilsService } from '../../services/utils.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-composants',
@@ -84,8 +85,12 @@ export class ComposantsComponent implements OnInit, OnDestroy {
   }
 
   private loadComponents() {
-    this._stateService.composentsAsObservable().subscribe((compo: Components[]) => {
-      this.data = compo;
+    this._stateService.composentsAsObservable()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((compo: Components[]) => {
+      if (compo && compo.length > 0) {
+        this.data = compo;
+      }
     });
   }
 
@@ -95,5 +100,9 @@ export class ComposantsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed.next();
     this.destroyed.complete();
+  }
+
+  openModal() {
+
   }
 }

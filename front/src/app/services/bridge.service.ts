@@ -161,12 +161,12 @@ export class BridgeService implements OnDestroy {
   // ===================================================================================================================
   // Client
 
-  public getClients(): Observable<Client[]> {
+  public getClients(): Observable<ResponsesApi<Client[]>> {
     // return new Observable<Client[]>((obs) => {
     //   obs.next(clientsMock);
     //   obs.complete();
     // });
-    return this._http.get<Client[]>(environment.apiUrlService + '/client/all');
+    return this._http.get<ResponsesApi<Client[]>>(environment.apiUrlService + '/client/all');
   }
 
   public setClient(cli: Client): Observable<Client> {
@@ -215,14 +215,23 @@ export class BridgeService implements OnDestroy {
   }
 
   // ===================================================================================================================
-  // Modele
+  // Modules
 
-  public getModule(): Observable<Module[]> {
-    return new Observable<Module[]>((obs) => {
-      obs.next([]);
-      obs.complete();
-    });
-    // return this._http.get<any>(environment.apiUrlService + 'modeles', { withCredentials: true });
+  /**
+   * Récupère la liste de touts les modules
+   * @return Observable
+   */
+  public getModule(): Observable<ResponsesApi<Module[]>> {
+    return this._http.get<ResponsesApi<Module[]>>(environment.apiUrlService + '/module/all');
+  }
+
+  /**
+   * Récupère le module par son id
+   * @param id: identifiant
+   * @return Observable
+   */
+  public getModuleById(id: number): Observable<ResponsesApi<Module>> {
+    return this._http.get<ResponsesApi<Module>>(environment.apiUrlService + `/module/${id}?getComponents=true`);
   }
 
   public setModule(): Observable<any> {
@@ -318,8 +327,8 @@ export class BridgeService implements OnDestroy {
         this._statesService.cleanUp();
 
         // Ajout les clients
-        if (clients && clients.length > 0) {
-          this._statesService.clients = this._utilsService.clientToSoft(clients);
+        if (clients && clients.data && clients.data['clients'].length > 0) {
+          this._statesService.clients = this._utilsService.clientToSoft(clients.data['clients']);
         }
         // Ajout les composants
         if (composants && composants.data && composants.data['components']) {
@@ -327,8 +336,8 @@ export class BridgeService implements OnDestroy {
         }
 
         // Ajout les modules
-        if (modules && modules.length > 0) {
-          this._statesService.modules.next(modules);
+        if (modules && modules.data && modules.data['modules'].length > 0) {
+          this._statesService.modules = modules.data['modules'];
         }
 
         // Check le token
@@ -341,7 +350,7 @@ export class BridgeService implements OnDestroy {
           this._statesService.roles = roles.data['roles'];
         }
 
-        console.log('*initData', clients, composants, modules, users, roles);
+        // console.log('*initData', clients, composants, modules, users, roles);
     }, (err) => {
         this._utilsService.showToast(err.statusText, 'danger');
       });

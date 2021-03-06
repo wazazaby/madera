@@ -1,25 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModulesComponent } from './modules.component';
+import { ModulebyidComponent } from './modulebyid.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
-import { NbDialogRef, NbDialogService, NbThemeModule, NbToastrModule } from '@nebular/theme';
+import { NbDialogModule, NbDialogRef, NbDialogService, NbThemeModule, NbToastrModule } from '@nebular/theme';
 
-describe('ModulesComponent', () => {
-  let component: ModulesComponent;
-  let fixture: ComponentFixture<ModulesComponent>;
+describe('ModulebyidComponent', () => {
+  let component: ModulebyidComponent;
+  let fixture: ComponentFixture<ModulebyidComponent>;
 
   beforeEach(async () => {
     const dialMock = jasmine.createSpy();
     const dialMockRef = jasmine.createSpy();
     await TestBed.configureTestingModule({
-      declarations: [ ModulesComponent ],
+      declarations: [ ModulebyidComponent ],
       imports: [
         RouterTestingModule,
-        ReactiveFormsModule,
         HttpClientTestingModule,
+        FormsModule,
+        ReactiveFormsModule,
         NbAuthModule.forRoot({
           strategies: [
             NbPasswordAuthStrategy.setup({
@@ -27,9 +28,9 @@ describe('ModulesComponent', () => {
             }),
           ],
         }),
-        RouterTestingModule.withRoutes([]),
         NbThemeModule.forRoot(),
         NbToastrModule.forRoot(),
+        NbDialogModule,
       ],
       providers: [
         {provide: NbDialogService, useClass: dialMock},
@@ -40,7 +41,7 @@ describe('ModulesComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ModulesComponent);
+    fixture = TestBed.createComponent(ModulebyidComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

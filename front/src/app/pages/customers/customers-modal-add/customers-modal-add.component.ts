@@ -7,6 +7,7 @@ import { NbDialogRef } from '@nebular/theme';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { Client } from '../../../interfaces/client';
+import { ResponsesApi } from '../../../interfaces/responses-api';
 
 @Component({
   selector: 'ngx-customers-modal-add',
@@ -57,9 +58,11 @@ export class CustomersModalAddComponent implements OnDestroy {
           (res) => {
             this._bridgeService.getClients()
               .pipe(takeUntil(this.destroyed))
-              .subscribe((clients: Client[]) => {
-                this._statesService.clients = this._utilsService.clientToSoft(clients);
-                this.ref.close();
+              .subscribe((clients: ResponsesApi<Client[]>) => {
+                if (clients && clients.data && clients.data['clients'].length > 0) {
+                  this._statesService.clients = this._utilsService.clientToSoft(clients.data['clients']);
+                  this.ref.close();
+                }
               });
         },
         (err) => {
