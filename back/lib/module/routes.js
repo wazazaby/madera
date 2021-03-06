@@ -38,9 +38,16 @@ export default async app => {
     });
 
     app.get(`${base}/all`, {
+        schema: schemas.all,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
-    }, async () => {
-        const modules = await db.module.findMany();
+    }, async req => {
+        const { getComponents } = req.query;
+        const moar = getComponents === true 
+            ? { include: { components: { include: { component: getComponents === true } } } } 
+            : {}
+        const modules = await db.module.findMany({
+            ...moar
+        });
         return { statusCode: 200, message: '', data: { modules } }
     });
 
