@@ -20,11 +20,6 @@ Madera API
 `npm run pgen`
 
 ## TODO
-* All devis
-* All clients (par commercial) + devis
-* Tout les components
-* Get devis by id
-
 
 ## Contenu .env
 Utilisé pour le cryptage des passwords

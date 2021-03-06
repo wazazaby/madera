@@ -201,4 +201,33 @@ export default async app => {
 
         return { statusCode: 200, message: 'Devis refusé avec succès', data: { denied } }
     });
+
+    app.get(`${base}/all`, {
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
+    }, async req => {
+        const { entityId } = req.user;
+        const quotations = await db.quotation.findMany({
+            where: {
+                commercialId: entityId
+            }
+        });
+        return { statusCode: 200, message: '', data: { quotations } }
+    });
+
+    app.get(`${base}/:id`, {
+        schema: schemas.byId,
+        preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
+    }, async (req, rep) => {
+        const { id } = req.params;
+        const { entityId } = req.user;
+        const quotation = await db.quotation.findFirst({
+            where: {
+                id,
+                commercialId: entityId
+            }
+        });
+        return quotation === null 
+            ? rep.notFound('Devis introuvable') 
+            : { statusCode: 200, message: '', data: { quotation } }
+    });
 }
