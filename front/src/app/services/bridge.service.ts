@@ -315,6 +315,8 @@ export class BridgeService implements OnDestroy {
       this._auth.getToken(),
     ]).pipe(takeUntil(this.destroyed))
       .subscribe(([clients, composants, modules, users, roles, token]) => {
+        this._statesService.cleanUp();
+
         // Ajout les clients
         if (clients && clients.length > 0) {
           this._statesService.clients = this._utilsService.clientToSoft(clients);

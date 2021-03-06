@@ -6,8 +6,8 @@ import db from '../../utils/db';
 export default async app => {
     const base = '/user';
 
-    app.post(`${base}/login`, { 
-        schema: schemas.login 
+    app.post(`${base}/login`, {
+        schema: schemas.login
     }, async (req, rep) => {
         const { email, password } = req.body;
         const user = await db.user.findUnique({
@@ -28,20 +28,20 @@ export default async app => {
         if (!await bcrypt.compare(password, user.password)) {
             return rep.unauthorized('Mot de passe invalide');
         }
-        
+
         let entityId;
         switch (user.role.code) {
             case 'ADMIN':
                 entityId = user.administrator.id;
                 break;
             case 'COMMERCIAL':
-                entityId = user.commercial.id; 
+                entityId = user.commercial.id;
                 break;
             case 'STOCKIST':
-                entityId = user.stockist.id; 
+                entityId = user.stockist.id;
                 break;
             case 'CLIENT':
-                entityId = user.client.id; 
+                entityId = user.client.id;
                 break;
             default:
                 entityId = user.id;

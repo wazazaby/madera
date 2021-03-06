@@ -27,6 +27,13 @@ export class InterceptorService implements HttpInterceptor, OnDestroy {
         this.token = token.toString();
       }
     });
+
+    // Récup le token
+    this._stateService.tokenAsObservable().subscribe((token) => {
+      if (token) {
+        this.token = token;
+      }
+    });
   }
 
   /**
