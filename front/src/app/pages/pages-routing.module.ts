@@ -12,6 +12,8 @@ import { ComposantsComponent } from './composants/composants.component';
 import { ProfilComponent } from './profil/profil.component';
 import { StockComponent } from './stock/stock.component';
 import { ModulebyidComponent } from './modules/modulebyid/modulebyid.component';
+import { QuotationShowComponent } from './quotation/quotation-show/quotation-show.component';
+import { QuotationCreateComponent } from './quotation/quotation-create/quotation-create.component';
 
 export const routes: Routes = [{
   path: '',
@@ -28,6 +30,14 @@ export const routes: Routes = [{
     {
       path: 'quotation',
       component: QuotationComponent,
+    },
+    {
+      path: 'quotation/create',
+      component: QuotationCreateComponent,
+    },
+    {
+      path: 'quotation/:id',
+      component: QuotationShowComponent,
     },
     {
       path: 'modules',

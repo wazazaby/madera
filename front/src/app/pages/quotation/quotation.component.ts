@@ -79,7 +79,7 @@ export class QuotationComponent implements OnInit, OnDestroy {
                       Nombres: 1,
                       Documents: 'Devis',
                       Date: formatDate(q.updatedAt, 'short', 'fr-FR'),
-                      Statut: this._stateService.quotationStatus.get(q.statusId).label,
+                      Statut: this._bridgeService.getStatusName(q.statusId),
                     },
                   },
                 );
@@ -107,4 +107,7 @@ export class QuotationComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
+  selectRow(data) {
+    console.log(data);
+  }
 }

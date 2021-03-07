@@ -315,14 +315,18 @@ export class BridgeService implements OnDestroy {
    */
   public initData() {
     return forkJoin([
-      this.getClients(),
-      this.getComposant(),
-      this.getModule(),
-      this.getUsers(),
-      this.getRoles(),
+      forkJoin([
+        this.getClients(),
+        this.getQuotationStatus(),
+        this.getComposant(),
+        this.getModule(),
+        this.getUsers(),
+        this.getRoles(),
+      ]),
       this._auth.getToken(),
     ]).pipe(takeUntil(this.destroyed))
-      .subscribe(([clients, composants, modules, users, roles, token]) => {
+      .subscribe(([[clients, status, composants, modules, users, roles], token]) => {
+
         this._statesService.cleanUp();
 
         // Ajout les clients
@@ -349,18 +353,6 @@ export class BridgeService implements OnDestroy {
           this._statesService.roles = roles.data['roles'];
         }
 
-        // console.log('*initData', clients, composants, modules, users, roles);
-    }, (err) => {
-        this._utilsService.showToast(err.statusText, 'danger');
-      });
-  }
-
-  public initDataV2() {
-    return forkJoin([
-      this.getQuotationStatus(),
-    ]).pipe(takeUntil(this.destroyed))
-      .subscribe(([status]) => {
-        // Ajoute les status des quotations
         if (status && status.data && status.data['quotationStatuses']) {
           const stat: QuotationStatus[] = status.data['quotationStatuses'];
           const mapStat = new Map();
@@ -371,7 +363,22 @@ export class BridgeService implements OnDestroy {
 
           this._statesService.quotationStatus = mapStat;
         }
+
+        // console.log('*initData', clients, composants, modules, users, roles);
+    }, (err) => {
+        this._utilsService.showToast(err.statusText, 'danger');
       });
+  }
+
+  public getStatusName(id: number): string {
+    let result = 'En Attente';
+
+    if (this._statesService.quotationStatus && this._statesService.quotationStatus.has(id)) {
+      result = this._statesService.quotationStatus.get(id).label;
+    } else {
+      this._router.navigateByUrl('/pages/dashboard').then();
+    }
+    return result;
   }
 
   ngOnDestroy(): void {

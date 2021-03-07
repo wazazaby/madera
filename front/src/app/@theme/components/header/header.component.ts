@@ -46,7 +46,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // Si aucune data n'est trouver on load tout
     if (this._utilsService.ifNodata()) {
       this._bridgeService.initData();
-      this._bridgeService.initDataV2();
     }
 
     this.currentTheme = this.themeService.currentTheme;
