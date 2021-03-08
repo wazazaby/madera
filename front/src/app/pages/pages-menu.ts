@@ -31,12 +31,12 @@ export const MENU_STOCK: NbMenuItem[] = [
     icon: 'pantone-outline',
     link: '/pages/composant',
   },
-  {
-    title: 'Stock',
-    icon: 'car-outline',
-    link: '/pages/stocks',
-    home: true,
-  },
+  // {
+  //   title: 'Stock',
+  //   icon: 'car-outline',
+  //   link: '/pages/stocks',
+  //   home: true,
+  // },
 ];
 
 // Menu du rôle commercial
@@ -64,7 +64,7 @@ export const MENU_COMMERCIAL: NbMenuItem[] = [
     icon: 'person-outline',
     link: '/pages/customers',
   },
-  // ...MENU_STOCK,
+  ...MENU_STOCK,
 ];
 
 // Menu du rôle admin
@@ -78,6 +78,6 @@ export const MENU_ADMIN: NbMenuItem[] = [
     icon: 'people-outline',
     link: '/pages/users',
   },
-  // ...MENU_STOCK,
+  ...MENU_STOCK,
 ];
 

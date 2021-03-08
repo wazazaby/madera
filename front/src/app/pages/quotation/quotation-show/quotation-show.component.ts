@@ -88,8 +88,8 @@ export class QuotationShowComponent implements OnDestroy {
     this._bridgeService.denyQuotation(this.id)
       .pipe(takeUntil(this.destroyed))
       .subscribe((res) => {
-        this.quotation.status = res.data['denied'].status;
-        this._utilsService.showToast('Devis annuler', 'danger');
+        this.quotation.status = res.data['quotation'].status;
+        this._utilsService.showToast(res.message, 'danger');
       });
   }
 

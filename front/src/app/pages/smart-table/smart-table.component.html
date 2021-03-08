@@ -1,8 +1,10 @@
-<ng2-smart-table
-    [settings]="getSetting()"
-    [source]="getSource()"
-    (userRowSelect)="rowSelect($event)"
-    (createConfirm)="onCreate($event)"
-    (editConfirm)="onEdit($event)"
-    (deleteConfirm)="onDelete($event)">
-</ng2-smart-table>
+<div class="smartTable">
+  <ng2-smart-table
+      [settings]="getSetting()"
+      [source]="getSource()"
+      (userRowSelect)="rowSelect($event)"
+      (createConfirm)="onCreate($event)"
+      (editConfirm)="onEdit($event)"
+      (deleteConfirm)="onDelete($event)">
+  </ng2-smart-table>
+</div>
