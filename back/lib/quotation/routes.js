@@ -10,7 +10,6 @@ export default async app => {
         schema: schemas.create,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
-        console.log('*********************************')
         const { label, shortDescription, clientId, modulesId } = req.body;
 
         console.log(label, shortDescription, clientId, modulesId)
