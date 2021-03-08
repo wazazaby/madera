@@ -67,7 +67,7 @@ export default async app => {
         }
     });
 
-    app.post(`${base}/approve`, {
+    app.put(`${base}/approve`, {
         schema: schemas.approve,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
@@ -171,20 +171,22 @@ export default async app => {
         return { statusCode: 200, message: 'Devis approuvé avec succès', data: { quotation: newQuotation } }
     });
 
-    app.post(`${base}/deny`, {
+    app.put(`${base}/deny`, {
         schema: schemas.approve,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
         const { quotationId } = req.body;
+        const { entityId } = req.user;
         const quotation = await db.quotation.findFirst({
-            where: { id: quotationId }
+            where: { id: quotationId, commercialId: entityId },
+            include: { status: true }
         });
         if (quotation === null) {
             return rep.notFound('Devis introuvable');
         }
-        // Si le devis n'appartient pas à cet utilisateur, on renvoit
-        if (quotation.commercialId !== req.user.entityId) {
-            return rep.unauthorized('Opération interdite');
+        switch (quotation.status.code) {
+            case 'ACCEPTED': return rep.conflict('Devis déjà approuvé');
+            case 'DENIED': return rep.conflict('Devis déjà refusé');
         }
         // Mise à jour du statut du devis
         const denied = await db.quotation.update({
@@ -192,12 +194,10 @@ export default async app => {
             data: {
                 status: { connect: { code: 'DENIED' } }
             },
-            include: {
-                status: true
-            }
+            include: { status: true }
         });
 
-        return { statusCode: 200, message: 'Devis refusé avec succès', data: { denied } }
+        return { statusCode: 200, message: 'Devis refusé avec succès', data: { quotation: denied } }
     });
 
     app.get(`${base}/all`, {
