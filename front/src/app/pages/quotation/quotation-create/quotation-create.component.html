@@ -1,1 +1,26 @@
-<p>quotation-create NTM works!</p>
+<div *ngIf="customers && customers.length > 0">
+  <div class="form-control-group">
+    <label class="label" for="input-role">Sélectionner un client:</label>
+    <nb-select placeholder="Sélectionner un role"
+               id="input-role"
+               fullWidth
+               name="role"
+               [(selected)]="clientId"
+               [formControl]="formQuotation.controls.clientId"
+               [status]="formQuotation.controls.clientId.dirty ? (formQuotation.controls.clientID.invalid  ? 'danger' : 'success') : ''"
+               [required]="true"
+               [attr.aria-invalid]="formQuotation.controls.clientId.invalid && formQuotation.controls.clientId.touched ? true : null"
+               ngDefaultControl
+    >
+      <nb-select-label> {{ clientId }} </nb-select-label>
+      <nb-option [value]="c.id" *ngFor="let c of customers">{{c.firstName - c.lastName}}</nb-option>
+    </nb-select>
+
+    <ng-container *ngIf="formQuotation.controls.clientId.hasError('required') && formQuotation.controls.clientId.touched">
+      <p class="text-danger">
+        La sélection d'un client est obligatoire!
+      </p>
+    </ng-container>
+  </div>
+
+</div>

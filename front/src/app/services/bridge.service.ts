@@ -287,6 +287,18 @@ export class BridgeService implements OnDestroy {
   }
 
   // ===================================================================================================================
+  // quotation
+
+  /**
+   * Récupère le devis client
+   * @param id: identifiant du devis
+   * @return Observable
+   */
+  public getQuotationById(id: number): Observable<ResponsesApi<any>> {
+    return this._http.get<ResponsesApi<any>>(environment.apiUrlService + `/quotation/${id}?getStatus=true&getModules=true&getPayments=true`);
+  }
+
+  // ===================================================================================================================
   // quotationStatus
 
   /**
@@ -302,7 +314,7 @@ export class BridgeService implements OnDestroy {
    * @param id identifiant
    * @return Observable
    */
-  public getQuotationById(id: number): Observable<ResponsesApi<QuotationStatus>> {
+  public getQuotationStatusById(id: number): Observable<ResponsesApi<QuotationStatus>> {
     return this._http.get<ResponsesApi<QuotationStatus>>(environment.apiUrlService + `/quotationStatus/${id}`);
   }
 

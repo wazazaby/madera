@@ -36,6 +36,7 @@ export interface SoftClient {
   postalCode: number;
   adressLine1: string;
   adressLine2: string;
+  clientId: number;
   userId: number;
   commercialId: number;
   quotation?: Quotation[];

@@ -1,13 +1,12 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { StatesService } from '../../services/states.service';
 import { BridgeService } from '../../services/bridge.service';
-import { Client, SoftClient } from '../../interfaces/client';
+import { SoftClient } from '../../interfaces/client';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { Users } from '../../interfaces/users';
-import { UserModalAddComponent } from '../users/user-modal-add/user-modal-add.component';
 import { CustomersModalAddComponent } from './customers-modal-add/customers-modal-add.component';
 import { NbDialogService } from '@nebular/theme';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
   selector: 'ngx-customers',
@@ -57,6 +56,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
   constructor(private _stateService: StatesService,
               private _bridgeService: BridgeService,
               private cdref: ChangeDetectorRef,
+              private _utilsService: UtilsService,
               private _dialogService: NbDialogService) {
   }
 
@@ -77,11 +77,13 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
 
   onEdit($event: any) {
-    console.log('*evt onEdit customers', $event);
+    this._utilsService.showToast('WIP', 'info');
+    // console.log('*evt onEdit customers', $event);
   }
 
   onDelete($event: any) {
-    console.log('*evt onDelete customers', $event);
+    this._utilsService.showToast('WIP', 'info');
+    // console.log('*evt onDelete customers', $event);
   }
 
   // Clean obs

@@ -81,6 +81,12 @@ registerLocaleData(localeFr);
             },
           },
 
+          errors: {
+            getter: (module, res, options) => {
+              return res.error ? res.error.message : options[module].defaultErrors;
+            },
+          },
+
           logout: {
             method: 'POST',
             endpoint: 'user/logout',

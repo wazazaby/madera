@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { Roles } from '../../../interfaces/roles';
 import { StatesService } from '../../../services/states.service';
-import { Users } from '../../../interfaces/users';
 import { BridgeService } from '../../../services/bridge.service';
 import { UtilsService } from '../../../services/utils.service';
 import { takeUntil } from 'rxjs/operators';

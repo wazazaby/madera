@@ -8,6 +8,7 @@ import { ResponsesApi } from '../../interfaces/responses-api';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { formatDate } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-quotation',
@@ -31,6 +32,7 @@ export class QuotationComponent implements OnInit, OnDestroy {
   constructor(private _dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>,
               private _stateService: StatesService,
               private _bridgeService: BridgeService,
+              public router: Router,
               private cdref: ChangeDetectorRef) {
   }
 
@@ -75,6 +77,7 @@ export class QuotationComponent implements OnInit, OnDestroy {
                 child.push(
                   {
                     data: {
+                      id: q.id,
                       Labels: q.label,
                       Nombres: 1,
                       Documents: 'Devis',
@@ -107,7 +110,10 @@ export class QuotationComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  selectRow(data) {
-    console.log(data);
+  public selectRow(evt) {
+    console.log(evt)
+    if (evt && evt.id > 0) {
+      this.router.navigateByUrl(`pages/quotation/${evt.id}`).then();
+    }
   }
 }

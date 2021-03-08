@@ -96,6 +96,7 @@ export class UtilsService implements NbRoleProvider {
         postalCode: c.client.postalCode,
         adressLine1: c.client.adressLine1,
         adressLine2: c.client.adressLine2,
+        clientId: c.client.id,
         userId: c.client.userId,
         commercialId: c.client.commercialId,
         quotation: c.client.quotation || [],
