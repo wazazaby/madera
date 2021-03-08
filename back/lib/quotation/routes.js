@@ -4,25 +4,28 @@ import db from '../../utils/db';
 
 export default async app => {
     const base = '/quotation';
-    
+
     app.post(`${base}/create`, {
         schema: schemas.create,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
+        console.log('*********************************')
         const { label, shortDescription, clientId, modulesId } = req.body;
+
+        console.log(label, shortDescription, clientId, modulesId)
         const { getStatus, getModules } = req.query;
         try {
             // On récupère tout les composants en fonction des modules choisis
             // Permettra de faire le calcul pour le total du devis
             const toAggregate = await Promise.all(
                 modulesId.map(id => (
-                    db.module.findFirst({ 
+                    db.module.findFirst({
                         where: { id },
-                        select: { 
+                        select: {
                             components: {
                                 select: { component: { select: { price: true } } }
-                            } 
-                        } 
+                            }
+                        }
                     })
                 ))
             );
@@ -31,8 +34,8 @@ export default async app => {
                 .reduce((a1, c1) => a1 + c1.components.reduce((a2, c2) => a2 + c2.component.price, 0), 0);
             const price = Number(calc.toFixed(2));
             // Si l'utilisateur veut fetch les modules une fois le devis inséré
-            const moar = getModules === true 
-                ? { modules: { include: { module: true } } } 
+            const moar = getModules === true
+                ? { modules: { include: { module: true } } }
                 : {};
             const newQuotation = await db.quotation.create({
                 data: {
@@ -85,7 +88,7 @@ export default async app => {
                 }
             }
         });
-        
+
         const total = quotation.price / 8;
         await db.order.create({
             data: {
@@ -94,7 +97,7 @@ export default async app => {
                 totalPaid: 0,
                 payments: {
                     create: [
-                        { 
+                        {
                             type: { connect: { code: 'AT_SIGNATURE'} },
                             total,
                             currentlyPaid: 0,
@@ -144,7 +147,7 @@ export default async app => {
                         }
                     ]
                 }
-            }            
+            }
         });
 
         const newQuotation = await db.quotation.findFirst({
@@ -212,11 +215,11 @@ export default async app => {
         const { id } = req.params;
         const { entityId } = req.user;
 
-        const moarModules = getModules === true 
-            ? { modules: { include: { module: true } } } 
+        const moarModules = getModules === true
+            ? { modules: { include: { module: true } } }
             : {}
-        const moarPayments = getPayments === true 
-            ? { orders: { include: { status: true, payments: { include: { type: true } } } } } 
+        const moarPayments = getPayments === true
+            ? { orders: { include: { status: true, payments: { include: { type: true } } } } }
             : {}
         const quotation = await db.quotation.findFirst({
             where: {
@@ -229,8 +232,8 @@ export default async app => {
                 ...moarModules
             }
         });
-        return quotation === null 
-            ? rep.notFound('Devis introuvable') 
+        return quotation === null
+            ? rep.notFound('Devis introuvable')
             : { statusCode: 200, message: '', data: { quotation } }
     });
 }

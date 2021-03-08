@@ -1,1 +1,27 @@
-<p>quotation-show works!</p>
+<div *ngIf="quotation">
+  <div>
+
+    <h1>{{quotation.label}} - {{quotation.price | currency: 'EUR':true }}</h1>
+    <p>{{quotation.shortDescription}}</p>
+
+    <label>Statut: <span class="badge badge-primary">{{quotation.status.label}}</span></label>
+
+    <div *ngIf="quotation.modules && quotation.modules.length > 0" class="d-flex row">
+      <div *ngFor="let q of quotation.modules" class="card m-2" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title"></h5>
+          <h6 class="card-subtitle mb-2 text-dark">{{q.module.label}}</h6>
+          <p class="card-text text-muted" *ngIf="q.module.description">{{q.module.description}}</p>
+          <p class="card-text text-muted" *ngIf="q.module.shortDescription">{{q.module.shortDescription}}</p>
+          <span (click)="redirect(q.module.id)" class="text-info clicked">Afficher</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex mt-4">
+      <button (click)="annuler()" class="btn btn-outline-danger">Annuler</button>
+      <button (click)="valider()" class="ml-4 btn btn-outline-success">Valider</button>
+    </div>
+
+  </div>
+</div>

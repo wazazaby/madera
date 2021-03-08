@@ -111,7 +111,6 @@ export class QuotationComponent implements OnInit, OnDestroy {
   }
 
   public selectRow(evt) {
-    console.log(evt)
     if (evt && evt.id > 0) {
       this.router.navigateByUrl(`pages/quotation/${evt.id}`).then();
     }
