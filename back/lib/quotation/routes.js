@@ -20,11 +20,7 @@ export default async app => {
                         where: { id },
                         select: { 
                             components: {
-                                select: {
-                                    component: {
-                                        select: { price: true }
-                                    }
-                                }
+                                select: { component: { select: { price: true } } }
                             } 
                         } 
                     })
@@ -155,13 +151,7 @@ export default async app => {
             where: { id: quotationId },
             include: {
                 orders: {
-                    include: {
-                        payments: {
-                            include: {
-                                type: true
-                            }
-                        }
-                    }
+                    include: { payments: { include: { type: true } } }
                 }
             }
         });
@@ -218,12 +208,25 @@ export default async app => {
         schema: schemas.byId,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
+        const { getStatus, getModules, getPayments } = req.query;
         const { id } = req.params;
         const { entityId } = req.user;
+
+        const moarModules = getModules === true 
+            ? { modules: { include: { module: true } } } 
+            : {}
+        const moarPayments = getPayments === true 
+            ? { orders: { include: { status: true, payments: { include: { type: true } } } } } 
+            : {}
         const quotation = await db.quotation.findFirst({
             where: {
                 id,
                 commercialId: entityId
+            },
+            include: {
+                status: getStatus === true,
+                ...moarPayments,
+                ...moarModules
             }
         });
         return quotation === null 

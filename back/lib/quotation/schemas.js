@@ -39,5 +39,13 @@ export const byId = {
             id: { type: 'integer' },
         },
         required: ['id']
+    },
+    querystring: {
+        type: 'object',
+        properties: {
+            getStatus: { type: 'boolean' },
+            getModules: { type: 'boolean' },
+            getPayments: { type: 'boolean' }
+        }
     }
 }
