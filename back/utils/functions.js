@@ -25,7 +25,7 @@ const generateEnums = async () => {
 }
 
 const verifyJWT = async req => {
-    await req.jwtVerify();
+    return await req.jwtVerify();
 }
 
 const lvlMessage = 'Vous n\'avez pas un niveau d\'authentification assez élevé pour effectuer cette tâche';
