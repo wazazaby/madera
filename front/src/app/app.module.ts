@@ -1,4 +1,4 @@
-import { APP_BASE_HREF, registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, CommonModule, registerLocaleData } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -32,6 +32,7 @@ registerLocaleData(localeFr);
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CommonModule,
     HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
