@@ -65,15 +65,17 @@ export class QuotationShowComponent implements OnDestroy {
     this._bridgeService.approveQuotation(this.id)
       .pipe(takeUntil(this.destroyed))
       .subscribe((res) => {
-        console.log('*', res);
-        this.quotation.status = {
-
-        };
-        this._utilsService.showToast('Devis valider', 'success');
+        this.quotation.status = res.data['quotation'].status;
+        this.quotation.orders = res.data['quotation'].orders;
+        this._utilsService.showToast(res.message, 'success');
       });
   }
 
   getStatus() {
     return this.quotation.status.label !== 'En attente';
+  }
+
+  addPayment() {
+
   }
 }
