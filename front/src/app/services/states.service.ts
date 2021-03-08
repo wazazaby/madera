@@ -26,8 +26,24 @@ export class StatesService {
   private _token: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   /** Quotation Status */
   private _quotationStatus: Map<number, QuotationStatus> = new Map();
+  /** PaymentById */
+  private _paymentById: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   constructor() {}
+
+  // ===================================================================================================================
+
+  public get paymentById(): any[] {
+    return this._paymentById.getValue();
+  }
+
+  public set paymentById(value: any[]) {
+    this._paymentById.next(value);
+  }
+
+  public paymentByIdAsObservable(): Observable<any[]> {
+    return this._paymentById.asObservable();
+  }
 
   // ===================================================================================================================
 

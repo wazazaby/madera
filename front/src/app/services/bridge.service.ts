@@ -286,6 +286,19 @@ export class BridgeService implements OnDestroy {
     return this._http.get<ResponsesApi<PaymentStatus>>(environment.apiUrlService + `/paymentType/${id}`);
   }
 
+  /**
+   * Ajouter un payment
+   * @param montant: montant du paiement
+   * @param id: identifiant
+   * @return Observable
+   */
+  public addPayment(montant: number, id: number): Observable<ResponsesApi<any>> {
+    return this._http.post<ResponsesApi<PaymentStatus>>(environment.apiUrlService + `/payment/add`, {
+      paymentId: id,
+      value: montant,
+    });
+  }
+
   // ===================================================================================================================
   // quotation
 
