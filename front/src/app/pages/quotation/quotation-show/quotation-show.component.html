@@ -19,9 +19,16 @@
 
     <div *ngIf="quotation.modules && quotation.modules.length > 0" class="d-flex row">
       <div *ngFor="let q of quotation.modules" class="card m-2" style="width: 18rem;">
+
         <div class="card-body">
-          <h5 class="card-title"></h5>
-          <h6 class="card-subtitle mb-2 text-dark">{{q.module.label}}</h6>
+          <h6 class="card-title mb-2 text-dark d-flex justify-content-between">
+            <span>
+              {{q.module.label}}
+            </span>
+            <span class="badge badge-info">
+              {{q.count}}
+            </span>
+          </h6>
           <p class="card-text text-muted" *ngIf="q.module.description">{{q.module.description}}</p>
           <p class="card-text text-muted" *ngIf="q.module.shortDescription">{{q.module.shortDescription}}</p>
           <span (click)="redirect(q.module.id)" class="text-info clicked">Afficher</span>
@@ -67,7 +74,7 @@
                       <td>{{p.leftToPay}}</td>
                       <td>{{p.updatedAt | date: 'short'}}</td>
                       <td>
-                        <button class="btn btn-outline-primary" (click)="addPayment()">Ajouter un payment</button>
+                        <button class="btn btn-outline-primary" (click)="addPayment(p)">Ajouter un payment</button>
                       </td>
                     </tr>
                 </ng-container>

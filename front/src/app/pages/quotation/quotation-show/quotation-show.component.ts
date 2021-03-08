@@ -5,6 +5,8 @@ import { StatesService } from '../../../services/states.service';
 import { BridgeService } from '../../../services/bridge.service';
 import { takeUntil } from 'rxjs/operators';
 import { UtilsService } from '../../../services/utils.service';
+import { NbDialogService } from '@nebular/theme';
+import { AddPaymentComponent } from '../add-payment/add-payment.component';
 
 @Component({
   selector: 'ngx-quotation-show',
@@ -22,6 +24,7 @@ export class QuotationShowComponent implements OnDestroy {
 
   constructor(private route: ActivatedRoute,
               public router: Router,
+              private _dialogService: NbDialogService,
               private _stateService: StatesService,
               private _utilsService: UtilsService,
               private _bridgeService: BridgeService) {
@@ -34,7 +37,36 @@ export class QuotationShowComponent implements OnDestroy {
           .subscribe((quotation) => {
             if (quotation && quotation.data && quotation.data['quotation']) {
               this.quotation = quotation.data['quotation'];
-              console.log(this.quotation);
+
+              // Regroupe par module
+              if (this.quotation && this.quotation.modules) {
+                const mod = this.quotation.modules;
+                const newMod = [];
+
+                mod.forEach(m => {
+                  const find = newMod.find(p => p.moduleId === m.moduleId);
+                  if (find) {
+                    find.count++;
+                    newMod.splice(newMod.findIndex(p => p.moduleId === m.moduleId), 1);
+                    newMod.push(find);
+                  } else {
+                    m.count = 1;
+                    newMod.push(m);
+                  }
+                });
+
+                newMod.sort((a, b) => {
+                  if ( a.module.label < b.module.label ) {
+                    return -1;
+                  }
+                  if ( a.module.label > b.module.label ) {
+                    return 1;
+                  }
+                  return 0;
+                });
+
+                this.quotation.modules = newMod;
+              }
             }
           });
       }
@@ -75,7 +107,12 @@ export class QuotationShowComponent implements OnDestroy {
     return this.quotation.status.label !== 'En attente';
   }
 
-  addPayment() {
-
+  public addPayment(data: any) {
+    this._dialogService.open(AddPaymentComponent, {
+      context: {
+        title: 'Ajouter un payement',
+        data,
+      },
+    });
   }
 }
