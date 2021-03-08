@@ -318,7 +318,7 @@ export class BridgeService implements OnDestroy {
    * @return Observable
    */
   public approveQuotation(id: number): Observable<ResponsesApi<any>> {
-    return this._http.post<ResponsesApi<any>>(environment.apiUrlService + `/quotation/approve`, {
+    return this._http.put<ResponsesApi<any>>(environment.apiUrlService + `/quotation/approve`, {
       quotationId: id,
     });
   }
@@ -329,7 +329,7 @@ export class BridgeService implements OnDestroy {
    * @return Observable
    */
   public denyQuotation(id: number): Observable<ResponsesApi<any>> {
-    return this._http.post<ResponsesApi<any>>(environment.apiUrlService + `/quotation/deny`, {
+    return this._http.put<ResponsesApi<any>>(environment.apiUrlService + `/quotation/deny`, {
       quotationId: id,
     });
   }

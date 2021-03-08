@@ -63,137 +63,137 @@ export default async app => {
         }
     });
 
-    app.put(`${base}/approve`, {
+    app.post(`${base}/approve`, {
         schema: schemas.approve,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
         const { quotationId } = req.body;
-        const { entityId } = req.user;
         const quotation = await db.quotation.findFirst({
-            where: { id: quotationId, commercialId: entityId },
-            include: { status: true }
+            where: { id: quotationId }
         });
         if (quotation === null) {
             return rep.notFound('Devis introuvable');
         }
-        // Si le devis est déjà approuvé/refusé
-        switch (quotation.status.code) {
-            case 'ACCEPTED': return rep.conflict('Devis déjà approuvé');
-            case 'DENIED': return rep.conflict('Devis déjà refusé');
+        // Si le devis n'appartient pas à cet utilisateur, on renvoit
+        if (quotation.commercialId !== req.user.entityId) {
+            return rep.unauthorized('Opération interdite');
         }
-        // Calcule des valeurs de chaque paiement
-        const calculateWithPrice = calculatePercentage(quotation.price);
-        const threePercent = calculateWithPrice(3);
-        const sevenPercent = calculateWithPrice(7);
-        const fivePercent = calculateWithPrice(5);
-        const tenPercent = calculateWithPrice(10);
-        const fifteenPercent = calculateWithPrice(15);
-        const thirtyfivePercent = calculateWithPrice(35);
-        const twentyPercent = calculateWithPrice(20);
-        const newQuotation = await db.quotation.update({
+        // Mise à jour du statut du devis
+        await db.quotation.update({
             where: { id: quotationId },
-            data: { 
-                status: { connect: { code: 'ACCEPTED' } },
-                orders: {
-                    create: {
-                        status: { connect: { code: 'WAITING' } },
-                        totalPaid: 0,
-                        payments: {
-                            create: [
-                                { 
-                                    type: { connect: { code: 'AT_SIGNATURE'} },
-                                    total: threePercent,
-                                    currentlyPaid: 0,
-                                    leftToPay: threePercent,
-                                },
-                                {
-                                    type: { connect: { code: 'AT_CONSTRUCTION_LICENCE_OBTENTION'} },
-                                    total: sevenPercent,
-                                    currentlyPaid: 0,
-                                    leftToPay: sevenPercent,
-                                },
-                                {
-                                    type: { connect: { code: 'AT_SITE_OPENING'} },
-                                    total: fivePercent,
-                                    currentlyPaid: 0,
-                                    leftToPay: fivePercent,
-                                },
-                                {
-                                    type: { connect: { code: 'AT_FOUNDATION_COMPLETION'} },
-                                    total: tenPercent,
-                                    currentlyPaid: 0,
-                                    leftToPay: tenPercent,
-                                },
-                                {
-                                    type: { connect: { code: 'AT_WALLS_COMPLETION'} },
-                                    total: fifteenPercent,
-                                    currentlyPaid: 0,
-                                    leftToPay: fifteenPercent,
-                                },
-                                {
-                                    type: { connect: { code: 'AT_WATER_AIR_PUT_OUT'} },
-                                    total: thirtyfivePercent,
-                                    currentlyPaid: 0,
-                                    leftToPay: thirtyfivePercent,
-                                },
-                                {
-                                    type: { connect: { code: 'AT_EQUIPMENT_WORK_COMPLETION'} },
-                                    total: twentyPercent,
-                                    currentlyPaid: 0,
-                                    leftToPay: twentyPercent,
-                                },
-                                {
-                                    type: { connect: { code: 'AT_KEY_HANDING'} },
-                                    total: fivePercent,
-                                    currentlyPaid: 0,
-                                    leftToPay: fivePercent,
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            include: {
-                status: true,
-                orders: {
-                    include: {
-                        status: true,
-                        payments: { include: { type: true } } 
+            data: {
+                status: {
+                    connect: {
+                        code: 'ACCEPTED'
                     }
                 }
             }
         });
 
-        return { statusCode: 200, message: 'Devis approuvé avec succès', data: { quotation: newQuotation } }
+        const total = quotation.price / 8;
+        await db.order.create({
+            data: {
+                quotation: { connect: { id: quotationId } },
+                status: { connect: { code: 'WAITING' } },
+                totalPaid: 0,
+                payments: {
+                    create: [
+                        {
+                            type: { connect: { code: 'AT_SIGNATURE'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_CONSTRUCTION_LICENCE_OBTENTION'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_SITE_OPENING'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_FOUNDATION_COMPLETION'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_WALLS_COMPLETION'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_WATER_AIR_PUT_OUT'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_EQUIPMENT_WORK_COMPLETION'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        },
+                        {
+                            type: { connect: { code: 'AT_KEY_HANDING'} },
+                            total,
+                            currentlyPaid: 0,
+                            leftToPay: total,
+                        }
+                    ]
+                }
+            }
+        });
+
+        const newQuotation = await db.quotation.findFirst({
+            where: { id: quotationId },
+            include: {
+                orders: {
+                    include: { payments: { include: { type: true } } }
+                }
+            }
+        });
+
+        return { statusCode: 200, message: 'Devis approuvé avec succès', data: { newQuotation } }
     });
 
-    app.put(`${base}/deny`, {
+    app.post(`${base}/deny`, {
         schema: schemas.approve,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
     }, async (req, rep) => {
         const { quotationId } = req.body;
-        const { entityId } = req.user;
         const quotation = await db.quotation.findFirst({
-            where: { id: quotationId, commercialId: entityId },
-            include: { status: true }
+            where: { id: quotationId }
         });
         if (quotation === null) {
             return rep.notFound('Devis introuvable');
         }
-        switch (quotation.status.code) {
-            case 'ACCEPTED': return rep.conflict('Devis déjà approuvé');
-            case 'DENIED': return rep.conflict('Devis déjà refusé');
+        // Si le devis n'appartient pas à cet utilisateur, on renvoit
+        if (quotation.commercialId !== req.user.entityId) {
+            return rep.unauthorized('Opération interdite');
         }
         // Mise à jour du statut du devis
         const denied = await db.quotation.update({
             where: { id: quotationId },
             data: {
-                status: { connect: { code: 'DENIED' } }
+                status: {
+                    connect: {
+                        code: 'DENIED'
+                    }
+                }
             },
-            include: { status: true }
+            include: {
+                status: true
+            }
         });
 
-        return { statusCode: 200, message: 'Devis refusé avec succès', data: { quotation: denied } }
+        return { statusCode: 200, message: 'Devis refusé avec succès', data: { denied } }
     });
 
     app.get(`${base}/all`, {
@@ -215,8 +215,9 @@ export default async app => {
         const { getStatus, getModules, getPayments } = req.query;
         const { id } = req.params;
         const { entityId } = req.user;
-        const moarModules = getModules === true 
-            ? { modules: { include: { module: true } } } 
+
+        const moarModules = getModules === true
+            ? { modules: { include: { module: true } } }
             : {}
         const moarPayments = getPayments === true
             ? { orders: { include: { status: true, payments: { include: { type: true } } } } }
