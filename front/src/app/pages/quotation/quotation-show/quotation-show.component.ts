@@ -34,6 +34,7 @@ export class QuotationShowComponent implements OnDestroy {
           .subscribe((quotation) => {
             if (quotation && quotation.data && quotation.data['quotation']) {
               this.quotation = quotation.data['quotation'];
+              console.log(this.quotation);
             }
           });
       }

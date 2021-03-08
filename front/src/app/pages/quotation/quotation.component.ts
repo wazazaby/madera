@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 })
 export class QuotationComponent implements OnInit, OnDestroy {
   public customColumn = 'Labels';
-  public defaultColumns = ['Nombres', 'Documents', 'Date', 'Statut'];
+  public defaultColumns = ['Nombres', 'Documents', 'Nbre de modules', 'Date de création', 'Date', 'Statut'];
   public allColumns = [this.customColumn, ...this.defaultColumns];
 
   public dataSource: NbTreeGridDataSource<any>;
@@ -81,6 +81,8 @@ export class QuotationComponent implements OnInit, OnDestroy {
                       Labels: q.label,
                       Nombres: 1,
                       Documents: 'Devis',
+                      'Nbre de modules': 1,
+                      'Date de création': formatDate(q.createdAt, 'short', 'fr-FR'),
                       Date: formatDate(q.updatedAt, 'short', 'fr-FR'),
                       Statut: this._bridgeService.getStatusName(q.statusId),
                     },

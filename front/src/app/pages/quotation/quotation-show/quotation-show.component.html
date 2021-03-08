@@ -12,7 +12,6 @@
         <button [disabled]="getStatus()" (click)="valider()" class="ml-4 btn btn-outline-success">Approuver le devis</button>
       </div>
     </div>
-    <p>{{quotation.shortDescription}}</p>
 
     <label>Statut:
       <span *ngIf="quotation.status.label === 'En attente'" class="badge badge-primary">{{quotation.status.label}}</span>
@@ -30,6 +29,15 @@
           <span (click)="redirect(q.module.id)" class="text-info clicked">Afficher</span>
         </div>
       </div>
+    </div>
+
+    <div class="mt-2" *ngIf="quotation.orders && quotation.orders.length > 0">
+      <h6 class="text-info">Commande en cours</h6>
+
+      <pre class="text-light">
+         {{quotation.orders | json}}
+      </pre>
+
     </div>
 
   </div>
