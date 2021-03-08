@@ -6,8 +6,6 @@ import { StatesService } from '../../services/states.service';
 import { BridgeService } from '../../services/bridge.service';
 import { UtilsService } from '../../services/utils.service';
 import { takeUntil } from 'rxjs/operators';
-import { CreateComposantComponent } from './create-composant/create-composant.component';
-import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-composants',
@@ -68,9 +66,7 @@ export class ComposantsComponent implements OnInit, OnDestroy {
 
   constructor(private _stateService: StatesService,
               private _bridgeService: BridgeService,
-              private _utilsService: UtilsService,
-              private _dialogService: NbDialogService) { }
-              
+              private _utilsService: UtilsService) { }
 
   ngOnInit(): void {
     this.loadComponents();
@@ -97,15 +93,6 @@ export class ComposantsComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-    public openModal() {
-        console.log('on passe la')
-        this._dialogService.open(CreateComposantComponent, {
-            context: {
-                title: 'Créer un composant',
-            }
-        });
-    }
 
   /**
    * Détruit les observables
