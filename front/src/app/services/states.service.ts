@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { decodeJwtPayload, NbAuthJWTToken, NbAuthService } from '@nebular/auth';
-import { NbRoleProvider } from '@nebular/security';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Client, SoftClient } from '../interfaces/client';
+import { SoftClient } from '../interfaces/client';
 import { Module } from '../interfaces/module';
 import { Components } from '../interfaces/components';
 import { Roles } from '../interfaces/roles';

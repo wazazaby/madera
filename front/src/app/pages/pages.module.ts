@@ -33,6 +33,7 @@ import { CustomersModalAddComponent } from './customers/customers-modal-add/cust
 import { ModulebyidComponent } from './modules/modulebyid/modulebyid.component';
 import { QuotationCreateComponent } from './quotation/quotation-create/quotation-create.component';
 import { QuotationShowComponent } from './quotation/quotation-show/quotation-show.component';
+import { AddPaymentComponent } from './quotation/add-payment/add-payment.component';
 
 @NgModule({
   imports: [
@@ -75,6 +76,7 @@ import { QuotationShowComponent } from './quotation/quotation-show/quotation-sho
     QuotationCreateComponent,
     QuotationShowComponent,
     ModulebyidComponent,
+    AddPaymentComponent,
   ],
 })
 export class PagesModule {

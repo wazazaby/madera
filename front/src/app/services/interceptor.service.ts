@@ -25,6 +25,7 @@ export class InterceptorService implements HttpInterceptor, OnDestroy {
       .subscribe((token: NbAuthToken) => {
       if (token) {
         this.token = token.toString();
+        this._stateService.token = this.token;
       }
     });
 
