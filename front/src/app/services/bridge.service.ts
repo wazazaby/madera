@@ -81,7 +81,6 @@ export class BridgeService implements OnDestroy {
   public addUsers(user: Users, type: string): Observable<ResponsesApi<any>> {
     const routeRole = new Map()
       .set('Administrateur', 'administrator')
-      .set('Client', 'client')
       .set('Commercial', 'commercial')
       .set('Stockiste', 'stockist');
 
@@ -162,11 +161,11 @@ export class BridgeService implements OnDestroy {
   // Client
 
   public getClients(): Observable<ResponsesApi<Client[]>> {
-    // return new Observable<Client[]>((obs) => {
-    //   obs.next(clientsMock);
-    //   obs.complete();
-    // });
     return this._http.get<ResponsesApi<Client[]>>(environment.apiUrlService + '/client/all');
+  }
+
+  public getClientsQuotation(): Observable<ResponsesApi<any[]>> {
+    return this._http.get<ResponsesApi<any[]>>(environment.apiUrlService + '/client/all?getQuotations=true');
   }
 
   public setClient(cli: Client): Observable<Client> {
@@ -284,7 +283,7 @@ export class BridgeService implements OnDestroy {
    * @return Observable
    */
   public getPaymentStatusById(id: number): Observable<ResponsesApi<PaymentStatus>> {
-    return this._http.get<ResponsesApi<PaymentStatus>>(environment.apiUrlService + `paymentType/${id}`);
+    return this._http.get<ResponsesApi<PaymentStatus>>(environment.apiUrlService + `/paymentType/${id}`);
   }
 
   // ===================================================================================================================
@@ -295,7 +294,7 @@ export class BridgeService implements OnDestroy {
    * @return Observable
    */
   public getQuotationStatus(): Observable<ResponsesApi<QuotationStatus[]>> {
-    return this._http.get<ResponsesApi<QuotationStatus[]>>(environment.apiUrlService + 'quotationStatus/all');
+    return this._http.get<ResponsesApi<QuotationStatus[]>>(environment.apiUrlService + '/quotationStatus/all');
   }
 
   /**
@@ -304,7 +303,7 @@ export class BridgeService implements OnDestroy {
    * @return Observable
    */
   public getQuotationById(id: number): Observable<ResponsesApi<QuotationStatus>> {
-    return this._http.get<ResponsesApi<QuotationStatus>>(environment.apiUrlService + `quotationStatus/${id}`);
+    return this._http.get<ResponsesApi<QuotationStatus>>(environment.apiUrlService + `/quotationStatus/${id}`);
   }
 
 
@@ -316,14 +315,18 @@ export class BridgeService implements OnDestroy {
    */
   public initData() {
     return forkJoin([
-      this.getClients(),
-      this.getComposant(),
-      this.getModule(),
-      this.getUsers(),
-      this.getRoles(),
+      forkJoin([
+        this.getClients(),
+        this.getQuotationStatus(),
+        this.getComposant(),
+        this.getModule(),
+        this.getUsers(),
+        this.getRoles(),
+      ]),
       this._auth.getToken(),
     ]).pipe(takeUntil(this.destroyed))
-      .subscribe(([clients, composants, modules, users, roles, token]) => {
+      .subscribe(([[clients, status, composants, modules, users, roles], token]) => {
+
         this._statesService.cleanUp();
 
         // Ajout les clients
@@ -350,10 +353,32 @@ export class BridgeService implements OnDestroy {
           this._statesService.roles = roles.data['roles'];
         }
 
+        if (status && status.data && status.data['quotationStatuses']) {
+          const stat: QuotationStatus[] = status.data['quotationStatuses'];
+          const mapStat = new Map();
+
+          stat.forEach((s: QuotationStatus) => {
+            mapStat.set(s.id, s);
+          });
+
+          this._statesService.quotationStatus = mapStat;
+        }
+
         // console.log('*initData', clients, composants, modules, users, roles);
     }, (err) => {
         this._utilsService.showToast(err.statusText, 'danger');
       });
+  }
+
+  public getStatusName(id: number): string {
+    let result = 'En Attente';
+
+    if (this._statesService.quotationStatus && this._statesService.quotationStatus.has(id)) {
+      result = this._statesService.quotationStatus.get(id).label;
+    } else {
+      this._router.navigateByUrl('/pages/dashboard').then();
+    }
+    return result;
   }
 
   ngOnDestroy(): void {

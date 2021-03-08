@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { Users } from '../interfaces/users';
 import { StatesService } from './states.service';
 import { Client, SoftClient } from '../interfaces/client';
+import { BridgeService } from './bridge.service';
 
 @Injectable({
   providedIn: 'root',

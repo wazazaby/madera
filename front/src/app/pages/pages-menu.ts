@@ -50,12 +50,12 @@ export const MENU_COMMERCIAL: NbMenuItem[] = [
     icon: 'folder-outline',
     children: [
       {
-        title: 'Création',
-        link: '/pages/quotation/create',
-      },
-      {
         title: 'Consultation',
         link: '/pages/quotation',
+      },
+      {
+        title: 'Création',
+        link: '/pages/quotation/create',
       },
     ],
   },

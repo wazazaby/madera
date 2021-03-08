@@ -8,6 +8,7 @@ import { Module } from '../interfaces/module';
 import { Components } from '../interfaces/components';
 import { Roles } from '../interfaces/roles';
 import { Users } from '../interfaces/users';
+import { QuotationStatus } from '../interfaces/quotation-status';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,8 @@ export class StatesService {
   private _roles: BehaviorSubject<Roles[]> = new BehaviorSubject<Roles[]>([]);
   /** Token utilisateur */
   private _token: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  /** Quotation Status */
+  private _quotationStatus: Map<number, QuotationStatus> = new Map();
 
   constructor() {}
 
@@ -111,6 +114,16 @@ export class StatesService {
 
   public modulesAsObservable(): Observable<Module[]> {
     return this._modules.asObservable();
+  }
+
+  // ===================================================================================================================
+
+  get quotationStatus(): Map<number, QuotationStatus> {
+    return this._quotationStatus;
+  }
+
+  set quotationStatus(value: Map<number, QuotationStatus>) {
+    this._quotationStatus = value;
   }
 
   // ===================================================================================================================

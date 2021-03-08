@@ -31,6 +31,8 @@ import { ButtonTableComponent } from './smart-table/button-table/button-table.co
 import { UserModalAddComponent } from './users/user-modal-add/user-modal-add.component';
 import { CustomersModalAddComponent } from './customers/customers-modal-add/customers-modal-add.component';
 import { ModulebyidComponent } from './modules/modulebyid/modulebyid.component';
+import { QuotationCreateComponent } from './quotation/quotation-create/quotation-create.component';
+import { QuotationShowComponent } from './quotation/quotation-show/quotation-show.component';
 
 @NgModule({
   imports: [
@@ -71,6 +73,8 @@ import { ModulebyidComponent } from './modules/modulebyid/modulebyid.component';
     UserModalAddComponent,
     CustomersModalAddComponent,
     ModulebyidComponent,
+    QuotationCreateComponent,
+    QuotationShowComponent,
   ],
 })
 export class PagesModule {

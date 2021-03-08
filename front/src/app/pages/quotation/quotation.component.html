@@ -13,7 +13,7 @@
         <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(customColumn)" *nbTreeGridHeaderCellDef>
           {{customColumn}}
         </th>
-        <td nbTreeGridCell *nbTreeGridCellDef="let row">
+        <td nbTreeGridCell *nbTreeGridCellDef="let row" (click)="selectRow(row.data)">
 
           <nb-tree-grid-row-toggle [expanded]="row.expanded" *ngIf="row.data.type === 'folder'; else fileIcon">
           </nb-tree-grid-row-toggle>
@@ -32,7 +32,8 @@
         <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(column)" *nbTreeGridHeaderCellDef>
           {{column}}
         </th>
-        <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data[column] || '-'}}</td>
+        <td (click)="selectRow(row.data)" nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data[column] || '-'}}</td>
+
       </ng-container>
 
     </table>
