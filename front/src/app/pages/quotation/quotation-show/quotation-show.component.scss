@@ -1,3 +1,24 @@
 .clicked {
   cursor: pointer;
 }
+
+.card {
+  border-color: #151a30;
+
+  .card-body {
+    background-color: #222b45;
+
+    &:hover {
+      background-color: #262e54;
+    }
+
+    .card-title {
+      color: #ffffff!important;
+    }
+  }
+}
+
+.table-dark {
+  background-color: #222b45;
+}
+

@@ -29,9 +29,9 @@
               {{q.count}}
             </span>
           </h6>
-          <p class="card-text text-muted" *ngIf="q.module.description">{{q.module.description}}</p>
-          <p class="card-text text-muted" *ngIf="q.module.shortDescription">{{q.module.shortDescription}}</p>
-          <span (click)="redirect(q.module.id)" class="text-info clicked">Afficher</span>
+          <p class="card-text" *ngIf="q.module.description">{{q.module.description}}</p>
+          <p class="card-text" *ngIf="q.module.shortDescription">{{q.module.shortDescription}}</p>
+          <span (click)="redirect(q.module.id)" class="d-flex text-info clicked justify-content-end">Afficher</span>
         </div>
       </div>
     </div>
