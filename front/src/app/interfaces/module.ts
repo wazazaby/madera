@@ -1,6 +1,3 @@
-import { Components } from './components';
-import { Quotation } from './quotation';
-
 export interface Module {
   id: number;
   label: string;
@@ -9,5 +6,6 @@ export interface Module {
   description: string;
   createdAt: Date;
   updatedAt: Date;
+  count?: number;
   components?: any[];
 }

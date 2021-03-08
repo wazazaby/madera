@@ -19,7 +19,7 @@ export class QuotationCreateComponent implements OnInit, OnDestroy {
   public customers: SoftClient[] = [];
   public modules: Module[] = [];
   public clientId: SoftClient;
-  public modulesId: Module[] = [];
+  public modulesId: any[] = [];
 
   /** Subject utilisé pour le unsubscribe de tout les obs */
   private destroyed: Subject<any> = new Subject();
@@ -49,7 +49,11 @@ export class QuotationCreateComponent implements OnInit, OnDestroy {
       const mod = [];
 
       this.formQuotation.value.modulesId.forEach(m => {
-        mod.push(m.id);
+        if (m.count !== 0) {
+            for (let i = 1; i <= m.count; i++) {
+              mod.push(m.id);
+            }
+        }
       });
 
       const data = {
@@ -79,7 +83,6 @@ export class QuotationCreateComponent implements OnInit, OnDestroy {
       .subscribe((client: SoftClient[]) => {
         if (client && client.length > 0) {
           this.customers = client;
-          console.log('*ici', client);
         }
       });
 
@@ -88,6 +91,10 @@ export class QuotationCreateComponent implements OnInit, OnDestroy {
       .subscribe((module: Module[]) => {
         if (module && module.length > 0) {
           this.modules = module;
+
+          this.modules.forEach(m => {
+            m.count = 1;
+          });
         }
       });
   }
@@ -98,4 +105,15 @@ export class QuotationCreateComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
+  public counter(num: number, module) {
+    if (!module.count) {
+      module.count = 0;
+    }
+
+    if (num === 0) {
+      module.count--;
+    } else {
+      module.count++;
+    }
+  }
 }

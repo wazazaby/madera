@@ -1,5 +1,6 @@
 <div *ngIf="customers && customers.length > 0">
-<!--  Step 1: client-->
+  <h4 class="text-info">Client :</h4>
+  <!--  Step 1: client-->
   <div class="form-control-group">
     <label class="label" for="input-client">Sélectionner un client:</label>
     <nb-select placeholder="Sélectionner un client"
@@ -24,9 +25,11 @@
     </ng-container>
   </div>
 
+  <hr>
+
   <div *ngIf="clientId && modules && modules.length > 0" class="mt-4">
 <!--    Step 2: Devis-->
-    <h2 class="label">Devis :</h2>
+    <h4 class="text-info">Devis :</h4>
     <div class="form-control-group">
       <label class="label" for="input-label">Titre</label>
       <input nbInput
@@ -64,9 +67,10 @@
       </ng-container>
     </div>
 
-    <div *ngIf="formQuotation.value.label && formQuotation.value. shortDescription">
+    <hr>
 
-      <label class="label">Module :</label>
+    <div *ngIf="formQuotation.value.label && formQuotation.value. shortDescription">
+      <h4 class="text-info">Modules :</h4>
       <!--    Step 3: Module-->
       <div class="form-control-group">
         <label class="label" for="input-modules">Sélectionner des modules:</label>
@@ -94,6 +98,20 @@
           </p>
         </ng-container>
       </div>
+      <div *ngIf="modulesId && modulesId.length > 0" class="d-flex m-2 p-2">
+        <div *ngFor="let m of modulesId" class="col-4 d-flex flex-column">
+          <span class="text-info">{{m.label}}</span>
+          <div>
+            <button [disabled]="m.count <= 1" class="btn btn-outline-warning" (click)="counter(0, m)"><i class="fas fa-minus"></i></button>
+            <span class="text-light p-2">Nombre de module: {{m.count}} </span>
+            <button class="btn btn-outline-primary" (click)="counter(1, m)"><i class="fas fa-plus"></i></button>
+          </div>
+
+        </div>
+      </div>
+
+      <hr>
+
 
       <div *ngIf="modulesId && modulesId.length > 0" class="mt-4">
         <button (click)="onCreate()" class="btn btn-outline-success" [disabled]="!formQuotation.valid">Valider</button>

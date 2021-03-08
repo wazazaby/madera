@@ -52,10 +52,27 @@ export class QuotationShowComponent implements OnDestroy {
   }
 
   annuler() {
-    this._utilsService.showToast('Devis annuler', 'danger');
+    this._bridgeService.denyQuotation(this.id)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((res) => {
+        this.quotation.status = res.data['denied'].status;
+        this._utilsService.showToast('Devis annuler', 'danger');
+      });
   }
 
   valider() {
-    this._utilsService.showToast('Devis valider', 'success');
+    this._bridgeService.approveQuotation(this.id)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((res) => {
+        console.log('*', res);
+        this.quotation.status = {
+
+        };
+        this._utilsService.showToast('Devis valider', 'success');
+      });
+  }
+
+  getStatus() {
+    return this.quotation.status.label !== 'En attente';
   }
 }
