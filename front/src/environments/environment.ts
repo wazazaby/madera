@@ -11,7 +11,7 @@
 export const environment = {
   production: false,
   // url de l'API node
-  apiUrlService: 'http://127.0.0.1:3306',
+  apiUrlService: 'http://127.0.0.1:3001',
   // url de base de l'application
   baseUrl: 'http://localhost:4200',
   // domaine
