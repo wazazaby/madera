@@ -1,1 +1,44 @@
-<p>quotation-show works!</p>
+<div *ngIf="quotation">
+  <div>
+    <h1>{{quotation.label}} - {{quotation.price | currency: 'EUR':true }}</h1>
+
+    <div class="d-flex">
+      <div class="col-8">
+        <p>{{quotation.shortDescription}}</p>
+      </div>
+
+      <div class="col-4 d-flex">
+        <button [disabled]="getStatus()" (click)="annuler()" class="btn btn-outline-danger">Refuser le devis</button>
+        <button [disabled]="getStatus()" (click)="valider()" class="ml-4 btn btn-outline-success">Approuver le devis</button>
+      </div>
+    </div>
+
+    <label>Statut:
+      <span *ngIf="quotation.status.label === 'En attente'" class="badge badge-primary">{{quotation.status.label}}</span>
+      <span *ngIf="quotation.status.label === 'Accepté'" class="badge badge-success">{{quotation.status.label}}</span>
+      <span *ngIf="quotation.status.label === 'Refusé'" class="badge badge-danger">{{quotation.status.label}}</span>
+    </label>
+
+    <div *ngIf="quotation.modules && quotation.modules.length > 0" class="d-flex row">
+      <div *ngFor="let q of quotation.modules" class="card m-2" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title"></h5>
+          <h6 class="card-subtitle mb-2 text-dark">{{q.module.label}}</h6>
+          <p class="card-text text-muted" *ngIf="q.module.description">{{q.module.description}}</p>
+          <p class="card-text text-muted" *ngIf="q.module.shortDescription">{{q.module.shortDescription}}</p>
+          <span (click)="redirect(q.module.id)" class="text-info clicked">Afficher</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-2" *ngIf="quotation.orders && quotation.orders.length > 0">
+      <h6 class="text-info">Commande en cours</h6>
+
+      <pre class="text-light">
+         {{quotation.orders | json}}
+      </pre>
+
+    </div>
+
+  </div>
+</div>

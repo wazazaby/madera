@@ -298,6 +298,43 @@ export class BridgeService implements OnDestroy {
     return this._http.get<ResponsesApi<any>>(environment.apiUrlService + `/quotation/${id}?getStatus=true&getModules=true&getPayments=true`);
   }
 
+  /**
+   * Ajoute un devis client
+   * @param data: devis
+   * @return Observable
+   */
+  public addQuotation(data: any): Observable<ResponsesApi<any>> {
+    return this._http.post<ResponsesApi<any>>(environment.apiUrlService + `/quotation/create`, {
+      label: data.label,
+      shortDescription: data.shortDescription,
+      clientId: data.clientId,
+      modulesId: data.modulesId,
+    });
+  }
+
+  /**
+   * Valider un devis
+   * @param id identifiant du devis
+   * @return Observable
+   */
+  public approveQuotation(id: number): Observable<ResponsesApi<any>> {
+    return this._http.post<ResponsesApi<any>>(environment.apiUrlService + `/quotation/approve`, {
+      quotationId: id,
+    });
+  }
+
+  /**
+   * Annule un devis client
+   * @param id identifiant du devis
+   * @return Observable
+   */
+  public denyQuotation(id: number): Observable<ResponsesApi<any>> {
+    return this._http.post<ResponsesApi<any>>(environment.apiUrlService + `/quotation/deny`, {
+      quotationId: id,
+    });
+  }
+
+
   // ===================================================================================================================
   // quotationStatus
 

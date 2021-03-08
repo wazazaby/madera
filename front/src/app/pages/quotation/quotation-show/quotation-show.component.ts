@@ -1,26 +1,29 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StatesService } from '../../../services/states.service';
 import { BridgeService } from '../../../services/bridge.service';
 import { takeUntil } from 'rxjs/operators';
+import { UtilsService } from '../../../services/utils.service';
 
 @Component({
   selector: 'ngx-quotation-show',
   templateUrl: './quotation-show.component.html',
   styleUrls: ['./quotation-show.component.scss'],
 })
-export class QuotationShowComponent implements OnInit, OnDestroy {
+export class QuotationShowComponent implements OnDestroy {
 
   private id: number = 0;
 
-  private quotation: any;
+  public quotation: any;
 
   /** Subject utilisé pour le unsubscribe de tout les obs */
   private destroyed = new Subject();
 
   constructor(private route: ActivatedRoute,
+              public router: Router,
               private _stateService: StatesService,
+              private _utilsService: UtilsService,
               private _bridgeService: BridgeService) {
     this.route.params.subscribe((res) => {
       if (res) {
@@ -29,13 +32,13 @@ export class QuotationShowComponent implements OnInit, OnDestroy {
         this._bridgeService.getQuotationById(this.id)
           .pipe(takeUntil(this.destroyed))
           .subscribe((quotation) => {
-            console.log('*', quotation);
+            if (quotation && quotation.data && quotation.data['quotation']) {
+              this.quotation = quotation.data['quotation'];
+              console.log(this.quotation);
+            }
           });
       }
     });
-  }
-
-  ngOnInit(): void {
   }
 
   ngOnDestroy(): void {
@@ -43,4 +46,34 @@ export class QuotationShowComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
+  public redirect(id) {
+    if (id > 0) {
+      this.router.navigateByUrl(`pages/modules/${id}`).then();
+    }
+  }
+
+  annuler() {
+    this._bridgeService.denyQuotation(this.id)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((res) => {
+        this.quotation.status = res.data['denied'].status;
+        this._utilsService.showToast('Devis annuler', 'danger');
+      });
+  }
+
+  valider() {
+    this._bridgeService.approveQuotation(this.id)
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((res) => {
+        console.log('*', res);
+        this.quotation.status = {
+
+        };
+        this._utilsService.showToast('Devis valider', 'success');
+      });
+  }
+
+  getStatus() {
+    return this.quotation.status.label !== 'En attente';
+  }
 }

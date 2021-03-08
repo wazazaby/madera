@@ -1,19 +1,21 @@
 <div *ngIf="customers && customers.length > 0">
+  <h4 class="text-info">Client :</h4>
+  <!--  Step 1: client-->
   <div class="form-control-group">
-    <label class="label" for="input-role">Sélectionner un client:</label>
-    <nb-select placeholder="Sélectionner un role"
-               id="input-role"
+    <label class="label" for="input-client">Sélectionner un client:</label>
+    <nb-select placeholder="Sélectionner un client"
+               id="input-client"
                fullWidth
-               name="role"
+               name="client"
                [(selected)]="clientId"
                [formControl]="formQuotation.controls.clientId"
-               [status]="formQuotation.controls.clientId.dirty ? (formQuotation.controls.clientID.invalid  ? 'danger' : 'success') : ''"
+               [status]="formQuotation.controls.clientId.dirty ? (formQuotation.controls.clientId.invalid  ? 'danger' : 'success') : ''"
                [required]="true"
                [attr.aria-invalid]="formQuotation.controls.clientId.invalid && formQuotation.controls.clientId.touched ? true : null"
                ngDefaultControl
     >
-      <nb-select-label> {{ clientId }} </nb-select-label>
-      <nb-option [value]="c.id" *ngFor="let c of customers">{{c.firstName - c.lastName}}</nb-option>
+      <nb-select-label *ngIf="clientId"> {{clientId.firstName}} - {{clientId.lastName}} </nb-select-label>
+      <nb-option [value]="c" *ngFor="let c of customers">{{c.firstName}} - {{c.lastName}}</nb-option>
     </nb-select>
 
     <ng-container *ngIf="formQuotation.controls.clientId.hasError('required') && formQuotation.controls.clientId.touched">
@@ -23,4 +25,102 @@
     </ng-container>
   </div>
 
+  <hr>
+
+  <div *ngIf="clientId && modules && modules.length > 0" class="mt-4">
+<!--    Step 2: Devis-->
+    <h4 class="text-info">Devis :</h4>
+    <div class="form-control-group">
+      <label class="label" for="input-label">Titre</label>
+      <input nbInput
+             fullWidth
+             id="input-label"
+             placeholder="Titre"
+             name="firstName"
+             [formControl]="formQuotation.controls.label"
+             [status]="formQuotation.controls.label.dirty ? (formQuotation.controls.label.invalid  ? 'danger' : 'success') : ''"
+             [required]="true"
+             [attr.aria-invalid]="formQuotation.controls.label.invalid && formQuotation.controls.label.touched ? true : null"
+      >
+      <ng-container *ngIf="formQuotation.controls.label.hasError('required') && formQuotation.controls.label.touched">
+        <p class="text-danger">
+          Le titre du devis est obligatoire!
+        </p>
+      </ng-container>
+    </div>
+    <div class="form-control-group">
+      <label class="label" for="input-shortDescription">Description</label>
+      <input nbInput
+             fullWidth
+             id="input-shortDescription"
+             placeholder="Description"
+             name="firstName"
+             [formControl]="formQuotation.controls.shortDescription"
+             [status]="formQuotation.controls.shortDescription.dirty ? (formQuotation.controls.shortDescription.invalid  ? 'danger' : 'success') : ''"
+             [required]="true"
+             [attr.aria-invalid]="formQuotation.controls.shortDescription.invalid && formQuotation.controls.shortDescription.touched ? true : null"
+      >
+      <ng-container *ngIf="formQuotation.controls.shortDescription.hasError('required') && formQuotation.controls.shortDescription.touched">
+        <p class="text-danger">
+          La description du devis est obligatoire!
+        </p>
+      </ng-container>
+    </div>
+
+    <hr>
+
+    <div *ngIf="formQuotation.value.label && formQuotation.value. shortDescription">
+      <h4 class="text-info">Modules :</h4>
+      <!--    Step 3: Module-->
+      <div class="form-control-group">
+        <label class="label" for="input-modules">Sélectionner des modules:</label>
+        <nb-select placeholder="Sélectionner des modules"
+                   multiple
+                   id="input-modules"
+                   fullWidth
+                   name="Modules"
+                   [(selected)]="modulesId"
+                   [formControl]="formQuotation.controls.modulesId"
+                   [status]="formQuotation.controls.modulesId.dirty ? (formQuotation.controls.modulesId.invalid  ? 'danger' : 'success') : ''"
+                   [required]="true"
+                   [attr.aria-invalid]="formQuotation.controls.modulesId.invalid && formQuotation.controls.modulesId.touched ? true : null"
+                   ngDefaultControl
+        >
+          <nb-select-label *ngIf="modulesId">
+            <span *ngFor="let m of modulesId"> - {{m.label}}</span>
+          </nb-select-label>
+          <nb-option [value]="m" *ngFor="let m of modules">{{m.label}}</nb-option>
+        </nb-select>
+
+        <ng-container *ngIf="formQuotation.controls.modulesId.hasError('required') && formQuotation.controls.modulesId.touched">
+          <p class="text-danger">
+            La sélection d'un module est obligatoire!
+          </p>
+        </ng-container>
+      </div>
+      <div *ngIf="modulesId && modulesId.length > 0" class="d-flex m-2 p-2">
+        <div *ngFor="let m of modulesId" class="col-4 d-flex flex-column">
+          <span class="text-info">{{m.label}}</span>
+          <div>
+            <button [disabled]="m.count <= 1" class="btn btn-outline-warning" (click)="counter(0, m)"><i class="fas fa-minus"></i></button>
+            <span class="text-light p-2">Nombre de module: {{m.count}} </span>
+            <button class="btn btn-outline-primary" (click)="counter(1, m)"><i class="fas fa-plus"></i></button>
+          </div>
+
+        </div>
+      </div>
+
+      <hr>
+
+
+      <div *ngIf="modulesId && modulesId.length > 0" class="mt-4">
+        <button (click)="onCreate()" class="btn btn-outline-success" [disabled]="!formQuotation.valid">Valider</button>
+      </div>
+
+    </div>
+
+  </div>
+
+
 </div>
+
