@@ -4,12 +4,8 @@ import db from '../../utils/db';
 
 export default async app => {
     const base = '/quotation';
-<<<<<<< HEAD
     const calculatePercentage = price => percentage => Number(((price / 100) * percentage).toFixed(2));
     
-=======
-
->>>>>>> 995becd2ca39c11cc1ff4bf0e690c6e2033110fe
     app.post(`${base}/create`, {
         schema: schemas.create,
         preHandler: app.auth([app.verifyJWT, app.isCommercial], { relation: 'and' })
