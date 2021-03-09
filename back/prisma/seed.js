@@ -416,11 +416,11 @@ const main = async () => {
             status: { connect: { code: 'WAITING' } },
             modules: {
                 create: [
-                    { module: { connect: { id: mod1.id} } },
-                    { module: { connect: { id: mod2.id} } },
-                    { module: { connect: { id: mod2.id} } },
-                    { module: { connect: { id: mod2.id} } },
-                    { module: { connect: { id: mod3.id} } }
+                    { module: { connect: { id: mod1.id } } },
+                    { module: { connect: { id: mod2.id } } },
+                    { module: { connect: { id: mod2.id } } },
+                    { module: { connect: { id: mod2.id } } },
+                    { module: { connect: { id: mod3.id } } }
                 ]
             }
         }
@@ -435,13 +435,13 @@ const main = async () => {
             status: { connect: { code: 'WAITING' } },
             modules: {
                 create: [
-                    { module: { connect: { id: mod1.id} } },
-                    { module: { connect: { id: mod1.id} } },
-                    { module: { connect: { id: mod1.id} } },
-                    { module: { connect: { id: mod2.id} } },
-                    { module: { connect: { id: mod2.id} } },
-                    { module: { connect: { id: mod3.id} } },
-                    { module: { connect: { id: mod3.id} } }
+                    { module: { connect: { id: mod1.id } } },
+                    { module: { connect: { id: mod1.id } } },
+                    { module: { connect: { id: mod1.id } } },
+                    { module: { connect: { id: mod2.id } } },
+                    { module: { connect: { id: mod2.id } } },
+                    { module: { connect: { id: mod3.id } } },
+                    { module: { connect: { id: mod3.id } } }
                 ]
             }
         }

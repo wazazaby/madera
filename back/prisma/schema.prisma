@@ -237,7 +237,7 @@ model Quotation {
   clientId         Int
   statusId         Int
   // <==> DOWN <==>
-  orders           Order[]
+  orders           Order?
   modules          ModuleOnQuotation[]
 }
 
@@ -289,6 +289,23 @@ model Payment {
   type          PaymentType @relation(fields: [typeId], references: [id])
   orderId       Int
   typeId        Int
+  // <==> DOWN <==>
+  historic      PaymentHistory[]
 }
 
 // =================== PAYMENT ===================
+
+// =================== PAYMENT HISTORY ===================
+
+model PaymentHistory {
+    id            Int         @id @default(autoincrement())
+    value         Float
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    // <==> RELATIONS <==>
+    // <==> UP <==>
+    payment       Payment     @relation(fields: [paymentId], references: [id])
+    paymentId     Int
+}
+
+// =================== PAYMENT HISTORY ===================

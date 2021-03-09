@@ -216,7 +216,14 @@ export default async app => {
             ? { modules: { include: { module: true } } } 
             : {}
         const moarPayments = getPayments === true
-            ? { orders: { include: { status: true, payments: { include: { type: true } } } } }
+            ? { 
+                orders: {
+                    include: {
+                        status: true,
+                        payments: { include: { type: true, historic: true } }
+                    }
+                } 
+            }
             : {}
         const quotation = await db.quotation.findFirst({
             where: {

@@ -216,6 +216,7 @@ CREATE TABLE `Order` (
     `totalPaid` DOUBLE NOT NULL,
     `quotationId` INTEGER NOT NULL,
     `statusId` INTEGER NOT NULL,
+UNIQUE INDEX `Order_quotationId_unique`(`quotationId`),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -230,6 +231,17 @@ CREATE TABLE `Payment` (
     `updatedAt` DATETIME(3) NOT NULL,
     `orderId` INTEGER NOT NULL,
     `typeId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `PaymentHistory` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `value` DOUBLE NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `paymentId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -310,6 +322,9 @@ ALTER TABLE `Payment` ADD FOREIGN KEY (`orderId`) REFERENCES `Order`(`id`) ON DE
 
 -- AddForeignKey
 ALTER TABLE `Payment` ADD FOREIGN KEY (`typeId`) REFERENCES `PaymentType`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `PaymentHistory` ADD FOREIGN KEY (`paymentId`) REFERENCES `Payment`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_ProviderToStockist` ADD FOREIGN KEY (`A`) REFERENCES `Provider`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

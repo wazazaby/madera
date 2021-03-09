@@ -15,10 +15,8 @@ export default async app => {
         const quotation = await db.quotation.findFirst({
             where: {
                 orders: {
-                    some: {
-                        payments: {
-                            some: { id: paymentId }
-                        }
+                    payments: {
+                        some: { id: paymentId }
                     }
                 }
             }
@@ -38,9 +36,10 @@ export default async app => {
         const leftToPay = Number((payment.leftToPay - value).toFixed(2));
         const newPayment = await db.payment.update({
             where: { id: paymentId },
-            data: { currentlyPaid, leftToPay },
+            data: { currentlyPaid, leftToPay, historic: { create: { value } } },
             include: {
-                type: true
+                type: true,
+                historic: true
             }
         });
         const message = newPayment.leftToPay === 0 
