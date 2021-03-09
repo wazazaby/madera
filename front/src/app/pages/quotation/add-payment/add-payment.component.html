@@ -2,9 +2,33 @@
   <nb-card-header>{{ title }}</nb-card-header>
   <nb-card-body>
 
-    <pre class="text-light">
-      {{data | json}}
-    </pre>
+    <div class="form-control-group">
+      <label class="label" for="input-value">Paiement</label>
+      <input nbInput
+             fullWidth
+             id="input-value"
+             placeholder="Paiement"
+             name="value"
+             [formControl]="formPayment.controls.value"
+             [status]="formPayment.controls.value.dirty ? (formPayment.controls.value.invalid  ? 'danger' : 'success') : ''"
+             [required]="true"
+             [attr.aria-invalid]="formPayment.controls.value.invalid && formPayment.controls.value.touched ? true : null"
+      >
+      <ng-container *ngIf="(formPayment.controls.value.hasError('required') || formPayment.controls.value.hasError('pattern')) && formPayment.controls.value.touched">
+        <p class="text-danger" *ngIf="formPayment.controls.value.hasError('required')">
+          Le montant du paiement est obligatoire!
+        </p>
+
+        <p class="text-danger" *ngIf="formPayment.controls.value.hasError('pattern')">
+          Le montant saisie est incorrect!
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="d-flex row mt-2 justify-content-between">
+      <button class="btn btn-outline-danger" (click)="dismiss()">Annuler</button>
+      <button [disabled]="!formPayment.valid" class="btn btn-outline-success" (click)="valider()">Enregistrer</button>
+    </div>
 
   </nb-card-body>
 </nb-card>

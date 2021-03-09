@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StatesService } from '../../../services/states.service';
@@ -13,7 +13,7 @@ import { AddPaymentComponent } from '../add-payment/add-payment.component';
   templateUrl: './quotation-show.component.html',
   styleUrls: ['./quotation-show.component.scss'],
 })
-export class QuotationShowComponent implements OnDestroy {
+export class QuotationShowComponent implements OnInit, OnDestroy {
 
   private id: number = 0;
 
@@ -66,10 +66,20 @@ export class QuotationShowComponent implements OnDestroy {
                 });
 
                 this.quotation.modules = newMod;
+                this._stateService.paymentById = this.quotation;
               }
             }
           });
       }
+    });
+  }
+
+  ngOnInit() {
+    this._stateService.paymentByIdAsObservable()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((res) => {
+        this.quotation = null;
+        this.quotation = res;
     });
   }
 
@@ -104,7 +114,11 @@ export class QuotationShowComponent implements OnDestroy {
   }
 
   getStatus() {
-    return this.quotation.status.label !== 'En attente';
+    if (this.quotation && this.quotation.status) {
+      return this.quotation.status.label !== 'En attente';
+    } else {
+      return true;
+    }
   }
 
   public addPayment(data: any) {

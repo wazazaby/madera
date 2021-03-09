@@ -11,7 +11,7 @@
     <h1>{{quotation.label}} - {{quotation.price | currency: 'EUR':true }}</h1>
     <p>{{quotation.shortDescription}}</p>
 
-    <label>Statut:
+    <label *ngIf="quotation.status">Statut:
       <span *ngIf="quotation.status.label === 'En attente'" class="badge badge-primary">{{quotation.status.label}}</span>
       <span *ngIf="quotation.status.label === 'Accepté'" class="badge badge-success">{{quotation.status.label}}</span>
       <span *ngIf="quotation.status.label === 'Refusé'" class="badge badge-danger">{{quotation.status.label}}</span>
@@ -74,7 +74,7 @@
                       <td>{{p.leftToPay}}</td>
                       <td>{{p.updatedAt | date: 'short'}}</td>
                       <td>
-                        <button class="btn btn-outline-primary" (click)="addPayment(p)">Ajouter un payment</button>
+                        <button class="btn btn-outline-primary" (click)="addPayment(p)">Ajouter un paiement</button>
                       </td>
                     </tr>
                 </ng-container>
