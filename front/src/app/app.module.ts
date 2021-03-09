@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import {
+  NbAccordionModule,
   NbChatModule,
   NbDatepickerModule,
   NbDialogModule,
@@ -36,6 +37,7 @@ registerLocaleData(localeFr);
     HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    NbAccordionModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),

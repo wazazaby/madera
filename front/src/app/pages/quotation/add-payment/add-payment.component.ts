@@ -43,17 +43,18 @@ export class AddPaymentComponent implements OnDestroy {
           this._utilsService.showToast(res.message);
           const quotation: any = this._stateService.paymentById;
 
-          quotation.orders.forEach(q => {
-            if (q) {
-              const foundIndex = q.payments.findIndex(p => p.id === this.data.id);
-              if (foundIndex > -1) {
-                q.payments[foundIndex] = res.data['payment'];
-              }
+          if (quotation.orders) {
+            const foundIndex = quotation.orders.payments.findIndex(p => p.id === this.data.id);
+            if (foundIndex > -1) {
+              quotation.orders.payments[foundIndex] = res.data['payment'];
             }
-          });
+          }
           this._stateService.paymentById = quotation;
           this.ref.close();
-        });
+        },
+          (err) => {
+            this._utilsService.showToast(err.error.message, 'danger');
+          });
     }
   }
 

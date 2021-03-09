@@ -43,6 +43,8 @@ export class SmartTableComponent implements OnInit, OnDestroy {
   @Input() public data: any[];
   // Observe les ajout/modification de data
   @Input() public refresh: EventEmitter<any>;
+  // Ajoute les actions de suppression et de modification
+  @Input() public actions: boolean = true;
   // Init le tableau en data
   private _source: LocalDataSource = new LocalDataSource();
   /** Subject utilisé pour le unsubscribe de tout les obs */
@@ -62,6 +64,14 @@ export class SmartTableComponent implements OnInit, OnDestroy {
 
     if (this.data && this.data.length > 0) {
       this._source.load(this.data).then();
+    }
+
+    if (!this.actions) {
+      this._setting.actions = {
+        add: false,
+        edit: false,
+        delete: false,
+      };
     }
 
     // Observe les changements sur la table

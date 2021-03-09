@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { UtilsService } from '../../../services/utils.service';
 import { NbDialogService } from '@nebular/theme';
 import { AddPaymentComponent } from '../add-payment/add-payment.component';
+import { PaymentHistoryComponent } from '../payment-history/payment-history.component';
 
 @Component({
   selector: 'ngx-quotation-show',
@@ -125,6 +126,15 @@ export class QuotationShowComponent implements OnInit, OnDestroy {
     this._dialogService.open(AddPaymentComponent, {
       context: {
         title: 'Ajouter un payement',
+        data,
+      },
+    });
+  }
+
+  public showHistory(data: any) {
+    this._dialogService.open(PaymentHistoryComponent, {
+      context: {
+        title: 'Historique des payements',
         data,
       },
     });

@@ -1,0 +1,19 @@
+<nb-card>
+  <nb-card-header>{{ title }}</nb-card-header>
+  <nb-card-body>
+
+    <app-smart-table
+        *ngIf="data.historic.length > 0"
+        [columns]="columns"
+        [data]="data.historic"
+        [actions]="false"
+    >
+    </app-smart-table>
+
+
+    <nb-card-footer class="d-flex justify-content-end">
+      <button class="btn btn-outline-danger" (click)="dismiss()">Retour</button>
+    </nb-card-footer>
+
+  </nb-card-body>
+</nb-card>

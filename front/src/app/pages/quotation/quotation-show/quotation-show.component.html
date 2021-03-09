@@ -36,19 +36,19 @@
       </div>
     </div>
 
-    <div class="mt-2" *ngIf="quotation.orders && quotation.orders.length > 0">
+    <div class="mt-2" *ngIf="quotation.orders">
       <h6 class="text-info">Commande en cours</h6>
 
-      <div *ngFor="let o of quotation.orders">
+      <div>
 
         <div class="d-flex row">
-          <span class="col-12">Total payer: {{o.totalPaid | currency: 'EUR':true}}</span>
+          <span class="col-12">Total payer: {{quotation.orders.totalPaid | currency: 'EUR':true}}</span>
           <label class="col-12">
             Statut:
-            <span *ngIf="o.status.label === 'En attente'" class="badge badge-primary">{{o.status.label}}</span>
+            <span *ngIf="quotation.orders.status.label === 'En attente'" class="badge badge-primary">{{quotation.orders.status.label}}</span>
           </label>
 
-          <div *ngIf="o.payments && o.payments.length > 0" class="mt-4">
+          <div *ngIf="quotation.orders.payments && quotation.orders.payments.length > 0" class="mt-4 col-10">
 
             <table class="table table-hover table-dark">
               <thead>
@@ -58,14 +58,14 @@
                 <th scope="col">payer</th>
                 <th scope="col">Restant</th>
                 <th scope="col">Date de modification</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Ajouter</th>
+                <th scope="col">Historiques</th>
               </tr>
               </thead>
-              <tbody>
+              <tbody *ngIf="quotation.orders && quotation.orders.payments && quotation.orders.payments.length > 0">
 
-                <ng-container *ngFor="let p of o.payments">
+                <tr *ngFor="let p of quotation.orders.payments">
 
-                    <tr>
                       <th scope="row">
                         {{p.type.label}}
                       </th>
@@ -73,11 +73,14 @@
                       <td>{{p.currentlyPaid}}</td>
                       <td>{{p.leftToPay}}</td>
                       <td>{{p.updatedAt | date: 'short'}}</td>
-                      <td>
-                        <button class="btn btn-outline-primary" (click)="addPayment(p)">Ajouter un paiement</button>
+
+                      <td class="text-center">
+                        <button class="btn btn-outline-primary" (click)="addPayment(p)"><i class="fas fa-plus"></i></button>
                       </td>
-                    </tr>
-                </ng-container>
+                      <td class="text-center">
+                        <button *ngIf="p.historic" [disabled]="p.historic.length < 1" class="btn btn-outline-secondary" (click)="showHistory(p)"><i class="fas fa-search"></i></button>
+                      </td>
+                </tr>
 
               </tbody>
             </table>

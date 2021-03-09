@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbSecurityModule } from '@nebular/security';
 import {
+  NbAccordionModule,
   NbAlertModule,
   NbButtonModule, NbCardModule,
   NbCheckboxModule, NbIconModule,
@@ -34,6 +35,7 @@ import { ModulebyidComponent } from './modules/modulebyid/modulebyid.component';
 import { QuotationCreateComponent } from './quotation/quotation-create/quotation-create.component';
 import { QuotationShowComponent } from './quotation/quotation-show/quotation-show.component';
 import { AddPaymentComponent } from './quotation/add-payment/add-payment.component';
+import { PaymentHistoryComponent } from './quotation/payment-history/payment-history.component';
 
 @NgModule({
   imports: [
@@ -55,6 +57,7 @@ import { AddPaymentComponent } from './quotation/add-payment/add-payment.compone
     NbSelectModule,
     NbRadioModule,
     ReactiveFormsModule,
+    NbAccordionModule,
   ],
   declarations: [
     PagesComponent,
@@ -77,6 +80,7 @@ import { AddPaymentComponent } from './quotation/add-payment/add-payment.compone
     QuotationShowComponent,
     ModulebyidComponent,
     AddPaymentComponent,
+    PaymentHistoryComponent,
   ],
 })
 export class PagesModule {
