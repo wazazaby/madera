@@ -49,6 +49,7 @@ export class AddPaymentComponent implements OnDestroy {
               quotation.orders.payments[foundIndex] = res.data['payment'];
             }
           }
+          quotation.orders.totalPaid = res.data['totalPaid'];
           this._stateService.paymentById = quotation;
           this.ref.close();
         },

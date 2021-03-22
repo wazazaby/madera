@@ -19,6 +19,9 @@ export default async app => {
                         some: { id: paymentId }
                     }
                 }
+            },
+            include: {
+                orders: true
             }
         });
         if (quotation === null || quotation.commercialId !== entityId) {
@@ -34,6 +37,13 @@ export default async app => {
         }
         const currentlyPaid = Number((payment.currentlyPaid + value).toFixed(2));
         const leftToPay = Number((payment.leftToPay - value).toFixed(2));
+        const totalPaid = Number((quotation.orders.totalPaid + value).toFixed(2));
+        const newTotal = await db.order.update({
+            where: { id: quotation.orders.id },
+            data: { totalPaid },
+            select: { totalPaid: true }
+        });
+        console.log(newTotal)
         const newPayment = await db.payment.update({
             where: { id: paymentId },
             data: { currentlyPaid, leftToPay, historic: { create: { value } } },
@@ -48,7 +58,7 @@ export default async app => {
         return { 
             statusCode: 200, 
             message, 
-            data: { payment: newPayment} 
+            data: { payment: newPayment, totalPaid: newTotal.totalPaid } 
         }
     });
 }
