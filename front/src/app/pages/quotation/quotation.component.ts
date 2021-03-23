@@ -81,7 +81,7 @@ export class QuotationComponent implements OnInit, OnDestroy {
                       Labels: q.label,
                       Nombres: 1,
                       Documents: 'Devis',
-                      'Nbre de modules': 1,
+                      'Nbre de modules': q.modules.length,
                       'Date de création': formatDate(q.createdAt, 'short', 'fr-FR'),
                       Date: formatDate(q.updatedAt, 'short', 'fr-FR'),
                       Statut: this._bridgeService.getStatusName(q.statusId),

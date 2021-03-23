@@ -18,7 +18,11 @@ export default async app => {
             include: {
                 client: {
                     include: {
-                        quotations: getQuotations === true
+                        quotations: {
+                            include: {
+                                modules: true
+                            }
+                        }
                     }
                 },
                 role: getRole === true
