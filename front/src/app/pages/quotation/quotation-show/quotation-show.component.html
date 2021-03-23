@@ -11,7 +11,7 @@
     <h1>{{quotation.label}} - {{quotation.price | currency: 'EUR':true }}</h1>
     <p>{{quotation.shortDescription}}</p>
 
-    <label *ngIf="quotation.status">Statut:
+    <label *ngIf="quotation.status">Statut :
       <span *ngIf="quotation.status.label === 'En attente'" class="badge badge-primary">{{quotation.status.label}}</span>
       <span *ngIf="quotation.status.label === 'Accepté'" class="badge badge-success">{{quotation.status.label}}</span>
       <span *ngIf="quotation.status.label === 'Refusé'" class="badge badge-danger">{{quotation.status.label}}</span>
@@ -42,9 +42,9 @@
       <div>
 
         <div class="d-flex row">
-          <span class="col-12">Total payer: {{quotation.orders.totalPaid | currency: 'EUR':true}}</span>
+          <span class="col-12">Total payé : {{quotation.orders.totalPaid | currency: 'EUR':true}}</span>
           <label class="col-12">
-            Statut:
+            Statut :
             <span *ngIf="quotation.orders.status.label === 'En attente'" class="badge badge-primary">{{quotation.orders.status.label}}</span>
           </label>
 
@@ -53,13 +53,13 @@
             <table class="table table-hover table-dark">
               <thead>
               <tr>
-                <th scope="col">Type</th>
+                <th scope="col">Jalon de paiement</th>
                 <th scope="col">Total</th>
-                <th scope="col">payer</th>
+                <th scope="col">Payé</th>
                 <th scope="col">Restant</th>
                 <th scope="col">Date de modification</th>
                 <th scope="col">Ajouter</th>
-                <th scope="col">Historiques</th>
+                <th scope="col">Historique</th>
               </tr>
               </thead>
               <tbody *ngIf="quotation.orders && quotation.orders.payments && quotation.orders.payments.length > 0">
@@ -69,9 +69,9 @@
                       <th scope="row">
                         {{p.type.label}}
                       </th>
-                      <td>{{p.total}}</td>
-                      <td>{{p.currentlyPaid}}</td>
-                      <td>{{p.leftToPay}}</td>
+                      <td>{{p.total}}€</td>
+                      <td>{{p.currentlyPaid}}€</td>
+                      <td>{{p.leftToPay}}€</td>
                       <td>{{p.updatedAt | date: 'short'}}</td>
 
                       <td class="text-center">
